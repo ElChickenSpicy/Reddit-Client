@@ -84,6 +84,13 @@ main {
   padding-top: 90px;
 }
 
+main #posts {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .searchbar {
   width: 95%;
   height: 30px;
@@ -114,7 +121,7 @@ main {
   top: 0px;
 }
 
-.main-header div {
+.main-header #brand {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -189,6 +196,7 @@ main {
 
 .content-media {
   width: 70%;
+  margin-top: 0px;
   border: 1px solid black;
   background-color: white;
   text-align: center;
@@ -201,6 +209,32 @@ main {
 
 .options button {
   margin-right: 15px;
+  height: 100%;
+}
+
+.comments-container {
+  width: 98%;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border: 3px solid red;
+  background-color: white;
+}
+
+.comment-item {
+  max-width: 100%;
+  width: 96%;
+  padding-top: 20px;
+  padding-bottom: 30px;
+  padding-left: 2%;
+  padding-right: 2%;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 /* Smartphones/Tablets (portrait) ----------- */
@@ -224,7 +258,7 @@ and (max-width : 768px) {
     display: none;
   }
 
-  .main-header div {
+  .main-header #brand {
     display: none;
   }
 
