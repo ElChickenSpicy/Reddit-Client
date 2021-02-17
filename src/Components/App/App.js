@@ -16,11 +16,23 @@ export class App extends React.Component {
 
         <main>
           <header className="main-header">
+            {/* Desktop View */}
             <h2>Current Page</h2>
             <div>
               <img alt="icon" />
               <h1>Sean's Reddit App</h1>
             </div>
+
+            {/* Mobile View */}
+            <select>
+              <option value="0">r/All</option>
+              <option value="1">r/soccer</option>
+              <option value="2">r/ProgrammerHumor</option>
+              <option value="3">r/coolguides</option>
+              <option value="4">r/dataisbeautiful</option>
+              <option value="5">r/ABoringDystopia</option>
+            </select>
+            <input placeholder="Search..." />
           </header>
 
           <article className="reddit-post">

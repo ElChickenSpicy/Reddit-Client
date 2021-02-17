@@ -137,6 +137,14 @@ main {
   transform: translate(0, -50%);
 }
 
+.main-header input {
+  display: none;
+}
+
+.main-header select {
+  display: none;
+}
+
 .reddit-post {
   display: flex;
   flex-direction: column;
@@ -169,17 +177,20 @@ main {
 
 .content {
   height: 100%;
+  background-color: lightgray;
 }
 
 .content-title {
   width: 30%;
   border: 1px solid black;
+  background-color: white;
   text-align: center;
 }
 
 .content-media {
   width: 70%;
   border: 1px solid black;
+  background-color: white;
   text-align: center;
 }
 
@@ -190,4 +201,75 @@ main {
 
 .options button {
   margin-right: 15px;
+}
+
+/* Smartphones/Tablets (portrait) ----------- */
+@media only screen
+and (max-width : 768px) {
+  nav {
+    display: none;
+  }
+
+  main {
+    width: 100%;
+    padding-top: 60px;
+  }
+
+  .main-header {
+    width: 95%;
+    height: 60px;
+  }
+
+  .main-header h2 {
+    display: none;
+  }
+
+  .main-header div {
+    display: none;
+  }
+
+  .main-header input {
+    display: inline-block;
+    width: 50%;
+    height: 19px;
+    margin-left: 4%;
+    margin-top: 15px;
+  }
+
+  .main-header select {
+    display: inline-block;
+    width: 35%;
+    height: 25px;
+    margin-left: 4%;
+    margin-top: 15px;
+  }
+
+  .reddit-post {
+    height: 400px;
+  }
+
+  .sub {
+    height: 25px;
+  }
+
+  .content {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+  }
+
+  .content-title {
+    width: 100%;
+    text-align: left;
+  }
+
+  .content-media {
+    width: 100%;
+    height: 85%;
+    text-align: left;
+  }
+
+  .options {
+    height: 25px;
+  }
 }
