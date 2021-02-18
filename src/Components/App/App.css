@@ -48,6 +48,10 @@ table {
 	border-spacing: 0;
 }
 
+a {
+  text-decoration: none;
+}
+
 /* || Home Page Layout - Desktop  */
 .top-container {
   height: 99vh;
@@ -95,6 +99,7 @@ main #posts {
   width: 95%;
   height: 30px;
   border: 2px solid black;
+  border-radius: 4px;
 }
 
 .subreddit-container {
@@ -105,6 +110,7 @@ main #posts {
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 4px;
 }
 
 .subreddit-title {
@@ -159,9 +165,10 @@ main #posts {
   align-items: center;
   border: 2px solid black;
   width: 98%;
-  height: 600px;
+  height: fit-content;
   margin-top: 15px;
   background-color: white;
+  border-radius: 8px;
 }
 
 .post-flex-item {
@@ -188,18 +195,75 @@ main #posts {
 }
 
 .content-title {
-  width: 30%;
+  width: 40%;
+  border: 1px solid black;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.content-media {
+  width: 60%;
+  margin-top: 0px;
   border: 1px solid black;
   background-color: white;
   text-align: center;
 }
 
-.content-media {
-  width: 70%;
+.content-link {
+  width: 100%;
   margin-top: 0px;
+  padding: 40px 20px;
   border: 1px solid black;
   background-color: white;
-  text-align: center;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.content-link:link {
+  text-decoration: none;
+}
+
+.content-link:hover {
+  text-decoration: underline;
+}
+
+.thumbnail-container {
+  width: 33%;
+}
+
+.thumbnail {
+  height: 120px;
+  width: auto;
+  border-radius: 8px;
+}
+
+.image-container {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  background-color: white;
+}
+
+.content-image {
+  max-width: 90%;
+  max-height: 800px;
+}
+
+.content-video {
+  max-width: 90%;
+  max-height: 800px;
+}
+
+.content-text {
+  background-color: white;
+  width: 60%;
+  padding: 50px 30px;
 }
 
 .options {

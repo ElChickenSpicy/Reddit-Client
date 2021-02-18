@@ -18,6 +18,8 @@ export class Comments extends React.Component {
                         <button>Upvote</button>
                         <button>Downvote</button>
                         <Link to="/Comments"><button>Comments</button></Link>
+                        <Link to="/"><button>&#171;</button></Link>
+
                     </div>
                 </article>
 
