@@ -100,6 +100,11 @@ main #posts {
   height: 30px;
   border: 2px solid black;
   border-radius: 4px;
+  transition-duration: 0.4s;
+}
+
+.searchbar:hover {
+  background-image: linear-gradient(319deg, #bbff99 0%, #ffec99 37%, #ff9999 100%);
 }
 
 .subreddit-container {
@@ -274,6 +279,33 @@ main #posts {
 .options button {
   margin-right: 15px;
   height: 100%;
+}
+
+.vote {
+  font-size: 20px;
+  font-weight: 900;
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  padding-bottom: 7px;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.up {
+  color: green;
+}
+
+.up:hover {
+  background-color: lightseagreen;
+  color: white;
+}
+
+.down {
+  color: red;  
+}
+
+.down:hover {
+  background-color: lightcoral;
+  color: white;
 }
 
 .comments-container {

@@ -77,8 +77,8 @@ export class Posts extends React.Component {
                             </div>
                             {output}
                             <div className="post-flex-item options">
-                                <button>Upvote</button>
-                                <button>Downvote</button>
+                                <button className="vote up">&#8593;</button>
+                                <button className="vote down">&#8595;</button>
                                 <Link to="/Comments"><button>Comments</button></Link>
                             </div>
                         </article>
