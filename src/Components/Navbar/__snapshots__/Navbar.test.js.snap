@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Navbar component renders the Navbar Component correctly 1`] = `
+<nav>
+  <input
+    className="searchbar"
+    placeholder="Search..."
+  />
+  <section
+    className="subreddit-container"
+  >
+    <header
+      className="subreddit-title"
+    >
+      Subreddits
+    </header>
+  </section>
+</nav>
+`;

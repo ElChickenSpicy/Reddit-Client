@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`APP component as a whole render the App Component correctly 1`] = `
+exports[`APP component as a whole renders the App Component correctly 1`] = `
 <div
   className="top-container"
 >
