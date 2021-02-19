@@ -2,26 +2,57 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 export class Comments extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { 
+            post: [],
+            comments: []
+         };
+        this.commentsFetch = this.commentsFetch.bind(this);
+    }
+
+    async commentsFetch() {
+        //Format the string to make the fetch request
+        let str = this.props.rp.location.pathname;
+        str = str.substring(9, str.length)
+        let queryString = 'https://www.reddit.com' + str + '.json';
+
+        //Request the data from Reddit
+        const response = await fetch(queryString);
+        const jsonResponse = await response.json();
+        this.setState( {
+            post: jsonResponse[0].data.children,
+            comments: jsonResponse[1].data.children
+        })
+        console.log(this.state.post);
+        console.log(this.state.comments);
+    }
+
+    componentDidMount() {
+        this.commentsFetch();
+    }
+
     render() {
         return (
             <div id="posts">
-                <article className="reddit-post">
-                    <div className="post-flex-item sub">
-                        <img alt="icon" />
-                        <h3>r/something</h3>
-                    </div>
-                    <div className="post-flex-item content">
-                        <h1 className="content-title">Title of Post</h1>
-                        <p className="content-media">Content of the post</p>
-                    </div>
-                    <div className="post-flex-item options">
-                        <button>Upvote</button>
-                        <button>Downvote</button>
-                        <Link to="/Comments"><button>Comments</button></Link>
-                        <Link to="/"><button>&#171;</button></Link>
-
-                    </div>
-                </article>
+                {this.state.post.map(post => {
+                    const postOutput = this.props.formatPost(post)
+                    return (
+                        <article className="reddit-post">
+                            <div className="post-flex-item sub">
+                                <img alt="icon" />
+                                <h3>r/{post.data.subreddit}</h3>
+                            </div>
+                            {postOutput}
+                            <div className="post-flex-item options">
+                                <button className="vote up">&#8593;</button>
+                                <button className="vote down">&#8595;</button>
+                                <Link to={`/Comments${[post.data.permalink]}`}><button>Comments</button></Link>
+                                <Link to="/"><button>&#171;</button></Link>
+                            </div>
+                        </article>
+                    );
+                })}
 
                 <section className="comments-container">
                     <div className="comment-item">
