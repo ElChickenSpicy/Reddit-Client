@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Posts } from '../Posts/Posts';
 import { Comments } from '../Comments/Comments';
 import { decode } from 'html-entities';
@@ -10,23 +10,23 @@ export class Main extends React.Component {
         this.state = { posts: [] };
         this.fetchInitialData = this.fetchInitialData.bind(this);
         this.formatPost = this.formatPost.bind(this);
-      }
-    
-      async fetchInitialData() {
+    }
+
+    async fetchInitialData() {
         //Fetch data from the r/popular page of Reddit
         const response = await fetch('https://www.reddit.com/r/popular.json');
         const jsonResponse = await response.json();
-    
+
         //Store the first 10 posts in state
         const popularPosts = jsonResponse.data.children.slice(0, 10);
         this.setState({ posts: popularPosts })
-      }
-    
-      componentDidMount() {
-        this.fetchInitialData();
-      }
+    }
 
-      formatPost(post) {
+    componentDidMount() {
+        this.fetchInitialData();
+    }
+
+    formatPost(post) {
         let output;
         let youtube;
         switch (post.data.post_hint) {
@@ -125,9 +125,10 @@ export class Main extends React.Component {
                 </header>
 
                 <Router>
+                    
                     <Switch>
-                        <Route path="/" exact render={routeProps => <Posts rp={routeProps} initialPosts={this.state.posts} formatPost={this.formatPost}/>}/>
-                        <Route path="/Comments/:id" render={routeProps => <Comments rp={routeProps} formatPost={this.formatPost}/>}  />
+                        <Route path="/" exact render={routeProps => <Posts rp={routeProps} initialPosts={this.state.posts} formatPost={this.formatPost} />} />
+                        <Route path="/Comments/:id" render={routeProps => <Comments rp={routeProps} formatPost={this.formatPost} />} />
                     </Switch>
                 </Router>
             </main>

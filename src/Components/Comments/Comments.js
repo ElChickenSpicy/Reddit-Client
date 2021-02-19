@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import { decode } from 'html-entities';
 
 export class Comments extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             post: [],
             comments: []
-         };
+        };
         this.commentsFetch = this.commentsFetch.bind(this);
     }
 
@@ -20,21 +21,21 @@ export class Comments extends React.Component {
         //Request the data from Reddit
         const response = await fetch(queryString);
         const jsonResponse = await response.json();
-        this.setState( {
+        this.setState({
             post: jsonResponse[0].data.children,
             comments: jsonResponse[1].data.children
         })
-        console.log(this.state.post);
         console.log(this.state.comments);
     }
 
     componentDidMount() {
         this.commentsFetch();
+        document.querySelector('.top-container').scrollTo(0,0)
     }
 
     render() {
         return (
-            <div id="posts">
+            <div id="posts" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
                 {this.state.post.map(post => {
                     const postOutput = this.props.formatPost(post)
                     return (
@@ -45,32 +46,71 @@ export class Comments extends React.Component {
                             </div>
                             {postOutput}
                             <div className="post-flex-item options">
-                                <button className="vote up">&#8593;</button>
-                                <button className="vote down">&#8595;</button>
-                                <Link to={`/Comments${[post.data.permalink]}`}><button>Comments</button></Link>
-                                <Link to="/"><button>&#171;</button></Link>
+                                <button className="vote up"></button>
+                                <button className="vote down"></button>
+                                <Link to={`/Comments${[post.data.permalink]}`}><button className="comment-button"></button></Link>
+                                <Link to="/"><button className="back-button"></button></Link>
                             </div>
                         </article>
                     );
                 })}
 
                 <section className="comments-container">
-                    <div className="comment-item">
-                        <h2>Username</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    </div>
-                    <div className="comment-item">
-                        <h2>Username</h2>
-                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?</p>
-                    </div>
-                    <div className="comment-item">
-                        <h2>Username</h2>
-                        <p>Quis autem vel eum iure reprehenderit qui in ea voluptate!!</p>
-                    </div>
-                    <div className="comment-item">
-                        <h2>Username</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    </div>
+                    {this.state.comments.map(comment => {
+                        return (
+
+                            //1st Comment
+                            comment.kind === 'more' ?
+                                //true
+                                '' :
+                                //false 
+                                <div className="comment-item">
+                                    <h2>u/{comment.data.author}</h2>
+                                    <p>{decode(comment.data.body)}</p>
+
+                                    {/* 2nd Comment */}
+                                    {comment.data.replies.data ? 
+                                        //true
+                                        comment.data.replies.data.children.length > 1 ?
+                                            //true
+                                            comment.data.replies.data.children.slice(0, comment.data.replies.data.children.length -1).map(reply => {
+                                                return (
+                                                    <div className="first-reply-layer">
+                                                        <h2>u/{reply.data.author}</h2>
+                                                        <p>{decode(reply.data.body)}</p>
+
+                                                        {/* 3rd Comment */}
+                                                        {reply.data.replies.data ? 
+                                                            //true
+                                                            reply.data.replies.data.children.length > 1 ?
+                                                                //true
+                                                                reply.data.replies.data.children.slice(0, reply.data.replies.data.children.length -1).map(secondLayer => {
+                                                                    return (
+                                                                        <div className="second-reply-layer">
+                                                                            <h2>u/{secondLayer.data.author}</h2>
+                                                                            <p>{decode(secondLayer.data.body)}</p>
+                                                                        </div>
+                                                                    )
+                                                                })
+                                                                :
+                                                                //false
+                                                                '' :
+                                                            //false
+                                                            ''}
+                                                    </div>
+                                                )
+
+                                            })
+                                             :
+                                            //false
+                                            '' :
+                                        //false
+                                        ''}
+
+                                        
+                                </div>
+                        )
+                    })}
                 </section>
             </div>
         )
