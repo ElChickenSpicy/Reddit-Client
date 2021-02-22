@@ -27,6 +27,7 @@ export class Comments extends React.Component {
             post: jsonResponse[0].data.children,
             comments: jsonResponse[1].data.children
         })
+        console.log(this.state.comments)
     }
 
     toggleFirstHidden(toggle) {
@@ -58,13 +59,12 @@ export class Comments extends React.Component {
 
     componentDidMount() {
         this.commentsFetch();
-        document.querySelector('.top-container').scrollTo(0, 0)
+        document.querySelector('.top-container').scrollTo(0, 0);
     }
 
     render() {
         return (
-            //Return the scroll to the top of the window
-            <div id="posts" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <div id="posts">
                 {this.state.post.map(post => {
                     const postOutput = this.props.formatPost(post)
                     return (
@@ -77,9 +77,12 @@ export class Comments extends React.Component {
                             {postOutput}
                             <div className="post-flex-item options">
                                 <button className="vote up"></button>
+                                <span>{(post.data.ups / 1000).toFixed(1)}k</span>
                                 <button className="vote down"></button>
-                                <Link to={`/Comments${[post.data.permalink]}`}><button className="comment-button"></button></Link>
+                                <Link to={`/Comments${[post.data.permalink]}`}><button className="comment-button pressed"></button></Link>
+                                <span>{(post.data.num_comments / 1000).toFixed(1)}k</span>
                                 <Link to="/"><button className="back-button"></button></Link>
+                                <span id="posted-by">Posted by: {post.data.author}</span>
                             </div>
                         </article>
                     );

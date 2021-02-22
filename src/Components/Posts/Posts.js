@@ -16,8 +16,11 @@ export class Posts extends React.Component {
                             {postOutput}
                             <div className="post-flex-item options">
                                 <button className="vote up"></button>
+                                <span>{post.data.ups > 999 ? (post.data.ups / 1000).toFixed(1) + 'k' : post.data.ups }</span>
                                 <button className="vote down"></button>
-                                <Link to={`/Comments${[post.data.permalink]}`}><button className="comment-button"></button></Link>
+                                <Link to={`/Comments${[post.data.permalink]}`}><button className="comment-button home"></button></Link>
+                                <span>{post.data.num_comments > 999 ? (post.data.num_comments / 1000).toFixed(1) + 'k' : post.data.num_comments}</span>
+                                <span id="posted-by">Posted by: {post.data.author}</span>
                             </div>
                         </article>
                     );

@@ -7,23 +7,7 @@ import { decode } from 'html-entities';
 export class Main extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { posts: [] };
-        this.fetchInitialData = this.fetchInitialData.bind(this);
         this.formatPost = this.formatPost.bind(this);
-    }
-
-    async fetchInitialData() {
-        //Fetch data from the r/popular page of Reddit
-        const response = await fetch('https://www.reddit.com/r/popular.json');
-        const jsonResponse = await response.json();
-
-        //Store the first 10 posts in state
-        const popularPosts = jsonResponse.data.children.slice(0, 10);
-        this.setState({ posts: popularPosts })
-    }
-
-    componentDidMount() {
-        this.fetchInitialData();
     }
 
     formatPost(post) {
@@ -106,7 +90,7 @@ export class Main extends React.Component {
             <main>
                 <header className="main-header">
                     {/* Desktop View */}
-                    <h2>Current Page</h2>
+                    <h2>{this.props.subreddit}</h2>
                     <div id="brand">
                         <img alt="icon" />
                         <h1>Sean's Reddit App</h1>
@@ -127,7 +111,7 @@ export class Main extends React.Component {
                 <Router>
                     
                     <Switch>
-                        <Route path="/" exact render={routeProps => <Posts rp={routeProps} initialPosts={this.state.posts} formatPost={this.formatPost} />} />
+                        <Route path="/" exact render={routeProps => <Posts rp={routeProps} initialPosts={this.props.posts} formatPost={this.formatPost} />} />
                         <Route path="/Comments/:id" render={routeProps => <Comments rp={routeProps} formatPost={this.formatPost} />} />
                     </Switch>
                 </Router>
