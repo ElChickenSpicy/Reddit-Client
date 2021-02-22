@@ -372,9 +372,10 @@ main #posts {
   justify-content: flex-start;
 }
 
-.comment-item h2 {
+.username {
   margin-bottom: 5px;
   font-weight: 700;
+  cursor: pointer;
 }
 
 .first-reply-layer {
