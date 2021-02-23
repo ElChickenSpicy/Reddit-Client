@@ -6,11 +6,13 @@ export class Posts extends React.Component {
         return (
             <div id="posts">
                 {this.props.initialPosts.map(post => {
-                    const postOutput = this.props.formatPost(post)
+                    const postOutput = this.props.formatPost(post);
                     return (
                         <article className="reddit-post">
                             <div className="post-flex-item sub">
-                                <img alt="icon" />
+                                {/* onError tag taken from Stack Overflow on 23/2/2021 from Deepak Mallah
+                                URL: https://stackoverflow.com/questions/34097560/react-js-replace-img-src-onerror */}
+                                <img src={"subreddit/" + post.data.subreddit + ".webp"} alt="icon" onError={(e)=>{e.target.onerror = null; e.target.src="subreddit/reddit.webp"}}/>
                                 <h3>r/{post.data.subreddit}</h3>
                             </div>
                             {postOutput}

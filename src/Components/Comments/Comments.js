@@ -28,6 +28,7 @@ export class Comments extends React.Component {
             comments: jsonResponse[1].data.children
         })
         console.log(this.state.comments)
+        this.props.updatePost(jsonResponse[0].data.children[0]);
     }
 
     toggleFirstHidden(toggle) {
@@ -71,16 +72,16 @@ export class Comments extends React.Component {
                         //Display the post
                         <article className="reddit-post">
                             <div className="post-flex-item sub">
-                                <img alt="icon" />
+                                <img src={"/subreddit/" + post.data.subreddit + ".webp"} alt="icon" onError={(e)=>{e.target.onerror = null; e.target.src="/subreddit/reddit.webp"}}/>                                <img alt={post.data.subreddit} />
                                 <h3>r/{post.data.subreddit}</h3>
                             </div>
                             {postOutput}
                             <div className="post-flex-item options">
                                 <button className="vote up"></button>
-                                <span>{(post.data.ups / 1000).toFixed(1)}k</span>
+                                <span>{post.data.ups > 999 ? (post.data.ups / 1000).toFixed(1) + 'k' : post.data.ups }</span>
                                 <button className="vote down"></button>
                                 <Link to={`/Comments${[post.data.permalink]}`}><button className="comment-button pressed"></button></Link>
-                                <span>{(post.data.num_comments / 1000).toFixed(1)}k</span>
+                                <span>{post.data.num_comments > 999 ? (post.data.num_comments / 1000).toFixed(1) + 'k' : post.data.num_comments}</span>
                                 <Link to="/"><button className="back-button"></button></Link>
                                 <span id="posted-by">Posted by: {post.data.author}</span>
                             </div>

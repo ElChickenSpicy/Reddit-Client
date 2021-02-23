@@ -133,10 +133,14 @@ ul {
 ul li {
   margin-bottom: 15px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 ul li img {
   margin-right: 7px;
+  height: 30px;
+  border-radius: 50%;
 }
 
 .main-header {
@@ -206,8 +210,9 @@ ul li img {
 }
 
 .sub img {
-  margin-right: 3px;
-  border: 1px solid orange;
+  margin-right: 7px;
+  height: 30px;
+  border-radius: 50%;
 }
 
 .content {

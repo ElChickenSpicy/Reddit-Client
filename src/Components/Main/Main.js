@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { Posts } from '../Posts/Posts';
 import { Comments } from '../Comments/Comments';
 import { decode } from 'html-entities';
@@ -17,15 +17,15 @@ export class Main extends React.Component {
             case 'link':
                 post.data.thumbnail === 'default' ? output =
                     <div className="post-flex-item content">
-                        <a className="content-link" href={post.data.url} target="_blank">
+                        <a className="content-link" href={post.data.url} target="_blank" rel="noreferrer">
                             {post.data.title}
                         </a>
                     </div> : output =
                     <div className="post-flex-item content">
-                        <a className="content-link" href={post.data.url} target="_blank">
+                        <a className="content-link" href={post.data.url} target="_blank" rel="noreferrer">
                             {post.data.title}
                             <div className="thumbnail-container">
-                                <img className="thumbnail" src={post.data.thumbnail} />
+                                <img className="thumbnail" src={post.data.thumbnail} alt='' />
                             </div>
                         </a>
                     </div>;
@@ -36,7 +36,7 @@ export class Main extends React.Component {
                     <div className="post-flex-item content">
                         <h1 className="content-title">{post.data.title}</h1>
                         <div className="image-container">
-                            <img className="content-image" src={post.data.url} />
+                            <img className="content-image" src={post.data.url} alt=''/>
                         </div>
                     </div>;
                 break;
@@ -108,13 +108,11 @@ export class Main extends React.Component {
                     <input placeholder="Search..." />
                 </header>
 
-                <Router>
-                    
                     <Switch>
                         <Route path="/" exact render={routeProps => <Posts rp={routeProps} initialPosts={this.props.posts} formatPost={this.formatPost} />} />
-                        <Route path="/Comments/:id" render={routeProps => <Comments rp={routeProps} formatPost={this.formatPost} />} />
+                        <Route path="/Comments/:id" render={routeProps => <Comments rp={routeProps} formatPost={this.formatPost} updatePost={this.props.updatePost} />} />
                     </Switch>
-                </Router>
+                    
             </main>
         )
     }
