@@ -17,6 +17,8 @@ export class App extends React.Component {
     this.fetchSubredditData = this.fetchSubredditData.bind(this);
     this.updatePost = this.updatePost.bind(this);
     this.highlightActive = this.highlightActive.bind(this);
+    this.addSubreddit = this.addSubreddit.bind(this);
+    this.removeSubreddit = this.removeSubreddit.bind(this);
 }
 
 async fetchInitialData() {
@@ -51,6 +53,18 @@ highlightActive() {
   return selected;
 }
 
+addSubreddit(sub) {
+  let newNav = this.state.nav;
+  newNav.push(sub);
+  this.setState({ nav: newNav });
+}
+
+removeSubreddit(sub) {
+  let newNav = this.state.nav;
+  newNav = newNav.filter(nav => nav !== sub);
+  this.setState({ nav: newNav });
+}
+
 updatePost(post) {
     this.setState(prevState => ({
       posts: prevState.posts.map(
@@ -68,8 +82,20 @@ componentDidMount() {
     return (
       <div className="top-container">
         <Router>
-          <Navbar navItems={this.state.nav} fetchSubredditData={this.fetchSubredditData} highlightActive={this.highlightActive()}/>
-          <Main posts={this.state.posts} subreddit={this.state.subreddit} updatePost={this.updatePost} fetchSubredditData={this.fetchSubredditData}/>
+          <Navbar 
+            navItems={this.state.nav} 
+            fetchSubredditData={this.fetchSubredditData} 
+            highlightActive={this.highlightActive()}
+          />
+          <Main 
+            posts={this.state.posts} 
+            subreddit={this.state.subreddit} 
+            navItems={this.state.nav} 
+            updatePost={this.updatePost} 
+            fetchSubredditData={this.fetchSubredditData}
+            addSubreddit={this.addSubreddit}
+            removeSubreddit={this.removeSubreddit}
+          />
         </Router>
       </div>
     )

@@ -90,7 +90,26 @@ export class Main extends React.Component {
             <main>
                 <header className="main-header">
                     {/* Desktop View */}
-                    <h2>r/{this.props.subreddit}</h2>
+                    <div id="main-subreddit">
+                        <h2>r/{this.props.subreddit}</h2>
+                        {/* If the above subreddit isn't included in state.nav, display a button with a + sign, otherwise display a minus sign */}
+                        
+                            {this.props.navItems.includes(this.props.subreddit) === true ? 
+                                <figure>
+                                <button className="remove" onClick={() => this.props.removeSubreddit(this.props.subreddit)}>-</button>
+                                <figcaption>
+                                    <p id="informational">Remove this subreddit from your Navigation Bar</p>
+                                </figcaption>
+                                </figure> :
+
+                                <figure>
+                                    <button className="add" onClick={() => this.props.addSubreddit(this.props.subreddit)}>+</button>
+                                    <figcaption>
+                                        <p id="informational">Add this subreddit to your Navigation Bar</p>
+                                    </figcaption>
+                                </figure>
+                            }
+                    </div>
                     <div id="brand">
                         <img alt="icon" />
                         <h1>Sean's Reddit App</h1>
