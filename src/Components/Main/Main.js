@@ -90,7 +90,7 @@ export class Main extends React.Component {
             <main>
                 <header className="main-header">
                     {/* Desktop View */}
-                    <h2>{this.props.subreddit}</h2>
+                    <h2>r/{this.props.subreddit}</h2>
                     <div id="brand">
                         <img alt="icon" />
                         <h1>Sean's Reddit App</h1>
@@ -109,7 +109,7 @@ export class Main extends React.Component {
                 </header>
 
                     <Switch>
-                        <Route path="/" exact render={routeProps => <Posts rp={routeProps} initialPosts={this.props.posts} formatPost={this.formatPost} />} />
+                        <Route path="/" exact render={routeProps => <Posts rp={routeProps} initialPosts={this.props.posts} formatPost={this.formatPost} fetchSubredditData={this.props.fetchSubredditData}/>} />
                         <Route path="/Comments/:id" render={routeProps => <Comments rp={routeProps} formatPost={this.formatPost} updatePost={this.props.updatePost} />} />
                     </Switch>
                     

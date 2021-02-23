@@ -50,6 +50,15 @@ table {
 
 a {
   text-decoration: none;
+
+}
+
+::-moz-selection { /* Code for Firefox */
+  background: rgba(255, 153, 0, 0.26);
+}
+
+::selection {
+  background: rgba(255, 153, 0, 0.26);
 }
 
 /* || Home Page Layout - Desktop  */
@@ -173,6 +182,9 @@ ul li img {
   position: absolute;
   top: 50%;
   transform: translate(0, -50%);
+  margin-left: 30px;
+  font-weight: 700;
+  font-size: 20px;
 }
 
 .main-header input {
@@ -198,7 +210,6 @@ ul li img {
 
 .post-flex-item {
   display: flex;
-  border: 1px solid black;
   width: 98%;
 }
 

@@ -27,7 +27,6 @@ export class Comments extends React.Component {
             post: jsonResponse[0].data.children,
             comments: jsonResponse[1].data.children
         })
-        console.log(this.state.comments)
         this.props.updatePost(jsonResponse[0].data.children[0]);
     }
 
@@ -72,6 +71,8 @@ export class Comments extends React.Component {
                         //Display the post
                         <article className="reddit-post">
                             <div className="post-flex-item sub">
+                                {/* onError tag taken from Stack Overflow on 23/2/2021 from Deepak Mallah
+                                URL: https://stackoverflow.com/questions/34097560/react-js-replace-img-src-onerror */}
                                 <img src={"/subreddit/" + post.data.subreddit + ".webp"} alt="icon" onError={(e)=>{e.target.onerror = null; e.target.src="/subreddit/reddit.webp"}}/>                                <img alt={post.data.subreddit} />
                                 <h3>r/{post.data.subreddit}</h3>
                             </div>

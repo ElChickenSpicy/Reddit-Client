@@ -8,10 +8,15 @@ import { BrowserRouter as Router } from "react-router-dom";
 export class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { posts: [], subreddit: 'r/popular' };
+    this.state = { 
+      posts: [], 
+      subreddit: 'popular',
+      nav: ['popular', 'soccer', 'AskReddit', 'dataisbeautiful', 'ProgrammerHumor', 'Art']
+     };
     this.fetchInitialData = this.fetchInitialData.bind(this);
     this.fetchSubredditData = this.fetchSubredditData.bind(this);
     this.updatePost = this.updatePost.bind(this);
+    this.highlightActive = this.highlightActive.bind(this);
 }
 
 async fetchInitialData() {
@@ -22,7 +27,6 @@ async fetchInitialData() {
     //Store the first 10 posts in state
     const popularPosts = jsonResponse.data.children.slice(0, 10);
     this.setState({ posts: popularPosts })
-    console.log(popularPosts);
 }
 
 async fetchSubredditData(sub) {
@@ -32,7 +36,19 @@ async fetchSubredditData(sub) {
 
     //Store the first 10 posts in state
     const subPosts = jsonResponse.data.children.slice(0, 10);
-    this.setState({ posts: subPosts, subreddit: 'r/' + sub })
+    this.setState({ posts: subPosts, subreddit: sub })
+
+    document.querySelector('.top-container').scrollTo(0, 0);
+}
+
+highlightActive() {
+  let selected = [];
+  this.state.nav.forEach(item => {
+    if (this.state.subreddit === item) {
+      selected.push(item);
+    }
+  })
+  return selected;
 }
 
 updatePost(post) {
@@ -45,14 +61,15 @@ updatePost(post) {
 
 componentDidMount() {
   this.fetchInitialData();
+  this.highlightActive();
 }
 
   render() {
     return (
       <div className="top-container">
         <Router>
-          <Navbar fetchSubredditData={this.fetchSubredditData}/>
-          <Main posts={this.state.posts} subreddit={this.state.subreddit} updatePost={this.updatePost}/>
+          <Navbar navItems={this.state.nav} fetchSubredditData={this.fetchSubredditData} highlightActive={this.highlightActive()}/>
+          <Main posts={this.state.posts} subreddit={this.state.subreddit} updatePost={this.updatePost} fetchSubredditData={this.fetchSubredditData}/>
         </Router>
       </div>
     )
