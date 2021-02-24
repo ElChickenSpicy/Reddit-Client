@@ -13,7 +13,6 @@ export class Main extends React.Component {
 
     formatPost(post) {
         let output;
-        let youtube;
         switch (post.data.post_hint) {
             case 'link':
                 post.data.thumbnail === 'default' ? output =
@@ -53,9 +52,48 @@ export class Main extends React.Component {
                     output =
                         <div className="post-flex-item content">
                             <h1 className="content-title">{post.data.title}</h1>
-                            <TweetEmbed id={post.data.url.split("/")[5]} />
+                            <TweetEmbed id={post.data.url.split("/")[5].split("?")[0]} />
                         </div>
-                } 
+                } else if (post.data.domain.startsWith("v.redd.it")) {
+                    output =
+                    <div className="post-flex-item content">
+                        <h1 className="content-title">{post.data.title}</h1>
+                        <div className="image-container">
+                            <video className="content-video" controls>
+                                <source src={post.data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
+                            </video>
+                        </div>
+                    </div>;
+                } else if (post.data.domain.startsWith("youtube")) {
+                    output =
+                    <div className="post-flex-item content">
+                        <h1 className="content-title">{post.data.title}</h1>
+                        <div className="image-container" dangerouslySetInnerHTML={{ __html: decode(post.data.media_embed.content) }}>
+                        </div>
+                    </div>;
+
+                } else if (!post.data.domain.startsWith("self")) {
+                        post.data.thumbnail === 'default' ? output =
+                        <div className="post-flex-item content">
+                            <a className="content-link" href={post.data.url} target="_blank" rel="noreferrer">
+                                {post.data.title}
+                            </a>
+                        </div> : output =
+                        <div className="post-flex-item content">
+                            <a className="content-link" href={post.data.url} target="_blank" rel="noreferrer">
+                                {post.data.title}
+                                <div className="thumbnail-container">
+                                    <img className="thumbnail" src={post.data.thumbnail} alt='' />
+                                </div>
+                            </a>
+                        </div>;
+
+                } else {
+                    output =
+                        <div className="post-flex-item content">
+                            <h1 className="content-oneliner">{post.data.title}</h1>
+                        </div>
+                }
                     
                 break;
 
@@ -72,11 +110,10 @@ export class Main extends React.Component {
                 break;
 
             case 'rich:video':
-                youtube = decode(post.data.media_embed.content)
                 output =
                     <div className="post-flex-item content">
                         <h1 className="content-title">{post.data.title}</h1>
-                        <div className="image-container" dangerouslySetInnerHTML={{ __html: youtube }}>
+                        <div className="image-container" dangerouslySetInnerHTML={{ __html: decode(post.data.media_embed.content) }}>
                         </div>
                     </div>;
                 break;
