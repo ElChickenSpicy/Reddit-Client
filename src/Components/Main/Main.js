@@ -4,6 +4,8 @@ import { Posts } from '../Posts/Posts';
 import { Comments } from '../Comments/Comments';
 import { decode } from 'html-entities';
 import TweetEmbed from 'react-tweet-embed'
+import YouTube from 'react-youtube';
+import Vimeo from '@u-wave/react-vimeo';
 
 export class Main extends React.Component {
     constructor(props) {
@@ -12,7 +14,19 @@ export class Main extends React.Component {
     }
 
     formatPost(post) {
+        const opts = {
+            height: '390',
+            width: '640',
+            playerVars: {
+              // https://developers.google.com/youtube/player_parameters
+              autoplay: 0,
+            },
+          };
         let output;
+        console.log("==============================================================")
+        console.log(post.data.title);
+        console.log(post.data.url)
+        console.log(post.data.domain);
         switch (post.data.post_hint) {
             case 'link':
                 post.data.thumbnail === 'default' ? output =
@@ -64,14 +78,22 @@ export class Main extends React.Component {
                             </video>
                         </div>
                     </div>;
-                } else if (post.data.domain.startsWith("youtube")) {
+                } else if (post.data.domain.startsWith("youtube.com")) {
                     output =
                     <div className="post-flex-item content">
                         <h1 className="content-title">{post.data.title}</h1>
-                        <div className="image-container" dangerouslySetInnerHTML={{ __html: decode(post.data.media_embed.content) }}>
+                        <div className="image-container">
+                            <YouTube videoId={post.data.url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
                         </div>
                     </div>;
-
+                } else if (post.data.domain.startsWith("youtu.be")) {
+                    output =
+                    <div className="post-flex-item content">
+                        <h1 className="content-title">{post.data.title}</h1>
+                        <div className="image-container">
+                            <YouTube videoId={post.data.url.split("/")[3]} opts={opts} onReady={this._onReady} />
+                        </div>
+                    </div>;
                 } else if (!post.data.domain.startsWith("self")) {
                         post.data.thumbnail === 'default' ? output =
                         <div className="post-flex-item content">
@@ -110,12 +132,35 @@ export class Main extends React.Component {
                 break;
 
             case 'rich:video':
-                output =
+                if (post.data.domain.startsWith("youtube.com")) {
+                    output =
                     <div className="post-flex-item content">
                         <h1 className="content-title">{post.data.title}</h1>
-                        <div className="image-container" dangerouslySetInnerHTML={{ __html: decode(post.data.media_embed.content) }}>
+                        <div className="image-container">
+                            <YouTube videoId={post.data.url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
                         </div>
                     </div>;
+                } else if (post.data.domain.startsWith("youtu.be")) {
+                    output =
+                    <div className="post-flex-item content">
+                        <h1 className="content-title">{post.data.title}</h1>
+                        <div className="image-container">
+                            <YouTube videoId={post.data.url.split("/")[3]} opts={opts} onReady={this._onReady} />
+                        </div>
+                    </div>;
+                } else if (post.data.domain.startsWith("vimeo")) {
+                    output =
+                    <div className="post-flex-item content">
+                        <h1 className="content-title">{post.data.title}</h1>
+                        <div className="image-container">
+                        <Vimeo
+                            video={post.data.url.split("/")[3]}
+                            width="640"
+                            height="390"
+                        />
+                        </div>
+                    </div>;
+                }
                 break;
             default:
                 output =
