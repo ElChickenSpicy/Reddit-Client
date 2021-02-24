@@ -19,28 +19,48 @@ export class App extends React.Component {
     this.highlightActive = this.highlightActive.bind(this);
     this.addSubreddit = this.addSubreddit.bind(this);
     this.removeSubreddit = this.removeSubreddit.bind(this);
+    this.Search = this.Search.bind(this);
 }
 
 async fetchInitialData() {
     //Fetch data from the r/popular page of Reddit
     const response = await fetch('https://www.reddit.com/r/popular.json');
-    const jsonResponse = await response.json();
+    if (response.ok) {
+      const jsonResponse = await response.json();
 
-    //Store the first 10 posts in state
-    const popularPosts = jsonResponse.data.children.slice(0, 10);
-    this.setState({ posts: popularPosts })
+      //Store the first 10 posts in state
+      const popularPosts = jsonResponse.data.children.slice(0, 10);
+      this.setState({ posts: popularPosts })
+  }
 }
 
 async fetchSubredditData(sub) {
     //Fetch data from the provided subreddit
     const response = await fetch('https://www.reddit.com/r/' + sub + '.json');
-    const jsonResponse = await response.json();
+    if (response.ok) {
+      const jsonResponse = await response.json();
 
-    //Store the first 10 posts in state
-    const subPosts = jsonResponse.data.children.slice(0, 10);
-    this.setState({ posts: subPosts, subreddit: sub })
+      //Store the first 10 posts in state
+      const subPosts = jsonResponse.data.children.slice(0, 10);
+      this.setState({ posts: subPosts, subreddit: sub })
+  
+      document.querySelector('.top-container').scrollTo(0, 0);
+      console.log(subPosts)
+    }
+}
 
-    document.querySelector('.top-container').scrollTo(0, 0);
+async Search(query, str) {
+    //Fetch data from the provided subreddit
+    const response = await fetch(query);
+    if (response.ok) {
+      const jsonResponse = await response.json();
+
+      //Store the first 10 posts in state
+      const subPosts = jsonResponse.data.children.slice(0, 10);
+      this.setState({ posts: subPosts, subreddit: "Search Results: " + str })
+  
+      document.querySelector('.top-container').scrollTo(0, 0);
+    }
 }
 
 highlightActive() {
@@ -86,6 +106,7 @@ componentDidMount() {
             navItems={this.state.nav} 
             fetchSubredditData={this.fetchSubredditData} 
             highlightActive={this.highlightActive()}
+            search={this.Search}
           />
           <Main 
             posts={this.state.posts} 

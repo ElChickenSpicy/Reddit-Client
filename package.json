@@ -14,6 +14,7 @@
     "react-scripts": "4.0.2",
     "react-searchbox-awesome": "^1.0.0",
     "react-test-renderer": "^17.0.1",
+    "react-tweet-embed": "^1.2.2",
     "web-vitals": "^1.0.1"
   },
   "scripts": {

@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import { Posts } from '../Posts/Posts';
 import { Comments } from '../Comments/Comments';
 import { decode } from 'html-entities';
+import TweetEmbed from 'react-tweet-embed'
 
 export class Main extends React.Component {
     constructor(props) {
@@ -42,16 +43,20 @@ export class Main extends React.Component {
                 break;
 
             case undefined:
-                post.data.selftext === "" ?
+                if (post.data.selftext !== "") {
                     output =
-                    <div className="post-flex-item content">
-                        <h1 className="content-link">{post.data.title}</h1>
-                    </div> :
+                        <div className="post-flex-item content">
+                            <h1 className="content-title">{post.data.title}</h1>
+                            <p className="content-text">{post.data.selftext}</p>
+                        </div>
+                } else if (post.data.domain === "twitter.com") {
                     output =
-                    <div className="post-flex-item content">
-                        <h1 className="content-title">{post.data.title}</h1>
-                        <p className="content-text">{post.data.selftext}</p>
-                    </div>;
+                        <div className="post-flex-item content">
+                            <h1 className="content-title">{post.data.title}</h1>
+                            <TweetEmbed id={post.data.url.split("/")[5]} />
+                        </div>
+                } 
+                    
                 break;
 
             case 'hosted:video':
@@ -91,24 +96,26 @@ export class Main extends React.Component {
                 <header className="main-header">
                     {/* Desktop View */}
                     <div id="main-subreddit">
-                        <h2>r/{this.props.subreddit}</h2>
-                        {/* If the above subreddit isn't included in state.nav, display a button with a + sign, otherwise display a minus sign */}
-                        
-                            {this.props.navItems.includes(this.props.subreddit) === true ? 
+                        {/* If the below subreddit isn't included in state.nav, display a button with a + sign, otherwise display a minus sign */}
+                        {/* Also, some formatting for if it is Search Results */}
+                        {this.props.subreddit.startsWith("Search Results") ?
+                            <h2>{this.props.subreddit}</h2> :
+                            this.props.navItems.includes(this.props.subreddit) === true ?
                                 <figure>
-                                <button className="remove" onClick={() => this.props.removeSubreddit(this.props.subreddit)}>-</button>
-                                <figcaption>
-                                    <p id="informational">Remove this subreddit from your Navigation Bar</p>
-                                </figcaption>
+                                    <h2>r/{this.props.subreddit}</h2>
+                                    <button className="remove" onClick={() => this.props.removeSubreddit(this.props.subreddit)}>-</button>
+                                    <figcaption>
+                                        <p id="informational">Remove this subreddit from your Navigation Bar</p>
+                                    </figcaption>
                                 </figure> :
-
                                 <figure>
+                                    <h2>r/{this.props.subreddit}</h2>
                                     <button className="add" onClick={() => this.props.addSubreddit(this.props.subreddit)}>+</button>
                                     <figcaption>
                                         <p id="informational">Add this subreddit to your Navigation Bar</p>
                                     </figcaption>
                                 </figure>
-                            }
+                        }
                     </div>
                     <div id="brand">
                         <img alt="icon" />
