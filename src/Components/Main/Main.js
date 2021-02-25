@@ -7,8 +7,7 @@ import TweetEmbed from 'react-tweet-embed'
 import YouTube from 'react-youtube';
 import Vimeo from '@u-wave/react-vimeo';
 import parse from 'html-react-parser';
-import myIcon from '../../Icons/logo.webp';
-
+import pepper from '../../Icons/pepper.webp';
 
 export class Main extends React.Component {
     constructor(props) {
@@ -226,7 +225,8 @@ export class Main extends React.Component {
                         }
                     </div>
                     <div id="brand">
-                        <img src={myIcon} style={{ height: '45px'}} alt="icon" />
+                        <img src={pepper} style={{ height: '50px', cursor: 'pointer'}} alt="Pepper icon" />
+                        <div id="nameLogo"></div>
                     </div>
 
                     {/* Mobile View */}

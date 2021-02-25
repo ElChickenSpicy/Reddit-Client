@@ -264,6 +264,19 @@ figure:hover figcaption {
   padding: 10px 0px;
 }
 
+#nameLogo {
+  height: 37px;
+  background-image: url('../../Icons/name.webp');
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 25%;
+  cursor: pointer;
+}
+
+#nameLogo:hover {
+  background-image: url('../../Icons/nameHover.webp');
+}
+
 .main-header input {
   display: none;
 }
