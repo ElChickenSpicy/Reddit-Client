@@ -7,6 +7,7 @@ import TweetEmbed from 'react-tweet-embed'
 import YouTube from 'react-youtube';
 import Vimeo from '@u-wave/react-vimeo';
 import parse from 'html-react-parser';
+import myIcon from '../../Icons/logo.webp';
 
 
 export class Main extends React.Component {
@@ -67,7 +68,9 @@ export class Main extends React.Component {
                             <TweetEmbed id={post.data.url.split("/")[5].split("?")[0]} />
                         </div>
                 } else if (post.data.domain.startsWith("v.redd.it")) {
-                    output =
+                    console.log(post)
+                    if (post.data.media) {
+                        output =
                     <div className="post-flex-item content">
                         <h1 className="content-title">{post.data.title}</h1>
                         <div className="image-container">
@@ -76,10 +79,18 @@ export class Main extends React.Component {
                             </video>
                         </div>
                     </div>;
+                    } else {
+                        output =
+                    <div className="post-flex-item content">
+                        <a className="content-link" href={post.data.url} target="_blank" rel="noreferrer">
+                            {post.data.title}
+                        </a>
+                    </div>;
+                    }
                 } else if (post.data.domain.startsWith("youtube.com")) {
                     output =
                     <div className="post-flex-item content">
-                        <h1 className="content-title">{post.data.title}</h1>
+                        <h1 className="content-title">Crosspost: {post.data.title}</h1>
                         <div className="image-container">
                             <YouTube videoId={post.data.url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
                         </div>
@@ -200,7 +211,7 @@ export class Main extends React.Component {
                             this.props.navItems.includes(this.props.subreddit) === true ?
                                 <figure>
                                     <h2>r/{this.props.subreddit}</h2>
-                                    <button className="remove" onClick={() => this.props.removeSubreddit(this.props.subreddit)}>-</button>
+                                    <button className="remove" onClick={() => this.props.removeSubreddit(this.props.subreddit)}>X</button>
                                     <figcaption>
                                         <p id="informational">Remove this subreddit from your Navigation Bar</p>
                                     </figcaption>
@@ -215,8 +226,7 @@ export class Main extends React.Component {
                         }
                     </div>
                     <div id="brand">
-                        <img alt="icon" />
-                        <h1>Sean's Reddit App</h1>
+                        <img src={myIcon} style={{ height: '45px'}} alt="icon" />
                     </div>
 
                     {/* Mobile View */}

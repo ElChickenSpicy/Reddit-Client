@@ -42,6 +42,7 @@ async fetchSubredditData(sub) {
 
       //Store the first 10 posts in state
       const subPosts = jsonResponse.data.children.slice(0, 10);
+      console.log(subPosts)
       this.setState({ posts: subPosts, subreddit: sub })
   
       document.querySelector('.top-container').scrollTo(0, 0);

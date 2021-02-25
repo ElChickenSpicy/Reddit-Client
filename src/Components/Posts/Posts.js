@@ -8,11 +8,7 @@ export class Posts extends React.Component {
         dayjs.extend(relativeTime)
         return (
             <div id="posts">
-                {this.props.initialPosts.length === 0 ? 
-                <div className="noPosts">
-                    <p>Looks like there is nothing to see here. Please select another Subreddit or search something new!</p>
-                </div> :
-                this.props.initialPosts.map(post => {
+                {this.props.initialPosts.map(post => {
                     const postOutput = this.props.formatPost(post);
                     return (
                         <article className="reddit-post">
