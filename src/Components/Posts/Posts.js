@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import * as dayjs from 'dayjs'
 
 export class Posts extends React.Component {
     render() {
+        const relativeTime = require('dayjs/plugin/relativeTime')
+        dayjs.extend(relativeTime)
         return (
             <div id="posts">
                 {this.props.initialPosts.length === 0 ? 
@@ -28,8 +31,8 @@ export class Posts extends React.Component {
                                 <button className="vote down"></button>
                                 <Link to={`/Comments${[post.data.permalink]}`}><button className="comment-button home"></button></Link>
                                 <span>{post.data.num_comments > 999 ? (post.data.num_comments / 1000).toFixed(1) + 'k' : post.data.num_comments}</span>
-                                <span id="posted-by">Posted by: {post.data.author}</span>
-                            </div>
+                                <span id="posted-by">Posted by: {post.data.author} ~ {dayjs(dayjs.unix(post.data.created_utc)).fromNow()}</span>
+                            </div> 
                         </article>
                     );
                 })}

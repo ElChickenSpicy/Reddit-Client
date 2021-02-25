@@ -6,6 +6,8 @@ import { decode } from 'html-entities';
 import TweetEmbed from 'react-tweet-embed'
 import YouTube from 'react-youtube';
 import Vimeo from '@u-wave/react-vimeo';
+import parse from 'html-react-parser';
+
 
 export class Main extends React.Component {
     constructor(props) {
@@ -23,10 +25,6 @@ export class Main extends React.Component {
             },
           };
         let output;
-        console.log("==============================================================")
-        console.log(post.data.title);
-        console.log(post.data.url)
-        console.log(post.data.domain);
         switch (post.data.post_hint) {
             case 'link':
                 post.data.thumbnail === 'default' ? output =
@@ -60,7 +58,7 @@ export class Main extends React.Component {
                     output =
                         <div className="post-flex-item content">
                             <h1 className="content-title">{post.data.title}</h1>
-                            <p className="content-text">{post.data.selftext}</p>
+                            <p className="content-text">{parse(decode(post.data.selftext_html))}</p>
                         </div>
                 } else if (post.data.domain === "twitter.com") {
                     output =
@@ -94,6 +92,23 @@ export class Main extends React.Component {
                             <YouTube videoId={post.data.url.split("/")[3]} opts={opts} onReady={this._onReady} />
                         </div>
                     </div>;
+                } else if (post.data.domain.startsWith("i.redd.it")) {
+                    output =
+                    <div className="post-flex-item content">
+                        <h1 className="content-title">{post.data.title}</h1>
+                        <div className="image-container">
+                            <img className="content-image" src={post.data.url} alt=''/>
+                        </div>
+                    </div>;
+                } else if (post.data.domain.startsWith("streamable")) {
+                    output =
+                    <div className="post-flex-item content">
+                        <h1 className="content-title">{post.data.title}</h1>
+                        <div className="image-container">
+                            {parse(decode(post.data.secure_media.oembed.html))}
+                        </div>
+                    </div>;
+
                 } else if (!post.data.domain.startsWith("self")) {
                         post.data.thumbnail === 'default' ? output =
                         <div className="post-flex-item content">
