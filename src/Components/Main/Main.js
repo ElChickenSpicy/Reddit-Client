@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
 import { Posts } from '../Posts/Posts';
 import { Comments } from '../Comments/Comments';
 import { decode } from 'html-entities';
@@ -7,7 +7,6 @@ import TweetEmbed from 'react-tweet-embed'
 import YouTube from 'react-youtube';
 import Vimeo from '@u-wave/react-vimeo';
 import parse from 'html-react-parser';
-import pepper from '../../Icons/pepper.webp';
 
 export class Main extends React.Component {
     constructor(props) {
@@ -111,12 +110,20 @@ export class Main extends React.Component {
                         </div>
                     </div>;
                 } else if (post.data.domain.startsWith("streamable")) {
-                    output =
+                    if (post.data.secure_media) {
+                        output =
                     <div className="post-flex-item content">
                         <h1 className="content-title">{post.data.title}</h1>
                         <div className="image-container">
                             {parse(decode(post.data.secure_media.oembed.html))}
                         </div>
+                    </div>;
+                    }
+                    output =
+                    <div className="post-flex-item content">
+                        <a className="content-link" href={post.data.url} target="_blank" rel="noreferrer">
+                            {post.data.title}
+                        </a>
                     </div>;
 
                 } else if (!post.data.domain.startsWith("self")) {
@@ -223,10 +230,6 @@ export class Main extends React.Component {
                                     </figcaption>
                                 </figure>
                         }
-                    </div>
-                    <div id="brand">
-                        <img src={pepper} style={{ height: '50px', cursor: 'pointer'}} alt="Pepper icon" />
-                        <div id="nameLogo"></div>
                     </div>
 
                     {/* Mobile View */}
