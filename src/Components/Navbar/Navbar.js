@@ -23,16 +23,7 @@ export class Navbar extends React.Component {
         return (
             <nav>
                 <section className="branding">
-                    <Link to="/" className="first40">
-                        <img id="normal" src={icon} alt="Icon" onClick={() => this.props.fetchSubredditData('popular')} onMouseOver={() => this.hoverImage()} />
-                        <img id="hoverImage" src={hoverIcon} alt="Icon" style={{ display: "none" }} onClick={() => this.props.fetchSubredditData('popular')} onMouseLeave={() => this.hoverImage()} />
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>R</h1>
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>E</h1>
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>L</h1>
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>A</h1>
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>X</h1>
-                    </Link>
-                    <div className="form">
+                <div className="form">
                         {/* When the user inputs info to the searchbar and hits enter, 
                         encode the text and call the search function with the text as the argument 
                         Note: Below searchbar adapted from design available @ https://uicookies.com/html-search-box/*/}
@@ -49,6 +40,15 @@ export class Navbar extends React.Component {
                         />
                         <i class="fa fa-search"></i>
                     </div>
+                    <Link to="/" className="first40">
+                        <img id="normal" src={icon} alt="Icon" onClick={() => this.props.fetchSubredditData('popular')} onMouseOver={() => this.hoverImage()} />
+                        <img id="hoverImage" src={hoverIcon} alt="Icon" style={{ display: "none" }} onClick={() => this.props.fetchSubredditData('popular')} onMouseLeave={() => this.hoverImage()} />
+                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>R</h1>
+                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>E</h1>
+                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>L</h1>
+                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>A</h1>
+                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>X</h1>
+                    </Link>
                 </section>
                 <section className="subreddit-container">
                     <header className="subreddit-title">

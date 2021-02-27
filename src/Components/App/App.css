@@ -69,7 +69,7 @@ a:link, a:visited {
   height: 99vh;
   overflow: auto;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 nav {
@@ -80,7 +80,19 @@ nav {
   width: 18%;
   height: 98%;
   position: fixed;
-  left: 1.5%;
+  left: 1%;
+}
+
+.main-header {
+  border: 6px solid red;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 18%;
+  height: 98%;
+  position: fixed;
+  right: 1%;
 }
 
 main {
@@ -88,14 +100,10 @@ main {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  border: 3px solid turquoise;
-  width: 77%;
+  width: 60%;
   height: fit-content;
   min-height: 100%;
-  margin-bottom: 10px;
-  margin-right: 1.5%;
-  background-color: lightgray;
-  padding-top: 120px;
+  margin-bottom: 20px;
 }
 
 main #posts {
@@ -110,7 +118,7 @@ main #posts {
   justify-content: center;
   align-items: center;
   margin-left: auto;
-  margin-right: 5px;
+  margin-right: 8px;
   transition: all 0.4s;
   width: 40px;
   height: 40px;
@@ -153,7 +161,7 @@ input{
 }
 
 .form:hover{
-  width: 58%;
+  width: 100%;
   cursor: pointer;
   background-color: bisque;
 }
@@ -169,12 +177,17 @@ input{
   height: 60px;
   background-color: white;
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
   border-radius: 8px;
   justify-content: flex-start;
   padding-left: 12px;
   margin-bottom: 8px;
   margin-top: 6px;
+}
+
+.form:hover ~ .first40 {
+  display: none;
 }
 
 .first40 {
@@ -244,7 +257,7 @@ ul {
 }
 
 ul li {
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: 'Hind Siliguri', sans-serif;
   font-size: 14px;
   font-weight: 500;
   padding-top: 7px;
@@ -264,25 +277,6 @@ ul li img {
   margin-right: 12px;
   height: 36px;
   border-radius: 50%;
-}
-
-.main-header {
-  border: 2px solid black;
-  height: 120px;
-  width: 76%;
-  position: fixed;
-  background-color: white;
-  top: 0px;
-}
-
-.main-header img {
-  margin-right: 10px;
-}
-
-.main-header h2 {
-  font-weight: 700;
-  font-size: 20px;
-  margin-right: 10px;
 }
 
 #main-subreddit {
@@ -364,33 +358,39 @@ figure:hover figcaption {
 }
 
 .reddit-post {
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.062);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  border: 2px solid black;
-  width: 98%;
+  align-items: flex-start;
+  width: 99%;
   height: fit-content;
   margin-top: 15px;
   background-color: white;
-  border-radius: 8px;
+  border-radius: 16px;
+  padding-left: 15px;
 }
 
 .post-flex-item {
   display: flex;
-  width: 98%;
+  width: 99%;
 }
+
 
 .sub {
   height: 40px;
-  margin: 7px 0px;
+  margin-top: 7px;
+  margin-bottom: 7px;
   justify-content: flex-start;
   align-items: center;
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .sub img {
   margin-right: 7px;
-  height: 30px;
+  height: 35px;
   border-radius: 50%;
 }
 
@@ -400,7 +400,7 @@ figure:hover figcaption {
 }
 
 .content-title {
-  width: 50%;
+  width: 40%;
   background-color: white;
   display: flex;
   align-items: center;
@@ -452,13 +452,13 @@ figure:hover figcaption {
 }
 
 .thumbnail-container {
-  width: 33%;
+  width: 30%;
   margin-right: 20px;
   margin-left: auto;
 }
 
 .thumbnail {
-  height: 120px;
+  height: 140px;
   width: auto;
   border-radius: 8px;
 }
@@ -489,11 +489,12 @@ figure:hover figcaption {
   background-color: white;
   width: 60%;
   padding: 50px 30px;
+  font-family: 'PT Sans', sans-serif;
 }
 
 .options {
-  height: 40px;
-  margin: 7px 0px;
+  height: 26px;
+  margin: 14px 0px;
 }
 
 .options button {
@@ -584,7 +585,8 @@ span {
 }
 
 #posted-by {
-  font-size: 14px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
   font-style: italic;
   margin-left: auto;
   margin-right: 10px;
@@ -666,16 +668,46 @@ span {
   justify-content: flex-start;
 }
 
-.noPosts {
-  width: 99%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 30vh;
-  font-size: 18px;
-  background-color: white;
-  border-radius: 8px;
-  border: 2px solid black;
+/* Brand and Searchbar get different lines at this screen width */
+@media only screen
+and (max-width : 1024px) {
+
+  .nav {
+    width: 24%;
+  }
+
+  .main {
+    width: 72%;
+  }
+
+  .branding {
+    height: 120px;
+    flex-direction: column-reverse;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .first40 {
+    width: 100%;
+  }
+
+  .form:hover ~ .first40 {
+    display: flex;
+  }
+
+  .form {
+    margin-left: 0px;
+    margin-right: auto;
+    margin-bottom: 10px;
+  }
+
+  ul li {
+    font-size: 12px;
+  }
+  
+  ul li img {
+    height: 30px;
+    width: 30px;
+  }
 }
 
 /* Smartphones/Tablets (portrait) ----------- */

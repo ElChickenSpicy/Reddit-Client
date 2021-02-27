@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import { Navbar } from '../Navbar/Navbar';
 import { Main } from '../Main/Main';
+import { Options } from '../Options/Options';
 import { BrowserRouter as Router } from "react-router-dom";
 
 
@@ -31,6 +32,7 @@ async fetchInitialData() {
       //Store the first 10 posts in state
       const popularPosts = jsonResponse.data.children.slice(0, 10);
       this.setState({ posts: popularPosts })
+      console.log(this.state.posts);
   }
 }
 
@@ -116,6 +118,7 @@ componentDidMount() {
             addSubreddit={this.addSubreddit}
             removeSubreddit={this.removeSubreddit}
           />
+          <Options />
         </Router>
       </div>
     )
