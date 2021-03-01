@@ -11,8 +11,9 @@ export class App extends React.Component {
     super(props);
     this.state = { 
       posts: [], 
-      subreddit: 'popular',
-      nav: ['popular', 'soccer', 'AskReddit', 'dataisbeautiful', 'ProgrammerHumor', 'Art']
+      activeSubreddit: 'popular',
+      nav: ['popular', 'soccer', 'AskReddit', 'dataisbeautiful', 'ProgrammerHumor', 'Art'],
+      subredditsAbout: []
      };
     this.fetchInitialData = this.fetchInitialData.bind(this);
     this.fetchSubredditData = this.fetchSubredditData.bind(this);
@@ -21,6 +22,7 @@ export class App extends React.Component {
     this.addSubreddit = this.addSubreddit.bind(this);
     this.removeSubreddit = this.removeSubreddit.bind(this);
     this.Search = this.Search.bind(this);
+    this.fetchAbout = this.fetchAbout.bind(this);
 }
 
 async fetchInitialData() {
@@ -32,8 +34,41 @@ async fetchInitialData() {
       //Store the first 10 posts in state
       const popularPosts = jsonResponse.data.children.slice(0, 10);
       this.setState({ posts: popularPosts })
-      console.log(this.state.posts);
+
+      //Populate the subredditsAbout state with the subreddit data from the initial posts
+      this.state.posts.forEach(post => {
+        this.fetchAbout(post.data);
+      });
   }
+}
+
+//Return the About data of the given subreddit
+//Allows state to dynamically assign subreddit icons and descriptions to the corresponding posts
+async fetchAbout(post) {
+    const response = await fetch('https://www.reddit.com/r/' + post.subreddit + '/about/.json');
+    if (response.ok) {
+      const jsonResponse = await response.json();
+      const subreddit = jsonResponse.data;
+
+      //If the array is empty, add the first element
+      if (this.state.subredditsAbout.length <= 0) {
+        this.setState({ subredditsAbout: [subreddit] });
+
+      //Else, check if the subreddit exists in state
+      } else {
+        const copy = this.state.subredditsAbout;
+        let exists = copy.filter(el => {
+          return el.name === subreddit.name;
+        });
+
+        //If it doesn't exist, add it to state
+        if (exists.length === 0) {
+          this.setState({
+            subredditsAbout: [...copy, subreddit]
+          });
+        }
+      }
+    }
 }
 
 async fetchSubredditData(sub) {
@@ -44,7 +79,12 @@ async fetchSubredditData(sub) {
 
       //Store the first 10 posts in state
       const subPosts = jsonResponse.data.children.slice(0, 10);
-      this.setState({ posts: subPosts, subreddit: sub })
+      this.setState({ posts: subPosts, activeSubreddit: sub });
+
+      //Populate the subredditsAbout state with the subreddit data from the initial posts
+      this.state.posts.forEach(post => {
+        this.fetchAbout(post.data);
+      });
   
       document.querySelector('.top-container').scrollTo(0, 0);
     }
@@ -58,7 +98,12 @@ async Search(query, str) {
 
       //Store the first 10 posts in state
       const subPosts = jsonResponse.data.children.slice(0, 10);
-      this.setState({ posts: subPosts, subreddit: "Search Results: " + str })
+      this.setState({ posts: subPosts, activeSubreddit: "Search Results: " + str });
+
+      //Populate the subredditsAbout state with the subreddit data from the initial posts
+      this.state.posts.forEach(post => {
+        this.fetchAbout(post.data);
+      });
   
       document.querySelector('.top-container').scrollTo(0, 0);
     }
@@ -67,7 +112,7 @@ async Search(query, str) {
 highlightActive() {
   let selected = [];
   this.state.nav.forEach(item => {
-    if (this.state.subreddit === item) {
+    if (this.state.activeSubreddit === item) {
       selected.push(item);
     }
   })
@@ -108,15 +153,17 @@ componentDidMount() {
             fetchSubredditData={this.fetchSubredditData} 
             highlightActive={this.highlightActive()}
             search={this.Search}
+            fetchAbout={this.fetchAbout}
           />
           <Main 
             posts={this.state.posts} 
-            subreddit={this.state.subreddit} 
             navItems={this.state.nav} 
             updatePost={this.updatePost} 
             fetchSubredditData={this.fetchSubredditData}
             addSubreddit={this.addSubreddit}
             removeSubreddit={this.removeSubreddit}
+            fetchAbout={this.fetchAbout}
+            about={this.state.subredditsAbout}
           />
           <Options />
         </Router>

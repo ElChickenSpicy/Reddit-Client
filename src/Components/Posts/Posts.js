@@ -9,6 +9,7 @@ export class Posts extends React.Component {
         return (
             <div id="posts">
                 {this.props.initialPosts.map(post => {
+                    const subreddit = this.props.about.filter(el => el.name === post.data.subreddit_id);
                     const postOutput = this.props.formatPost(post);
                     return (
                         <article className="reddit-post">
@@ -16,7 +17,12 @@ export class Posts extends React.Component {
                                 <div className="post-flex-item sub">
                                     {/* onError tag taken from Stack Overflow on 23/2/2021 from Deepak Mallah
                                     URL: https://stackoverflow.com/questions/34097560/react-js-replace-img-src-onerror */}
-                                    <img src={"subreddit/" + post.data.subreddit + ".webp"} alt="icon" onError={(e)=>{e.target.onerror = null; e.target.src="subreddit/reddit.webp"}}/>
+                                    <img 
+                                        src={subreddit[0] ? subreddit[0].icon_img : "subreddit/reddit.webp" } 
+                                        alt="icon" 
+                                        onError={(e)=>{e.target.onerror = null; e.target.src="subreddit/reddit.webp"}}
+                                    />
+                                    {/* <img src={"subreddit/" + post.data.subreddit + ".webp"} alt="icon" onError={(e)=>{e.target.onerror = null; e.target.src="subreddit/reddit.webp"}}/> */}
                                     <h3 onClick={() => {this.props.fetchSubredditData(post.data.subreddit)}}>r/{post.data.subreddit}</h3>
                                 </div>
                             </Link> 

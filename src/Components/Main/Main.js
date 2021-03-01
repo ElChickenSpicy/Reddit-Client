@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { Posts } from '../Posts/Posts';
 import { Comments } from '../Comments/Comments';
 import { decode } from 'html-entities';
@@ -69,7 +69,6 @@ export class Main extends React.Component {
                             <TweetEmbed id={post.data.url.split("/")[5].split("?")[0]} />
                         </div>
                 } else if (post.data.domain.startsWith("v.redd.it")) {
-                    console.log(post)
                     if (post.data.media) {
                         output =
                     <div className="post-flex-item content">
@@ -211,7 +210,7 @@ export class Main extends React.Component {
         return (
             <main>
                 <Switch>
-                    <Route path="/" exact render={routeProps => <Posts rp={routeProps} initialPosts={this.props.posts} formatPost={this.formatPost} fetchSubredditData={this.props.fetchSubredditData}/>} />
+                    <Route path="/" exact render={routeProps => <Posts rp={routeProps} initialPosts={this.props.posts} formatPost={this.formatPost} fetchSubredditData={this.props.fetchSubredditData} about={this.props.about}/>} />
                     <Route path="/Comments/:id" render={routeProps => <Comments rp={routeProps} formatPost={this.formatPost} updatePost={this.props.updatePost} />} />
                 </Switch>        
             </main>

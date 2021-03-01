@@ -376,7 +376,6 @@ figure:hover figcaption {
   width: 99%;
 }
 
-
 .sub {
   height: 40px;
   margin-top: 7px;
@@ -391,6 +390,7 @@ figure:hover figcaption {
 .sub img {
   margin-right: 7px;
   height: 35px;
+  width: 35px;
   border-radius: 50%;
 }
 
