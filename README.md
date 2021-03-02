@@ -19,3 +19,4 @@ The aim of this project is to create a relaxed, comfortable view of your favouri
 * React - v 17.0.1
 * [Reddit API](https://www.reddit.com/dev/api/)
 * Enzyme v 3.11.0
+* _The project also uses a range of JS libraries, which I will document in due course!_
