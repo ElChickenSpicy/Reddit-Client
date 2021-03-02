@@ -87,7 +87,12 @@ export class Comments extends React.Component {
                                 <button className="vote down"></button>
                                 <Link to={`/Comments${[post.data.permalink]}`}><button className="comment-button active"></button></Link>
                                 <span>{post.data.num_comments > 999 ? (post.data.num_comments / 1000).toFixed(1) + 'k' : post.data.num_comments}</span>
-                                <Link to="/"><button className="back-button"></button></Link>
+                                <Link to="/">
+                                    <button 
+                                    className="back-button"
+                                    onClick={() => this.props.setScrollPosition()}
+                                    ></button>
+                                </Link>
                                 <span id="posted-by">Posted by: {post.data.author} ~ {dayjs(dayjs.unix(post.data.created_utc)).fromNow()}</span>
                             </div>
                         </article>

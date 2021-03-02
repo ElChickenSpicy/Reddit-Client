@@ -12,7 +12,23 @@ import Vimeo from '@u-wave/react-vimeo';
 export class Main extends React.Component {
     constructor(props) {
         super(props);
+        this.state = { 
+            scrollPosition: [] 
+        };
         this.formatPost = this.formatPost.bind(this);
+        this.saveScrollPosition = this.saveScrollPosition.bind(this);
+        this.setScrollPosition = this.setScrollPosition.bind(this);
+    }
+
+    saveScrollPosition() {
+        const left = document.querySelector('.top-container').scrollLeft;
+        const top =  document.querySelector('.top-container').scrollTop;
+        const container = [left, top];
+        this.setState({ scrollPosition: [ ...container ] });
+    }
+
+    setScrollPosition() {
+        document.querySelector('.top-container').scrollTo(...this.state.scrollPosition);
     }
 
     formatPost(post) {
@@ -260,6 +276,7 @@ export class Main extends React.Component {
                         formatPost={this.formatPost} 
                         fetchSubredditData={this.props.fetchSubredditData} 
                         about={this.props.about}
+                        saveScrollPosition={this.saveScrollPosition}
                         />
                     }/>
                     <Route 
@@ -270,6 +287,7 @@ export class Main extends React.Component {
                         formatPost={this.formatPost} 
                         updatePost={this.props.updatePost}
                         about={this.props.about}
+                        setScrollPosition={this.setScrollPosition}
                         />
                     }/>
                 </Switch>        
