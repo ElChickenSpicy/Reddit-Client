@@ -3,10 +3,11 @@ import { Switch, Route } from "react-router-dom";
 import { Posts } from '../Posts/Posts';
 import { Comments } from '../Comments/Comments';
 import { decode } from 'html-entities';
+import parse from 'html-react-parser';
+//For embedding content
 import TweetEmbed from 'react-tweet-embed'
 import YouTube from 'react-youtube';
 import Vimeo from '@u-wave/react-vimeo';
-import parse from 'html-react-parser';
 
 export class Main extends React.Component {
     constructor(props) {
@@ -15,6 +16,7 @@ export class Main extends React.Component {
     }
 
     formatPost(post) {
+        //YouTube configuration options
         const opts = {
             height: '390',
             width: '640',
@@ -23,183 +25,214 @@ export class Main extends React.Component {
               autoplay: 0,
             },
           };
+
+        //Variable to store the outputted format of the post
         let output;
+
+        //Object destructuring
+        const { data } = post;
+        let { domain, selftext, title, url } = data;
+        title = decode(title);
+        const titleLink = 
+        <a className="content-link" href={url} target="_blank" rel="noreferrer">
+            {title}
+        </a>;
         
-        switch (post.data.post_hint) {
+        //Switch statement based on the post_hint property
+        switch (data.post_hint) {
+            //Link
             case 'link':
-                post.data.thumbnail === 'default' ? 
+                if (data.thumbnail === 'default') {
                     output =
                     <div className="post-flex-item content">
-                        <a className="content-link" href={post.data.url} target="_blank" rel="noreferrer">
-                            {post.data.title}
-                        </a>
-                    </div> : 
+                        {titleLink}
+                    </div>
+                } else {
                     output =
                     <div className="post-flex-item content">
-                        <a className="content-link" href={post.data.url} target="_blank" rel="noreferrer">
-                            {post.data.title}
+                        <a className="content-link" href={url} target="_blank" rel="noreferrer">
+                            {title}
                             <div className="thumbnail-container">
-                                <img className="thumbnail" src={post.data.thumbnail} alt='' />
+                                <img className="thumbnail" src={data.thumbnail} alt={title} />
                             </div>
                         </a>
                     </div>;
+                }  
                 break;
-
+            //Image
             case 'image':
                 output =
                     <div className="post-flex-item content">
-                        <h1 className="content-title">{post.data.title}</h1>
+                        {titleLink}
                         <div className="image-container">
-                            <img className="content-image" src={post.data.url} alt=''/>
+                            <img className="content-image" src={url} alt={title}/>
                         </div>
                     </div>;
                 break;
-
-            case undefined:
-                if (post.data.selftext !== "") {
-                    output =
-                        <div className="post-flex-item content">
-                            <h1 className="content-title">{post.data.title}</h1>
-                            <p className="content-text">{parse(decode(post.data.selftext_html))}</p>
-                        </div>
-                } else if (post.data.domain === "twitter.com") {
-                    output =
-                        <div className="post-flex-item content">
-                            <h1 className="content-title">{post.data.title}</h1>
-                            <TweetEmbed id={post.data.url.split("/")[5].split("?")[0]} />
-                        </div>
-                } else if (post.data.domain.startsWith("v.redd.it")) {
-                    if (post.data.media) {
-                        output =
-                    <div className="post-flex-item content">
-                        <h1 className="content-title">{post.data.title}</h1>
-                        <div className="image-container">
-                            <video className="content-video" controls>
-                                <source src={post.data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
-                            </video>
-                        </div>
-                    </div>;
-                    } else {
-                        output =
-                    <div className="post-flex-item content">
-                        <a className="content-link" href={post.data.url} target="_blank" rel="noreferrer">
-                            {post.data.title}
-                        </a>
-                    </div>;
-                    }
-                } else if (post.data.domain.startsWith("youtube.com")) {
-                    output =
-                    <div className="post-flex-item content">
-                        <h1 className="content-title">Crosspost: {post.data.title}</h1>
-                        <div className="image-container">
-                            <YouTube videoId={post.data.url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
-                        </div>
-                    </div>;
-                } else if (post.data.domain.startsWith("youtu.be")) {
-                    output =
-                    <div className="post-flex-item content">
-                        <h1 className="content-title">{post.data.title}</h1>
-                        <div className="image-container">
-                            <YouTube videoId={post.data.url.split("/")[3]} opts={opts} onReady={this._onReady} />
-                        </div>
-                    </div>;
-                } else if (post.data.domain.startsWith("i.redd.it")) {
-                    output =
-                    <div className="post-flex-item content">
-                        <h1 className="content-title">{post.data.title}</h1>
-                        <div className="image-container">
-                            <img className="content-image" src={post.data.url} alt=''/>
-                        </div>
-                    </div>;
-                } else if (post.data.domain.startsWith("streamable")) {
-                    if (post.data.secure_media) {
-                        output =
-                    <div className="post-flex-item content">
-                        <h1 className="content-title">{post.data.title}</h1>
-                        <div className="image-container">
-                            {parse(decode(post.data.secure_media.oembed.html))}
-                        </div>
-                    </div>;
-                    }
-                    output =
-                    <div className="post-flex-item content">
-                        <a className="content-link" href={post.data.url} target="_blank" rel="noreferrer">
-                            {post.data.title}
-                        </a>
-                    </div>;
-
-                } else if (!post.data.domain.startsWith("self")) {
-                        post.data.thumbnail === 'default' ? output =
-                        <div className="post-flex-item content">
-                            <a className="content-link" href={post.data.url} target="_blank" rel="noreferrer">
-                                {post.data.title}
-                            </a>
-                        </div> : output =
-                        <div className="post-flex-item content">
-                            <a className="content-link" href={post.data.url} target="_blank" rel="noreferrer">
-                                {post.data.title}
-                                <div className="thumbnail-container">
-                                    <img className="thumbnail" src={post.data.thumbnail} alt='' />
-                                </div>
-                            </a>
-                        </div>;
-
-                } else {
-                    output =
-                        <div className="post-flex-item content">
-                            <h1 className="content-oneliner">{post.data.title}</h1>
-                        </div>
-                }
-                    
-                break;
-
+            //Hosted Video
             case 'hosted:video':
                 output =
                     <div className="post-flex-item content">
-                        <h1 className="content-title">{post.data.title}</h1>
+                        {titleLink}
                         <div className="image-container">
                             <video className="content-video" controls>
-                                <source src={post.data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
+                                <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
                             </video>
                         </div>
                     </div>;
                 break;
-
+            //Rich Video
             case 'rich:video':
-                if (post.data.domain.startsWith("youtube.com")) {
-                    output =
-                    <div className="post-flex-item content">
-                        <h1 className="content-title">{post.data.title}</h1>
-                        <div className="image-container">
-                            <YouTube videoId={post.data.url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
-                        </div>
-                    </div>;
-                } else if (post.data.domain.startsWith("youtu.be")) {
-                    output =
-                    <div className="post-flex-item content">
-                        <h1 className="content-title">{post.data.title}</h1>
-                        <div className="image-container">
-                            <YouTube videoId={post.data.url.split("/")[3]} opts={opts} onReady={this._onReady} />
-                        </div>
-                    </div>;
-                } else if (post.data.domain.startsWith("vimeo")) {
-                    output =
-                    <div className="post-flex-item content">
-                        <h1 className="content-title">{post.data.title}</h1>
-                        <div className="image-container">
-                        <Vimeo
-                            video={post.data.url.split("/")[3]}
-                            width="640"
-                            height="390"
-                        />
-                        </div>
-                    </div>;
+                switch (domain) {
+                    case 'youtube.com' :
+                        output =
+                        <div className="post-flex-item content">
+                            {titleLink}
+                            <div className="image-container">
+                                <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
+                            </div>
+                        </div>;
+                        break;
+                    case 'youtu.be' :
+                        output =
+                        <div className="post-flex-item content">
+                            {titleLink}
+                            <div className="image-container">
+                                <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
+                            </div>
+                        </div>;
+                        break;
+                    case 'gfycat.com' :
+                        output =
+                        <div className="post-flex-item content">
+                            {titleLink}
+                            <div className="image-container">
+                                {parse(decode(data.media_embed.content))}
+                            </div>
+                        </div>;
+                        break;
+                    case 'vimeo' :
+                        output =
+                        <div className="post-flex-item content">
+                            {titleLink}
+                            <div className="image-container">
+                            <Vimeo
+                                video={url.split("/")[3]}
+                                width="640"
+                                height="390"
+                            />
+                            </div>
+                        </div>;
+                        break;
                 }
                 break;
+                //Undefined
+                case undefined:
+                if (selftext !== "") {
+                    output =
+                        <div className="post-flex-item content">
+                            {titleLink}
+                            <p className="content-text">{parse(decode(data.selftext_html))}</p>
+                        </div>
+                } else if (!domain.startsWith("self")) {
+                    switch (domain) {
+                        case 'twitter.com' :
+                            output =
+                            <div className="post-flex-item content">
+                                {titleLink}
+                                <TweetEmbed id={url.split("/")[5].split("?")[0]} />
+                            </div>
+                            break;
+                        case 'v.redd.it' :
+                            if (data.media) {
+                                output =
+                                <div className="post-flex-item content">
+                                    {titleLink}
+                                    <div className="image-container">
+                                        <video className="content-video" controls>
+                                            <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
+                                        </video>
+                                    </div>
+                                </div>;
+                            } else {
+                                output =
+                                <div className="post-flex-item content">
+                                    {titleLink}
+                                </div>;
+                            }
+                            break;
+                        case 'youtube.com' :
+                            output =
+                            <div className="post-flex-item content">
+                                Crosspost: {titleLink}
+                                <div className="image-container">
+                                    <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
+                                </div>
+                            </div>;
+                            break;
+                        case 'youtu.be' :
+                            output =
+                            <div className="post-flex-item content">
+                                {titleLink}
+                                <div className="image-container">
+                                    <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
+                                </div>
+                            </div>;
+                            break;
+                        case 'i.redd.it' :
+                            output =
+                            <div className="post-flex-item content">
+                                {titleLink}
+                                <div className="image-container">
+                                    <img className="content-image" src={url} alt=''/>
+                                </div>
+                            </div>;
+                            break;
+                        case 'streamable' :
+                            if (data.secure_media) {
+                                output =
+                                <div className="post-flex-item content">
+                                    {titleLink}
+                                    <div className="image-container">
+                                        {parse(decode(data.secure_media.oembed.html))}
+                                    </div>
+                                </div>;
+                            } else {
+                                output =
+                                <div className="post-flex-item content">
+                                    {titleLink}
+                                </div>;
+                            }
+                            break;
+                        default :
+                            data.thumbnail === 'default' ? 
+                            output =
+                            <div className="post-flex-item content">
+                                {titleLink}
+                            </div> : 
+                            output =
+                            <div className="post-flex-item content">
+                                <a className="content-link" href={url} target="_blank" rel="noreferrer">
+                                    {title}
+                                    <div className="thumbnail-container">
+                                        <img className="thumbnail" src={data.thumbnail} alt='' />
+                                    </div>
+                                </a>
+                            </div>;
+                            break;
+                    }
+                } else {
+                    output =
+                        <div className="post-flex-item content">
+                            <h1 className="content-oneliner">{title}</h1>
+                        </div>
+                } 
+                break;
+            //Default
             default:
                 output =
                     <div className="post-flex-item content">
-                        <h1 className="content-link">{post.data.title}</h1>
+                        {titleLink}
                     </div>;
                 break;
         }
@@ -210,8 +243,26 @@ export class Main extends React.Component {
         return (
             <main>
                 <Switch>
-                    <Route path="/" exact render={routeProps => <Posts rp={routeProps} initialPosts={this.props.posts} formatPost={this.formatPost} fetchSubredditData={this.props.fetchSubredditData} about={this.props.about}/>} />
-                    <Route path="/Comments/:id" render={routeProps => <Comments rp={routeProps} formatPost={this.formatPost} updatePost={this.props.updatePost} />} />
+                    <Route 
+                    path="/" exact 
+                    render={routeProps => 
+                        <Posts 
+                        rp={routeProps} 
+                        initialPosts={this.props.posts} 
+                        formatPost={this.formatPost} 
+                        fetchSubredditData={this.props.fetchSubredditData} 
+                        about={this.props.about}
+                        />
+                    }/>
+                    <Route 
+                    path="/Comments/:id" 
+                    render={routeProps => 
+                        <Comments 
+                        rp={routeProps} 
+                        formatPost={this.formatPost} 
+                        updatePost={this.props.updatePost} 
+                        />
+                    }/>
                 </Switch>        
             </main>
         )

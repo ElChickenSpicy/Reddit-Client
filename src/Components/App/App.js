@@ -32,7 +32,7 @@ async fetchInitialData() {
       const jsonResponse = await response.json();
 
       //Store the first 10 posts in state
-      const popularPosts = jsonResponse.data.children.slice(0, 10);
+      const popularPosts = jsonResponse.data.children.slice(0, 25);
       this.setState({ posts: popularPosts })
 
       //Populate the subredditsAbout state with the subreddit data from the initial posts
@@ -78,7 +78,7 @@ async fetchSubredditData(sub) {
       const jsonResponse = await response.json();
 
       //Store the first 10 posts in state
-      const subPosts = jsonResponse.data.children.slice(0, 10);
+      const subPosts = jsonResponse.data.children.slice(0, 25);
       this.setState({ posts: subPosts, activeSubreddit: sub });
 
       //Populate the subredditsAbout state with the subreddit data from the initial posts
@@ -87,6 +87,7 @@ async fetchSubredditData(sub) {
       });
   
       document.querySelector('.top-container').scrollTo(0, 0);
+      subPosts.forEach(post => console.log(post.data));
     }
 }
 
