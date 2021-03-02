@@ -65,6 +65,9 @@ a:link, a:visited {
 }
 
 /* || Home Page Layout - Desktop  */
+/* Including Subreddit/Search Views */
+
+/* Overall Container */
 .top-container {
   height: 99vh;
   overflow: auto;
@@ -72,6 +75,8 @@ a:link, a:visited {
   justify-content: center;
 }
 
+/* Container of left-hand side and its children*/
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 nav {
   display: flex;
   flex-direction: column;
@@ -83,34 +88,20 @@ nav {
   left: 1%;
 }
 
-.main-header {
-  border: 6px solid red;
+.branding {
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 95%;
+  height: 60px;
+  background-color: white;
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   align-items: center;
-  justify-content: space-evenly;
-  width: 18%;
-  height: 98%;
-  position: fixed;
-  right: 1%;
-}
-
-main {
-  display: flex;
-  flex-direction: column;
+  border-radius: 8px;
   justify-content: flex-start;
-  align-items: center;
-  width: 60%;
-  height: fit-content;
-  min-height: 100%;
-  margin-bottom: 20px;
-}
-
-main #posts {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding-left: 12px;
+  margin-bottom: 8px;
+  margin-top: 6px;
 }
 
 .form{
@@ -168,22 +159,6 @@ input{
 
 .form:hover input{
   display: block;
-}
-
-.branding {
-  box-sizing: border-box;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  width: 95%;
-  height: 60px;
-  background-color: white;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  border-radius: 8px;
-  justify-content: flex-start;
-  padding-left: 12px;
-  margin-bottom: 8px;
-  margin-top: 6px;
 }
 
 .form:hover ~ .first40 {
@@ -279,84 +254,42 @@ ul li img {
   border-radius: 50%;
 }
 
-#main-subreddit {
+/* Container on right-hand side and its children*/
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+.main-header {
+  border: 6px solid red;
   display: flex;
-  position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
-  margin-left: 30px;
-  width: 30%;
+  flex-direction: column;
   align-items: center;
+  justify-content: space-evenly;
+  width: 18%;
+  height: 98%;
+  position: fixed;
+  right: 1%;
+}
+
+/* Central Container and its immediate children */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+main {
+  display: flex;
+  flex-direction: column;
   justify-content: flex-start;
-}
-
-#main-subreddit button {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 25px;
-  font-weight: 900;
-  border-radius: 4px;
-  outline: none;
-  border: none
+  width: 60%;
+  height: fit-content;
+  min-height: 100%;
+  margin-bottom: 20px;
 }
 
-.add {
-  background-color: lightgreen;
-  color: white;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.add:hover {
-  background-color: rgb(67, 245, 67);
-  color: white;
-}
-
-.remove {
-  background-color: lightcoral;
-  color: white;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-.remove:hover {
-  background-color: rgb(245, 80, 80);
-  color: white;
-}
-
-figure {
+main #posts {
+  width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
-figcaption {
-  display: none;
-}
-figure:hover figcaption {
-  display: block;
-}
-
-#informational {
-  background-color: rgba(211, 211, 211, 0.212);
-  border-radius: 8px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 15px;
-  width: 115%;
-  padding: 10px 0px;
-}
-
-.main-header input {
-  display: none;
-}
-
-.main-header select {
-  display: none;
-}
-
+/* Post Containers */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .reddit-post {
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.062);
   display: flex;
@@ -376,6 +309,8 @@ figure:hover figcaption {
   width: 99%;
 }
 
+/* Top row of a post container (subreddit & icon) */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .sub {
   height: 40px;
   margin-top: 7px;
@@ -394,67 +329,56 @@ figure:hover figcaption {
   border-radius: 50%;
 }
 
+/* Content of a post */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .content {
   height: 100%;
-  background-color: lightgray;
+  background-color: white;
 }
 
-.content-title {
+.title {
   width: 40%;
-  background-color: white;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding: 20px 30px 30px 30px;
 }
 
-.content-oneliner {
-  width: 100%;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 20px;
-  padding-left: 15px;
-  padding-bottom: 30px;
-  padding-right: 25px;
-}
-
-.content-media {
-  width: 60%;
-  margin-top: 0px;
-  border: 1px solid black;
-  background-color: white;
-  text-align: center;
-}
-
-.content-link {
-  width: 50%;
-  padding-top: 20px;
-  padding-left: 15px;
-  padding-bottom: 30px;
-  padding-right: 25px;
-  margin-top: 0px;
-  background-color: white;
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.content-link:link {
+.link:link {
   text-decoration: none;
 }
 
-.content-link:hover {
+.link:hover {
   text-decoration: underline;
 }
 
-.thumbnail-container {
-  width: 30%;
-  margin-right: 20px;
-  margin-left: auto;
+.oneliner {
+  width: 100%;
+}
+
+.media {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  max-width: 90%;
+  max-height: 800px;
+}
+
+.video {
+  max-width: 90%;
+  max-height: 800px;
+}
+
+.text {
+  width: 60%;
+  padding: 50px 30px;
+  font-family: 'PT Sans', sans-serif;
+  background-color: rgb(243, 243, 243);
+  border-radius: 16px;
 }
 
 .thumbnail {
@@ -463,35 +387,13 @@ figure:hover figcaption {
   border-radius: 8px;
 }
 
-.image-container {
-  width: 60%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-}
-
+/* Uniform width for Twitter content */
 [id^="twitter-widget"] {
   width: 450px !important;
 }
 
-.content-image {
-  max-width: 90%;
-  max-height: 800px;
-}
-
-.content-video {
-  max-width: 90%;
-  max-height: 800px;
-}
-
-.content-text {
-  background-color: white;
-  width: 60%;
-  padding: 50px 30px;
-  font-family: 'PT Sans', sans-serif;
-}
-
+/* Bottom row of a post container (buttons, etc) */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .options {
   height: 26px;
   margin: 14px 0px;
@@ -551,7 +453,7 @@ figure:hover figcaption {
   background-image: url('../../Icons/noun_icon.png');
 }
 
-.pressed {
+.active {
   background-image: url('../../Icons/noun_hover.webp');
   cursor: default;
 }
@@ -577,21 +479,8 @@ figure:hover figcaption {
   background-color: lightgray;
 }
 
-span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-}
-
-#posted-by {
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 13px;
-  font-style: italic;
-  margin-left: auto;
-  margin-right: 10px;
-}
-
+/* Comments container and its children */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .comments-container {
   width: 98%;
   margin-top: 10px;
@@ -628,12 +517,27 @@ span {
   cursor: pointer;
 }
 
+#posted-by {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  font-style: italic;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
 #comment-time {
   font-weight: 300;
   font-size: 14px;
   font-style: italic;
   display: inline-block;
   margin-left: 7px;
+}
+
+span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
 }
 
 .first-reply-layer {

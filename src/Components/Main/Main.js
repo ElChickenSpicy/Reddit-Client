@@ -33,10 +33,14 @@ export class Main extends React.Component {
         const { data } = post;
         let { domain, selftext, title, url } = data;
         title = decode(title);
+
+        //Reusable JSX elements
         const titleLink = 
-        <a className="content-link" href={url} target="_blank" rel="noreferrer">
+        <a className="title link" href={url} target="_blank" rel="noreferrer">
             {title}
         </a>;
+        const plainHeading = 
+        <h1 className="title">{title}</h1>;
         
         //Switch statement based on the post_hint property
         switch (data.post_hint) {
@@ -45,17 +49,17 @@ export class Main extends React.Component {
                 if (data.thumbnail === 'default') {
                     output =
                     <div className="post-flex-item content">
-                        {titleLink}
+                        <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
+                            {title}
+                        </a>;
                     </div>
                 } else {
                     output =
                     <div className="post-flex-item content">
-                        <a className="content-link" href={url} target="_blank" rel="noreferrer">
-                            {title}
-                            <div className="thumbnail-container">
-                                <img className="thumbnail" src={data.thumbnail} alt={title} />
-                            </div>
-                        </a>
+                        {titleLink}
+                        <div className="media">
+                            <img className="thumbnail" src={data.thumbnail} alt={title} />
+                        </div>
                     </div>;
                 }  
                 break;
@@ -64,8 +68,8 @@ export class Main extends React.Component {
                 output =
                     <div className="post-flex-item content">
                         {titleLink}
-                        <div className="image-container">
-                            <img className="content-image" src={url} alt={title}/>
+                        <div className="media">
+                            <img className="image" src={url} alt={title}/>
                         </div>
                     </div>;
                 break;
@@ -74,8 +78,8 @@ export class Main extends React.Component {
                 output =
                     <div className="post-flex-item content">
                         {titleLink}
-                        <div className="image-container">
-                            <video className="content-video" controls>
+                        <div className="media">
+                            <video className="video" controls>
                                 <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
                             </video>
                         </div>
@@ -88,7 +92,7 @@ export class Main extends React.Component {
                         output =
                         <div className="post-flex-item content">
                             {titleLink}
-                            <div className="image-container">
+                            <div className="media">
                                 <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
                             </div>
                         </div>;
@@ -97,7 +101,7 @@ export class Main extends React.Component {
                         output =
                         <div className="post-flex-item content">
                             {titleLink}
-                            <div className="image-container">
+                            <div className="media">
                                 <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
                             </div>
                         </div>;
@@ -106,7 +110,7 @@ export class Main extends React.Component {
                         output =
                         <div className="post-flex-item content">
                             {titleLink}
-                            <div className="image-container">
+                            <div className="media">
                                 {parse(decode(data.media_embed.content))}
                             </div>
                         </div>;
@@ -115,7 +119,7 @@ export class Main extends React.Component {
                         output =
                         <div className="post-flex-item content">
                             {titleLink}
-                            <div className="image-container">
+                            <div className="media">
                             <Vimeo
                                 video={url.split("/")[3]}
                                 width="640"
@@ -132,7 +136,7 @@ export class Main extends React.Component {
                     output =
                         <div className="post-flex-item content">
                             {titleLink}
-                            <p className="content-text">{parse(decode(data.selftext_html))}</p>
+                            <p className="text">{parse(decode(data.selftext_html))}</p>
                         </div>
                 } else if (!domain.startsWith("self")) {
                     switch (domain) {
@@ -140,7 +144,9 @@ export class Main extends React.Component {
                             output =
                             <div className="post-flex-item content">
                                 {titleLink}
-                                <TweetEmbed id={url.split("/")[5].split("?")[0]} />
+                                <div className="media">
+                                    <TweetEmbed id={url.split("/")[5].split("?")[0]} />
+                                </div>
                             </div>
                             break;
                         case 'v.redd.it' :
@@ -148,8 +154,8 @@ export class Main extends React.Component {
                                 output =
                                 <div className="post-flex-item content">
                                     {titleLink}
-                                    <div className="image-container">
-                                        <video className="content-video" controls>
+                                    <div className="media">
+                                        <video className="video" controls>
                                             <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
                                         </video>
                                     </div>
@@ -165,7 +171,7 @@ export class Main extends React.Component {
                             output =
                             <div className="post-flex-item content">
                                 Crosspost: {titleLink}
-                                <div className="image-container">
+                                <div className="media">
                                     <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
                                 </div>
                             </div>;
@@ -174,7 +180,7 @@ export class Main extends React.Component {
                             output =
                             <div className="post-flex-item content">
                                 {titleLink}
-                                <div className="image-container">
+                                <div className="media">
                                     <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
                                 </div>
                             </div>;
@@ -183,8 +189,8 @@ export class Main extends React.Component {
                             output =
                             <div className="post-flex-item content">
                                 {titleLink}
-                                <div className="image-container">
-                                    <img className="content-image" src={url} alt=''/>
+                                <div className="media">
+                                    <img className="image" src={url} alt=''/>
                                 </div>
                             </div>;
                             break;
@@ -193,7 +199,7 @@ export class Main extends React.Component {
                                 output =
                                 <div className="post-flex-item content">
                                     {titleLink}
-                                    <div className="image-container">
+                                    <div className="media">
                                         {parse(decode(data.secure_media.oembed.html))}
                                     </div>
                                 </div>;
@@ -208,23 +214,25 @@ export class Main extends React.Component {
                             data.thumbnail === 'default' ? 
                             output =
                             <div className="post-flex-item content">
-                                {titleLink}
+                                <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
+                                    {title}
+                                </a>
                             </div> : 
                             output =
                             <div className="post-flex-item content">
-                                <a className="content-link" href={url} target="_blank" rel="noreferrer">
+                                <a className="title link" href={url} target="_blank" rel="noreferrer">
                                     {title}
-                                    <div className="thumbnail-container">
-                                        <img className="thumbnail" src={data.thumbnail} alt='' />
-                                    </div>
                                 </a>
+                                <div className="media">
+                                    <img className="thumbnail" src={data.thumbnail} alt='' />
+                                </div>
                             </div>;
                             break;
                     }
                 } else {
                     output =
                         <div className="post-flex-item content">
-                            <h1 className="content-oneliner">{title}</h1>
+                            <h1 className="title oneliner">{title}</h1>
                         </div>
                 } 
                 break;
@@ -260,7 +268,8 @@ export class Main extends React.Component {
                         <Comments 
                         rp={routeProps} 
                         formatPost={this.formatPost} 
-                        updatePost={this.props.updatePost} 
+                        updatePost={this.props.updatePost}
+                        about={this.props.about}
                         />
                     }/>
                 </Switch>        

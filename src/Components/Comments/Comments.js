@@ -25,7 +25,6 @@ export class Comments extends React.Component {
         //Request the data from Reddit
         const response = await fetch(queryString);
         const jsonResponse = await response.json();
-        console.log(jsonResponse);
         this.setState({
             post: jsonResponse[0].data.children,
             comments: jsonResponse[1].data.children
@@ -71,14 +70,14 @@ export class Comments extends React.Component {
         return (
             <div id="posts">
                 {this.state.post.map(post => {
+                    const subreddit = this.props.about.filter(el => el.name === post.data.subreddit_id);
+                    let src = subreddit[0] ? subreddit[0].icon_img !== "" ? subreddit[0].icon_img : "subreddit/popular.webp" : "subreddit/popular.webp";
                     const postOutput = this.props.formatPost(post)
                     return (
                         //Display the post
                         <article className="reddit-post">
                             <div className="post-flex-item sub">
-                                {/* onError tag taken from Stack Overflow on 23/2/2021 from Deepak Mallah
-                                URL: https://stackoverflow.com/questions/34097560/react-js-replace-img-src-onerror */}
-                                <img src={"/subreddit/" + post.data.subreddit + ".webp"} alt="icon" onError={(e) => { e.target.onerror = null; e.target.src = "/subreddit/reddit.webp" }} />                                <img alt={post.data.subreddit} />
+                                <img src={src} alt="icon" />
                                 <h3>r/{post.data.subreddit}</h3>
                             </div>
                             {postOutput}
@@ -86,7 +85,7 @@ export class Comments extends React.Component {
                                 <button className="vote up"></button>
                                 <span>{post.data.ups > 999 ? (post.data.ups / 1000).toFixed(1) + 'k' : post.data.ups}</span>
                                 <button className="vote down"></button>
-                                <Link to={`/Comments${[post.data.permalink]}`}><button className="comment-button pressed"></button></Link>
+                                <Link to={`/Comments${[post.data.permalink]}`}><button className="comment-button active"></button></Link>
                                 <span>{post.data.num_comments > 999 ? (post.data.num_comments / 1000).toFixed(1) + 'k' : post.data.num_comments}</span>
                                 <Link to="/"><button className="back-button"></button></Link>
                                 <span id="posted-by">Posted by: {post.data.author} ~ {dayjs(dayjs.unix(post.data.created_utc)).fromNow()}</span>
