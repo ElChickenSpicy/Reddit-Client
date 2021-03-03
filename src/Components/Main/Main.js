@@ -21,10 +21,7 @@ export class Main extends React.Component {
     }
 
     saveScrollPosition() {
-        const left = document.querySelector('.top-container').scrollLeft;
-        const top =  document.querySelector('.top-container').scrollTop;
-        const container = [left, top];
-        this.setState({ scrollPosition: [ ...container ] });
+        this.setState({ scrollPosition: [ document.querySelector('.top-container').scrollLeft, document.querySelector('.top-container').scrollTop ] });
     }
 
     setScrollPosition() {
@@ -144,6 +141,22 @@ export class Main extends React.Component {
                             </div>
                         </div>;
                         break;
+                    case 'streamable.com' :
+                        if (data.secure_media) {
+                            output =
+                            <div className="post-flex-item content">
+                                {titleLink}
+                                <div className="media">
+                                    {parse(decode(data.secure_media.oembed.html))}
+                                </div>
+                            </div>;
+                        } else {
+                            output =
+                            <div className="post-flex-item content">
+                                {titleLink}
+                            </div>;
+                        }
+                        break;
                 }
                 break;
                 //Undefined
@@ -206,11 +219,11 @@ export class Main extends React.Component {
                             <div className="post-flex-item content">
                                 {titleLink}
                                 <div className="media">
-                                    <img className="image" src={url} alt=''/>
+                                    <img className="image" src={url} alt={title}/>
                                 </div>
                             </div>;
                             break;
-                        case 'streamable' :
+                        case 'streamable.com' :
                             if (data.secure_media) {
                                 output =
                                 <div className="post-flex-item content">
@@ -240,7 +253,7 @@ export class Main extends React.Component {
                                     {title}
                                 </a>
                                 <div className="media">
-                                    <img className="thumbnail" src={data.thumbnail} alt='' />
+                                    <img className="thumbnail" src={data.thumbnail} alt={title} />
                                 </div>
                             </div>;
                             break;

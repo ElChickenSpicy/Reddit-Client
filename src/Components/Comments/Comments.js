@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { decode } from 'html-entities';
 import parse from 'html-react-parser';
-import * as dayjs from 'dayjs'
+import * as dayjs from 'dayjs';
 
 export class Comments extends React.Component {
     constructor(props) {
@@ -41,8 +41,7 @@ export class Comments extends React.Component {
             comments: prevState.comments.map(
                 comment => comment.data.id === toggle.data.id ? toggle : comment
             )
-        })
-        )
+        }));
     }
 
     toggleSecondHidden(comment, reply) {
@@ -55,8 +54,7 @@ export class Comments extends React.Component {
             comments: prevState.comments.map(
                 c => c.data.id === comment.data.id ? comment : c
             )
-        })
-        )
+        }));
     }
 
     componentDidMount() {
@@ -70,30 +68,45 @@ export class Comments extends React.Component {
         return (
             <div id="posts">
                 {this.state.post.map(post => {
-                    const subreddit = this.props.about.filter(el => el.name === post.data.subreddit_id);
-                    let src = subreddit[0] ? subreddit[0].icon_img !== "" ? subreddit[0].icon_img : "subreddit/popular.webp" : "subreddit/popular.webp";
+                    //Object destructuring
+                    const { data: { all_awardings, author, created_utc, num_comments, permalink, subreddit, subreddit_id, ups } } = post;
+                    //Retrieve image src and title for the subreddit's info
+                    const icon = this.props.about.filter(el => el.name === subreddit_id);
+                    let src = icon[0] ? icon[0].icon_img !== "" && icon[0].icon_img !== null ? icon[0].icon_img : "subreddit/popular.webp" : "subreddit/popular.webp";
+                    let title = icon[0] ? icon[0].title !== "" && icon[0].title !== null ? icon[0].title : {subreddit} : {subreddit};
+                    //Pass the post to the formatPost function
                     const postOutput = this.props.formatPost(post)
                     return (
                         //Display the post
                         <article className="reddit-post">
                             <div className="post-flex-item sub">
-                                <img src={src} alt="icon" />
-                                <h3>r/{post.data.subreddit}</h3>
+                                <img
+                                src={src}
+                                alt={subreddit}
+                                title={title}
+                                />
+                                <h3 title={title}>r/{subreddit}</h3>
+                                <div className="awards-container">
+                                    {all_awardings.length > -1 ?
+                                    all_awardings.map(el => {
+                                        return <div className="award"><img src={el.icon_url} alt={el.name} title={el.name + '\n' + el.description}/>x{el.count}</div>
+                                    }) : '' }
+                                </div>
                             </div>
                             {postOutput}
                             <div className="post-flex-item options">
                                 <button className="vote up"></button>
-                                <span>{post.data.ups > 999 ? (post.data.ups / 1000).toFixed(1) + 'k' : post.data.ups}</span>
+                                <span>{ups > 999 ? (ups / 1000).toFixed(1) + 'k' : ups}</span>
                                 <button className="vote down"></button>
-                                <Link to={`/Comments${[post.data.permalink]}`}><button className="comment-button active"></button></Link>
-                                <span>{post.data.num_comments > 999 ? (post.data.num_comments / 1000).toFixed(1) + 'k' : post.data.num_comments}</span>
+                                <Link to={`/Comments${[permalink]}`}><button className="comment-button active"></button></Link>
+                                <span>{num_comments > 999 ? (num_comments / 1000).toFixed(1) + 'k' : num_comments}</span>
                                 <Link to="/">
-                                    <button 
-                                    className="back-button"
-                                    onClick={() => this.props.setScrollPosition()}
+                                    <button
+                                        className="back-button"
+                                        onClick={() => this.props.setScrollPosition()}
                                     ></button>
                                 </Link>
-                                <span id="posted-by">Posted by: {post.data.author} ~ {dayjs(dayjs.unix(post.data.created_utc)).fromNow()}</span>
+                                <span id="posted-by">Posted by: {author} ~ {dayjs(dayjs.unix(created_utc)).fromNow()}</span>
                             </div>
                         </article>
                     );
@@ -102,65 +115,73 @@ export class Comments extends React.Component {
                 {/* Display the Comments */}
                 <section className="comments-container">
                     {this.state.comments.map(comment => {
+                        //Object destructuring
+                        const { kind, data: { author, body_html, collapsed, created_utc, replies, ups } } = comment;
                         return (
                             //Ensure the comment.kind is not 'more'
-                            comment.kind === 'more' ? '' :
+                            kind === 'more' ? '' :
 
-                                comment.data.collapsed === false ?
+                                collapsed === false ?
                                     //If the collapsed property is set to false, display the comment and its children
                                     <div className="comment-item">
-                                        <h2 
-                                            className="username" 
+                                        <h2
+                                            className="username"
                                             onClick={() => { this.toggleFirstHidden(comment) }}>
-                                            u/{comment.data.author} 
+                                            u/{author}
                                             <span id="comment-time">
-                                                ~ {dayjs(dayjs.unix(comment.data.created_utc)).fromNow()}
+                                                ~ {dayjs(dayjs.unix(created_utc)).fromNow()}
                                             </span>
                                         </h2>
-                                        <p>{parse(decode(comment.data.body_html))}</p>
+                                        <p>{parse(decode(body_html))}</p>
                                         <div className="comment-info">
                                             <button className="vote up"></button>
-                                            <span>{comment.data.ups > 999 ? (comment.data.ups / 1000).toFixed(1) + 'k' : comment.data.ups }</span>
+                                            <span>{ups > 999 ? (ups / 1000).toFixed(1) + 'k' : ups}</span>
                                             <button className="vote down"></button>
                                         </div>
 
-                                        {!comment.data.replies.data ? '' :
-                                            comment.data.replies.data.children.length <= 1 ? '' :
-                                                comment.data.replies.data.children.slice(0, comment.data.replies.data.children.length - 1).map(reply => {
+                                        {!replies.data ? '' :
+                                            replies.data.children.length <= 1 ? '' :
+                                                replies.data.children.slice(0, replies.data.children.length - 1).map(reply => {
+                                                    //Object destructuring
+                                                    const { data: { 
+                                                        author: r_author, body_html: r_body_html, collapsed: r_collapsed, created_utc: r_created_utc, replies: r_replies, ups: r_ups 
+                                                    }} = reply;
                                                     return (
-                                                        reply.data.collapsed === false ?
+                                                        r_collapsed === false ?
                                                             //If the collapsed property is set to false, display the reply and its children
                                                             <div className="first-reply-layer">
-                                                                <h2 
-                                                                className="username" 
-                                                                onClick={() => { this.toggleSecondHidden(comment, reply) }}>
-                                                                    u/{reply.data.author}
+                                                                <h2
+                                                                    className="username"
+                                                                    onClick={() => { this.toggleSecondHidden(comment, reply) }}>
+                                                                    u/{r_author}
                                                                     <span id="comment-time">
-                                                                         ~ {dayjs(dayjs.unix(reply.data.created_utc)).fromNow()}
+                                                                        ~ {dayjs(dayjs.unix(r_created_utc)).fromNow()}
                                                                     </span>
                                                                 </h2>
-                                                                <p>{parse(decode(reply.data.body_html))}</p>
+                                                                <p>{parse(decode(r_body_html))}</p>
                                                                 <div className="comment-info">
                                                                     <button className="vote up"></button>
-                                                                    <span>{reply.data.ups > 999 ? (reply.data.ups / 1000).toFixed(1) + 'k' : reply.data.ups }</span>
+                                                                    <span>{r_ups > 999 ? (r_ups / 1000).toFixed(1) + 'k' : r_ups}</span>
                                                                     <button className="vote down"></button>
                                                                 </div>
-                                                                {!reply.data.replies.data ? '' :
-                                                                    reply.data.replies.data.children.length <= 1 ? '' :
-                                                                        reply.data.replies.data.children.slice(0, reply.data.replies.data.children.length - 1).map(secondLayer => {
+                                                                {!r_replies.data ? '' :
+                                                                    r_replies.data.children.length <= 1 ? '' :
+                                                                        r_replies.data.children.slice(0, r_replies.data.children.length - 1).map(secondLayer => {
+                                                                            //Object destructuring
+                                                                            const { data: { author: s_author, body_html: s_body_html, created_utc: s_created_utc, ups: s_ups } } = secondLayer;
                                                                             return (
                                                                                 <div className="second-reply-layer">
-                                                                                    <h2 
-                                                                                    className="username">
-                                                                                        u/{secondLayer.data.author}
+                                                                                    <h2
+                                                                                        className="username">
+                                                                                        u/{s_author}
                                                                                         <span id="comment-time">
-                                                                                            ~ {dayjs(dayjs.unix(secondLayer.data.created_utc)).fromNow()}
+                                                                                            ~ {dayjs(dayjs.unix(s_created_utc)).fromNow()}
                                                                                         </span>
                                                                                     </h2>
-                                                                                    <p>{parse(decode(secondLayer.data.body_html))}</p>
+                                                                                    <p>{parse(decode(s_body_html))}</p>
                                                                                     <div className="comment-info">
                                                                                         <button className="vote up"></button>
-                                                                                        <span>{secondLayer.data.ups > 999 ? (secondLayer.data.ups / 1000).toFixed(1) + 'k' : secondLayer.data.ups }</span>
+                                                                                        <span>{s_ups > 999 ? (s_ups / 1000).toFixed(1) + 'k' : s_ups}</span>
                                                                                         <button className="vote down"></button>
                                                                                     </div>
                                                                                 </div>
@@ -170,17 +191,16 @@ export class Comments extends React.Component {
                                                             </div> :
                                                             //If the collapsed property is set to true, hide the reply and its children
                                                             <div className="first-reply-layer" onClick={() => { this.toggleSecondHidden(comment, reply) }}>
-                                                                <h2 className="username">u/{reply.data.author}</h2>
+                                                                <h2 className="username">u/{r_author}</h2>
                                                                 <p>...</p>
                                                             </div>
                                                     )
                                                 })
                                         }
                                     </div> :
-
                                     //If the collapsed property is set to true, hide the comment and its children
                                     <div className="comment-item">
-                                        <h2 className="username" onClick={() => { this.toggleFirstHidden(comment) }}>u/{comment.data.author}</h2>
+                                        <h2 className="username" onClick={() => { this.toggleFirstHidden(comment) }}>u/{author}</h2>
                                         <p>...</p>
                                     </div>
                         )

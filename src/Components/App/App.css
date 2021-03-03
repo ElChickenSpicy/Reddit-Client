@@ -73,6 +73,7 @@ a:link, a:visited {
   overflow: auto;
   display: flex;
   justify-content: center;
+  padding-top: 5px;
 }
 
 /* Container of left-hand side and its children*/
@@ -291,12 +292,12 @@ main #posts {
 /* Post Containers */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .reddit-post {
-  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.062);
+  box-shadow: 0 4px 6px 0 rgba(48, 48, 48, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.062);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: 99%;
+  width: 100%;
   height: fit-content;
   margin-top: 15px;
   background-color: white;
@@ -319,7 +320,7 @@ main #posts {
   align-items: center;
   font-family: 'Hind Siliguri', sans-serif;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 600; 
 }
 
 .sub img {
@@ -327,6 +328,29 @@ main #posts {
   height: 35px;
   width: 35px;
   border-radius: 50%;
+}
+
+.awards-container {
+  display: flex;
+  align-items: center;
+  height: 35px;
+  padding-left: 10px;
+}
+
+.awards-container img {
+  height: 18px;
+  width: 18px;
+  padding-left: 10px;
+  margin-right: 2px;
+}
+
+.award {
+  display: flex;
+  align-items: center;
+  color: rgb(146, 146, 146);
+  font-weight: 400;
+  font-size: 12px;
+
 }
 
 /* Content of a post */
@@ -366,6 +390,7 @@ main #posts {
 .image {
   max-width: 90%;
   max-height: 800px;
+  border-radius: 8px;
 }
 
 .video {
@@ -395,8 +420,8 @@ main #posts {
 /* Bottom row of a post container (buttons, etc) */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .options {
-  height: 26px;
-  margin: 14px 0px;
+  height: 24px;
+  margin: 16px 0px;
 }
 
 .options button {
