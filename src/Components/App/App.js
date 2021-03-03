@@ -79,7 +79,6 @@ async fetchSubredditData(sub) {
     //Store the first 10 posts in state
     const subPosts = jsonResponse.data.children.slice(0, 10);
     this.setState({ posts: subPosts, activeSubreddit: sub });
-    console.log(subPosts);
 
     //Fetch the subredditsAbout data
     this.state.posts.forEach(({ data: { subreddit, subreddit_id }}) => {

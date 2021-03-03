@@ -30,7 +30,7 @@ export class Navbar extends React.Component {
                         <input
                             id="searchbar"
                             className="searchbar"
-                            placeholder="Search..."
+                            placeholder="What do you want to see?"
                             onKeyUp={({ key, target: { value } }) => {
                                 if (key === "Enter") {
                                     this.props.search(`https://www.reddit.com/search.json?q=${encodeURI(value)}`, value);
@@ -38,16 +38,16 @@ export class Navbar extends React.Component {
                                 }
                             }}
                         />
-                        <i class="fa fa-search"></i>
+                        <i className="fa fa-search"></i>
                     </div>
                     <Link to="/" className="first40">
                         <img id="normal" src={icon} alt="Icon" onClick={() => this.props.fetchSubredditData('popular')} onMouseOver={() => this.hoverImage()} />
                         <img id="hoverImage" src={hoverIcon} alt="Icon" style={{ display: "none" }} onClick={() => this.props.fetchSubredditData('popular')} onMouseLeave={() => this.hoverImage()} />
                         <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>R</h1>
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>E</h1>
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>L</h1>
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>A</h1>
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>X</h1>
+                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>e</h1>
+                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>l</h1>
+                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>a</h1>
+                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>x</h1>
                     </Link>
                 </section>
                 <section className="subreddit-container">

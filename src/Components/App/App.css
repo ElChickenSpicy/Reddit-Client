@@ -83,7 +83,7 @@ nav {
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  width: 18%;
+  width: 17.5%;
   height: 98%;
   position: fixed;
   left: 1%;
@@ -91,10 +91,10 @@ nav {
 
 .branding {
   box-sizing: border-box;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.288), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   width: 95%;
   height: 60px;
-  background-color: white;
+  background-color: rgb(41, 41, 41);
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
@@ -127,10 +127,10 @@ input{
   outline: 0;
   border: 0;
   display: none;
-  font-size: 0.9em;
+  font-size: 0.85em;
   border-radius: 20px;
   padding: 0 10px;
-  background-color: bisque;
+  background-color: rgb(255, 238, 217);
 }
 
 .fa{
@@ -147,15 +147,15 @@ input{
 }
 
 .form:hover .fa{
-  background: #07051a;
+  background: rgb(41, 41, 41);
   color: rgb(255, 230, 0);
-  margin-right: -3px;
+  margin-right: -6px;
 }
 
 .form:hover{
   width: 100%;
   cursor: pointer;
-  background-color: bisque;
+  background-color: rgb(255, 238, 217);
 }
 
 .form:hover input{
@@ -175,16 +175,18 @@ input{
 }
 
 .first40 img {
-  width: 2.3em;
-  margin-right: 4px;
-  margin-bottom: 2px;
+  width: 2.15em;
+  margin-right: 7px;
+  padding: 5px 5px;
+  background-color: rgb(136, 136, 136);
+  border-radius: 10%;
 }
 
 .name {
   display: inline-block;
-  font-family: 'Righteous', cursive;
-  font-size: 1.4em;
-  color: black;
+  font-family: 'Fascinate', cursive;
+  font-size: 1.8em;
+  color: rgb(255, 255, 255);
   margin-top: 4px;
 }
 
@@ -208,7 +210,7 @@ input{
 .subreddit-title {
   width: 95%;
   position: absolute;
-  background-color: rgb(236, 236, 236);
+  background-color: rgb(224, 224, 224);
   z-index: 9;
   height: 40px;
   display: flex;
@@ -219,7 +221,7 @@ input{
 }
 
 .subreddit-title h2 {
-  font-family: 'Roboto';
+  font-family: 'IBM Plex Sans', sans-serif;
   font-weight: 700;
   font-size: 18px;
   padding-left: 4px;
@@ -263,7 +265,7 @@ ul li img {
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  width: 18%;
+  width: 17.5%;
   height: 98%;
   position: fixed;
   right: 1%;
@@ -296,7 +298,7 @@ main #posts {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch;
   width: 100%;
   height: fit-content;
   margin-top: 15px;
@@ -314,8 +316,8 @@ main #posts {
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .sub {
   height: 40px;
-  margin-top: 7px;
-  margin-bottom: 7px;
+  margin: 7px 0px 17px 0px;
+  display: flex;
   justify-content: flex-start;
   align-items: center;
   font-family: 'Hind Siliguri', sans-serif;
@@ -331,9 +333,10 @@ main #posts {
 }
 
 .awards-container {
+  flex: 1;
   display: flex;
   align-items: center;
-  height: 35px;
+  flex-wrap: wrap;
   padding-left: 10px;
 }
 
@@ -341,7 +344,7 @@ main #posts {
   height: 18px;
   width: 18px;
   padding-left: 10px;
-  margin-right: 2px;
+  margin: 2px 1px;
 }
 
 .award {
@@ -421,61 +424,66 @@ main #posts {
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .options {
   height: 24px;
-  margin: 16px 0px;
+  margin: 26px 0px 16px 0px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgb(107, 107, 107);
 }
 
-.options button {
-  margin-right: 15px;
-  height: 100%;
+#votes {
+ margin: 0px 12px;
 }
 
-.vote {
-  width: 28px;
-  padding-bottom: 7px;
-  background-color: rgba(255, 255, 255, 0);
-  border-radius: 8px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: 0%;
-  border: none;
+.fa-arrow-alt-circle-up{
+  color: black;
+  font-size: 26px;
   cursor: pointer;
-  transition-duration: 0.2s;
-  outline: none;
+  transition-duration: 0.1s;
 }
 
-.up {
-  background-image: url('../../Icons/up-icon.png');
+.fa-arrow-alt-circle-up:hover {
+  color: rgb(0, 255, 0);
 }
 
-.up:hover {
-  background-image: url('../../Icons/up-hover.webp');
-}
-
-.down {
-  background-image: url('../../Icons/down-icon.png');
-}
-
-.down:hover {
-  background-image: url('../../Icons/down-hover.webp');
-}
-
-.comment-button {
-  width: 35px;
-  padding-bottom: 2px;
-  margin-left: 4px;
-  background-color: white;
-  border-radius: 8px;
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: 0%;
-  border: none;
+.fa-arrow-alt-circle-down{
+  color: black;
+  font-size: 26px;
   cursor: pointer;
-  transition-duration: 0.2s;
-  outline: none;
+  transition-duration: 0.1s;
 }
 
-.home {
-  background-image: url('../../Icons/noun_icon.png');
+.fa-arrow-alt-circle-down:hover {
+  color: red;
+}
+
+#comments {
+  display: flex;
+}
+
+#num-comments {
+  color: rgb(107, 107, 107);
+}
+
+#num-comments:hover {
+  color: red;
+}
+
+.fa-comment-alt {
+  font-size: 24px;
+  padding-top: 2px;
+  margin: 0px 12px 0px 20px;
+  cursor: pointer;
+  transition-duration: 0.1s;
+}
+
+.fa-comment-alt:hover {
+  background-color: rgb(233, 233, 233);
+  border-radius: 50%;
+}
+
+.fa-comment-alt:hover ~ #num-comments {
+  color: red;
 }
 
 .active {
@@ -483,25 +491,23 @@ main #posts {
   cursor: default;
 }
 
-.comment-button:hover {
-  background-image: url('../../Icons/noun_hover.webp');
+#back {
+  width: 100%;
 }
 
-.back-button {
-  background-image: url('../../Icons/back-icon.png');
-  width: 40px;
+.back {
+  width: 100%;
+  margin-top: 14px;
   border: none;
-  background-color: white;
-  border-radius: 50%;
-  background-size: 65%;
-  background-repeat: no-repeat;
-  background-position: 45%;
+  outline: none;
+  font-size: 18px;
+  border-radius: 6px;
+  transition-duration: 0.2s;
   cursor: pointer;
-  transition-duration: 00.2s;
 }
 
-.back-button:hover {
-  background-color: lightgray;
+.back:hover {
+  background-color: rgb(224, 223, 223);
 }
 
 /* Comments container and its children */
@@ -531,6 +537,17 @@ main #posts {
   justify-content: flex-start;
 }
 
+.author {
+  display: flex;
+}
+
+.author img {
+  height: 20px;
+  width: 20px;
+  margin-right: 6px;
+  border-radius: 50%;
+}
+
 .comment-info {
   display: flex;
   margin-top: 12px; 
@@ -545,9 +562,18 @@ main #posts {
 #posted-by {
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 13px;
+  font-weight: 300;
   font-style: italic;
   margin-left: auto;
   margin-right: 10px;
+  color: rgb(122, 122, 122);
+}
+
+#posted-by img {
+  height: 20px;
+  width: 20px;
+  margin: 0px 4px;
+  border-radius: 50%;
 }
 
 #comment-time {
@@ -599,7 +625,7 @@ span {
 
 /* Brand and Searchbar get different lines at this screen width */
 @media only screen
-and (max-width : 1024px) {
+and (max-width : 1250px) {
 
   .nav {
     width: 24%;

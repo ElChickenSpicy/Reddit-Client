@@ -1,9 +1,11 @@
 import React from 'react';
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
 import { Posts } from '../Posts/Posts';
 import { Comments } from '../Comments/Comments';
 import { decode } from 'html-entities';
 import parse from 'html-react-parser';
+import * as dayjs from 'dayjs';
+
 //For embedding content
 import TweetEmbed from 'react-tweet-embed'
 import YouTube from 'react-youtube';
@@ -18,6 +20,7 @@ export class Main extends React.Component {
         this.formatPost = this.formatPost.bind(this);
         this.saveScrollPosition = this.saveScrollPosition.bind(this);
         this.setScrollPosition = this.setScrollPosition.bind(this);
+        this.displayPost = this.displayPost.bind(this);
     }
 
     saveScrollPosition() {
@@ -26,6 +29,54 @@ export class Main extends React.Component {
 
     setScrollPosition() {
         document.querySelector('.top-container').scrollTo(...this.state.scrollPosition);
+    }
+
+    displayPost(post) {
+        //Object destructuring
+        const { data: { all_awardings, author, author_flair_richtext, created_utc, num_comments, permalink, subreddit, subreddit_id, ups } } = post;
+        //Does Author have a flair?
+        let flair = author_flair_richtext.length > 0 ? author_flair_richtext[0].u ?
+            <img src={author_flair_richtext[0].u} alt="Author's flair" title={author_flair_richtext[0].a} />
+            : ''
+            : '';
+        //Retrieve image src and title for the subreddit's info
+        const icon = this.props.about.filter(el => el.name === subreddit_id);
+        let src = icon[0] ? icon[0].icon_img !== "" && icon[0].icon_img !== null ? icon[0].icon_img : "subreddit/popular.webp" : "subreddit/popular.webp";
+        let title = icon[0] ? icon[0].title !== "" && icon[0].title !== null ? icon[0].title : { subreddit } : { subreddit };
+        //Pass the post to the formatPost function
+        const postOutput = this.formatPost(post);
+        return (
+            <article className="reddit-post">
+                <Link to="/">
+                    <div className="post-flex-item sub">
+                        <img
+                            src={src}
+                            alt={subreddit}
+                            title={title}
+                        />
+                        <h3 title={title} onClick={() => { this.props.fetchSubredditData(subreddit) }}>r/{subreddit}</h3>
+                        <div className="awards-container">
+                            {all_awardings.length > -1 ?
+                                all_awardings.map(el => {
+                                    return <div className="award"><img src={el.icon_url} alt={el.name} title={el.name + '\n' + el.description} />x{el.count}</div>
+                                }) : ''}
+                        </div>
+                    </div>
+                </Link>
+                {postOutput}
+                <div className="post-flex-item options">
+                    <i class="far fa-arrow-alt-circle-up" title="Upvote"></i>
+                    <span id="votes">{ups > 999 ? (ups / 1000).toFixed(1) + 'k' : ups}</span>
+                    <i class="far fa-arrow-alt-circle-down" title="Downvote"></i>
+                    <Link
+                        to={`/Comments${[permalink]}`} id="comments">
+                        <i className="far fa-comment-alt" title="Comments" onClick={() => this.saveScrollPosition()}></i>
+                        <span id="num-comments">{num_comments > 999 ? (num_comments / 1000).toFixed(1) + 'k Comments' : num_comments + " Comments"}</span>
+                    </Link>
+                    <span id="posted-by">Posted by: {flair}{author} ~ {dayjs(dayjs.unix(created_utc)).fromNow()}</span>
+                </div>
+            </article>
+        );
     }
 
     formatPost(post) {
@@ -47,13 +98,11 @@ export class Main extends React.Component {
         let { domain, selftext, title, url } = data;
         title = decode(title);
 
-        //Reusable JSX elements
+        //Reusable JSX element
         const titleLink = 
         <a className="title link" href={url} target="_blank" rel="noreferrer">
             {title}
         </a>;
-        const plainHeading = 
-        <h1 className="title">{title}</h1>;
         
         //Switch statement based on the post_hint property
         switch (data.post_hint) {
@@ -286,10 +335,9 @@ export class Main extends React.Component {
                         <Posts 
                         rp={routeProps} 
                         initialPosts={this.props.posts} 
-                        formatPost={this.formatPost} 
                         fetchSubredditData={this.props.fetchSubredditData} 
                         about={this.props.about}
-                        saveScrollPosition={this.saveScrollPosition}
+                        displayPost={this.displayPost}
                         />
                     }/>
                     <Route 
@@ -297,10 +345,10 @@ export class Main extends React.Component {
                     render={routeProps => 
                         <Comments 
                         rp={routeProps} 
-                        formatPost={this.formatPost} 
                         updatePost={this.props.updatePost}
                         about={this.props.about}
                         setScrollPosition={this.setScrollPosition}
+                        displayPost={this.displayPost}
                         />
                     }/>
                 </Switch>        
