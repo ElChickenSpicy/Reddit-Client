@@ -56,18 +56,18 @@ export class Navbar extends React.Component {
                     </header>
                     <ul>
                         {this.props.navItems.map(item => {
-                            
                             return (
                                 <Link to="/">
                                     <li 
+                                    id="nav-item"
                                     style={this.props.highlightActive[0] === item ? { backgroundColor: 'rgba(211, 211, 211, 0.212)' } : { backgroundColor: 'white' }} 
                                     onClick={() => { this.props.fetchSubredditData(item) }}
                                     >
-                                        <img src={"/subreddit/" + item + ".webp"} alt={item}/>
+                                        <img src={`/subreddit/${item}.webp`} alt={item}/>
                                         r/{item}
                                     </li>
                                 </Link>
-                            )
+                            );
                         })}
                     </ul>
                 </section>

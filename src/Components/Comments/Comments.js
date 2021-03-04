@@ -21,10 +21,9 @@ export class Comments extends React.Component {
         //Format the string to make the fetch request
         let str = this.props.rp.location.pathname;
         str = str.substring(9, str.length)
-        let queryString = 'https://www.reddit.com' + str + '.json';
 
         //Request the data from Reddit
-        const response = await fetch(queryString);
+        const response = await fetch(`https://www.reddit.com${str}.json`);
         const jsonResponse = await response.json();
         this.setState({
             post: jsonResponse[0].data.children,
@@ -121,7 +120,7 @@ export class Comments extends React.Component {
                                         <div className="comment-info">
                                             <i class="fas fa-arrow-up" title="Upvote"></i>
                                             <i class="fas fa-arrow-down" title="Downvote"></i>
-                                            <span id="votes">{ups > 999 ? (ups / 1000).toFixed(1) + 'k' : ups}</span>
+                                            <span id="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)} k` : ups}</span>
                                         </div>
 
                                         {!replies.data ? '' :
@@ -152,7 +151,7 @@ export class Comments extends React.Component {
                                                                 <div className="comment-info">
                                                                     <i class="fas fa-arrow-up" title="Upvote"></i>
                                                                     <i class="fas fa-arrow-down" title="Downvote"></i>
-                                                                    <span id="votes">{r_ups > 999 ? (r_ups / 1000).toFixed(1) + 'k' : r_ups}</span>
+                                                                    <span id="votes">{r_ups > 999 ? `${(r_ups / 1000).toFixed(1)} k` : r_ups}</span>
                                                                 </div>
                                                                 {!r_replies.data ? '' :
                                                                     r_replies.data.children.length <= 1 ? '' :
@@ -180,7 +179,7 @@ export class Comments extends React.Component {
                                                                                     <div className="comment-info">
                                                                                         <i class="fas fa-arrow-up" title="Upvote"></i>
                                                                                         <i class="fas fa-arrow-down" title="Downvote"></i>
-                                                                                        <span id="votes">{s_ups > 999 ? (s_ups / 1000).toFixed(1) + 'k' : s_ups}</span>
+                                                                                        <span id="votes">{s_ups > 999 ? `${(s_ups / 1000).toFixed(1)} k` : s_ups}</span>
                                                                                     </div>
                                                                                 </div>
                                                                             )

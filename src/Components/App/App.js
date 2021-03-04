@@ -46,7 +46,7 @@ async fetchInitialData() {
 //Return the About data of the given subreddit
 //Allows state to dynamically assign subreddit icons and descriptions to the corresponding posts
 async fetchAbout(post) {
-  const response = await fetch('https://www.reddit.com/r/' + post + '/about/.json');
+  const response = await fetch(`https://www.reddit.com/r/${post}/about/.json`);
   if (response.ok) {
     const jsonResponse = await response.json();
     const subreddit = jsonResponse.data;
@@ -74,7 +74,7 @@ async fetchAbout(post) {
 
 async fetchSubredditData(sub) {
   //Fetch data from the provided subreddit
-  const response = await fetch('https://www.reddit.com/r/' + sub + '.json');
+  const response = await fetch(`https://www.reddit.com/r/${sub}.json`);
   if (response.ok) {
     const jsonResponse = await response.json();
 
@@ -105,7 +105,7 @@ async Search(query, str) {
 
     //Store the first 10 posts in state
     const subPosts = jsonResponse.data.children.slice(0, 10);
-    this.setState({ posts: subPosts, activeSubreddit: "Search Results: " + str });
+    this.setState({ posts: subPosts, activeSubreddit: `Search Results: ${str}` });
 
     //Fetch the subredditsAbout data
     this.state.posts.forEach(({ data: { subreddit, subreddit_id }}) => {
@@ -125,7 +125,7 @@ getSubreddit(name) {
   if (name === 'popular') {
     return (
       <div className="active-subreddit">
-        <h3>Current Subreddit:</h3>
+        <h3>Current Subreddit</h3>
         <h1>r/All</h1>
         <p>This is Reddit's Homepage, where you can see the most popular posts across a wide range of different subreddits.</p>
       </div>
@@ -135,11 +135,11 @@ getSubreddit(name) {
     const { accounts_active, display_name, public_description, subscribers } = active[0];
     return (
       <div className="active-subreddit">
-        <h3>Current Subreddit:</h3>
+        <h3>Current Subreddit</h3>
         <h1>r/{display_name}</h1>
         <p>{decode(public_description)}</p>
-        <h4>{subscribers > 999 ? subscribers.toLocaleString() + ' Subscibers' : subscribers.toLocaleString() + ' Subscibers'}</h4>
-        <h4>{accounts_active > 999 ? accounts_active.toLocaleString() + ' Active Users' : accounts_active.toLocaleString() + ' Active Users'}</h4>
+        <h4><span className="subscribers">{subscribers.toLocaleString()}</span> Subscibers</h4>
+        <h4><span className="accounts">{accounts_active.toLocaleString()}</span> Active Users</h4>
       </div>
     );
   }

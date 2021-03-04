@@ -59,7 +59,7 @@ export class Main extends React.Component {
                         <div className="awards-container">
                             {all_awardings.length > -1 ?
                                 all_awardings.map(el => {
-                                    return <div className="award"><img src={el.icon_url} alt={el.name} title={el.name + '\n' + el.description} />x{el.count}</div>
+                                    return <div className="award"><img src={el.icon_url} alt={el.name} title={`${el.name} \n' ${el.description}`} />x{el.count}</div>
                                 }) : ''}
                         </div>
                     </div>
@@ -69,12 +69,12 @@ export class Main extends React.Component {
                     <div className="voting-buttons">
                         <i class="far fa-arrow-alt-circle-up" title="Upvote"></i>
                         <i class="far fa-arrow-alt-circle-down" title="Downvote"></i>
-                        <span id="votes">{ups > 999 ? (ups / 1000).toFixed(1) + 'k' : ups}</span>
+                        <span id="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
                     </div>
                     <Link
                         to={`/Comments${[permalink]}`} id="comments">
                         <i className="far fa-comment-alt" title="Comments" onClick={() => this.saveScrollPosition()}></i>
-                        <span id="num-comments">{num_comments > 999 ? (num_comments / 1000).toFixed(1) + 'k Comments' : num_comments + " Comments"}</span>
+                        <span id="num-comments">{num_comments > 999 ? `${(num_comments / 1000).toFixed(1)}k Comments` : `${num_comments} Comments`}</span>
                     </Link>
                     <span id="posted-by">Posted by: {flair}{author} ~ {dayjs(dayjs.unix(created_utc)).fromNow()}</span>
                 </div>
