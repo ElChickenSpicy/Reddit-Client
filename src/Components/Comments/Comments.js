@@ -59,7 +59,11 @@ export class Comments extends React.Component {
     }
 
     flairExists(kind, flair) {
-        let commentFlair = kind === 'more' ? '' : flair.length > 0 ? flair[0].u ?
+        let commentFlair = 
+        flair === undefined ? '' :
+        kind === 'more' ? '' :
+        flair.length > 0 ? 
+        flair[0].u ?
         <img src={flair[0].u} alt="Author's flair" title={flair[0].a} />
         : ''
         : '';
@@ -115,9 +119,9 @@ export class Comments extends React.Component {
                                         </div>
                                         <p>{parse(decode(body_html))}</p>
                                         <div className="comment-info">
-                                            <button className="vote up"></button>
-                                            <span>{ups > 999 ? (ups / 1000).toFixed(1) + 'k' : ups}</span>
-                                            <button className="vote down"></button>
+                                            <i class="fas fa-arrow-up" title="Upvote"></i>
+                                            <i class="fas fa-arrow-down" title="Downvote"></i>
+                                            <span id="votes">{ups > 999 ? (ups / 1000).toFixed(1) + 'k' : ups}</span>
                                         </div>
 
                                         {!replies.data ? '' :
@@ -146,9 +150,9 @@ export class Comments extends React.Component {
                                                                 </div>
                                                                 <p>{parse(decode(r_body_html))}</p>
                                                                 <div className="comment-info">
-                                                                    <button className="vote up"></button>
-                                                                    <span>{r_ups > 999 ? (r_ups / 1000).toFixed(1) + 'k' : r_ups}</span>
-                                                                    <button className="vote down"></button>
+                                                                    <i class="fas fa-arrow-up" title="Upvote"></i>
+                                                                    <i class="fas fa-arrow-down" title="Downvote"></i>
+                                                                    <span id="votes">{r_ups > 999 ? (r_ups / 1000).toFixed(1) + 'k' : r_ups}</span>
                                                                 </div>
                                                                 {!r_replies.data ? '' :
                                                                     r_replies.data.children.length <= 1 ? '' :
@@ -174,9 +178,9 @@ export class Comments extends React.Component {
                                                                                     </div>
                                                                                     <p>{parse(decode(s_body_html))}</p>
                                                                                     <div className="comment-info">
-                                                                                        <button className="vote up"></button>
-                                                                                        <span>{s_ups > 999 ? (s_ups / 1000).toFixed(1) + 'k' : s_ups}</span>
-                                                                                        <button className="vote down"></button>
+                                                                                        <i class="fas fa-arrow-up" title="Upvote"></i>
+                                                                                        <i class="fas fa-arrow-down" title="Downvote"></i>
+                                                                                        <span id="votes">{s_ups > 999 ? (s_ups / 1000).toFixed(1) + 'k' : s_ups}</span>
                                                                                     </div>
                                                                                 </div>
                                                                             )
@@ -203,4 +207,4 @@ export class Comments extends React.Component {
             </div>
         )
     }
-};
+}; 

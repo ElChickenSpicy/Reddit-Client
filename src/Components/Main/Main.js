@@ -53,6 +53,7 @@ export class Main extends React.Component {
                             src={src}
                             alt={subreddit}
                             title={title}
+                            onClick={() => { this.props.fetchSubredditData(subreddit) }}
                         />
                         <h3 title={title} onClick={() => { this.props.fetchSubredditData(subreddit) }}>r/{subreddit}</h3>
                         <div className="awards-container">
@@ -65,9 +66,11 @@ export class Main extends React.Component {
                 </Link>
                 {postOutput}
                 <div className="post-flex-item options">
-                    <i class="far fa-arrow-alt-circle-up" title="Upvote"></i>
-                    <span id="votes">{ups > 999 ? (ups / 1000).toFixed(1) + 'k' : ups}</span>
-                    <i class="far fa-arrow-alt-circle-down" title="Downvote"></i>
+                    <div className="voting-buttons">
+                        <i class="far fa-arrow-alt-circle-up" title="Upvote"></i>
+                        <i class="far fa-arrow-alt-circle-down" title="Downvote"></i>
+                        <span id="votes">{ups > 999 ? (ups / 1000).toFixed(1) + 'k' : ups}</span>
+                    </div>
                     <Link
                         to={`/Comments${[permalink]}`} id="comments">
                         <i className="far fa-comment-alt" title="Comments" onClick={() => this.saveScrollPosition()}></i>
@@ -113,7 +116,7 @@ export class Main extends React.Component {
                     <div className="post-flex-item content">
                         <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
                             {title}
-                        </a>;
+                        </a>
                     </div>
                 } else {
                     output =
@@ -122,7 +125,7 @@ export class Main extends React.Component {
                         <div className="media">
                             <img className="thumbnail" src={data.thumbnail} alt={title} />
                         </div>
-                    </div>;
+                    </div>
                 }  
                 break;
             //Image
@@ -133,7 +136,7 @@ export class Main extends React.Component {
                         <div className="media">
                             <img className="image" src={url} alt={title}/>
                         </div>
-                    </div>;
+                    </div>
                 break;
             //Hosted Video
             case 'hosted:video':
@@ -145,7 +148,7 @@ export class Main extends React.Component {
                                 <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
                             </video>
                         </div>
-                    </div>;
+                    </div>
                 break;
             //Rich Video
             case 'rich:video':
@@ -157,7 +160,7 @@ export class Main extends React.Component {
                             <div className="media">
                                 <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
                             </div>
-                        </div>;
+                        </div>
                         break;
                     case 'youtu.be' :
                         output =
@@ -166,7 +169,7 @@ export class Main extends React.Component {
                             <div className="media">
                                 <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
                             </div>
-                        </div>;
+                        </div>
                         break;
                     case 'gfycat.com' :
                         output =
@@ -175,7 +178,7 @@ export class Main extends React.Component {
                             <div className="media">
                                 {parse(decode(data.media_embed.content))}
                             </div>
-                        </div>;
+                        </div>
                         break;
                     case 'vimeo' :
                         output =
@@ -188,7 +191,7 @@ export class Main extends React.Component {
                                 height="390"
                             />
                             </div>
-                        </div>;
+                        </div>
                         break;
                     case 'streamable.com' :
                         if (data.secure_media) {
@@ -198,12 +201,12 @@ export class Main extends React.Component {
                                 <div className="media">
                                     {parse(decode(data.secure_media.oembed.html))}
                                 </div>
-                            </div>;
+                            </div>
                         } else {
                             output =
                             <div className="post-flex-item content">
                                 {titleLink}
-                            </div>;
+                            </div>
                         }
                         break;
                 }
@@ -237,12 +240,12 @@ export class Main extends React.Component {
                                             <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
                                         </video>
                                     </div>
-                                </div>;
+                                </div>
                             } else {
                                 output =
                                 <div className="post-flex-item content">
                                     {titleLink}
-                                </div>;
+                                </div>
                             }
                             break;
                         case 'youtube.com' :
@@ -252,7 +255,7 @@ export class Main extends React.Component {
                                 <div className="media">
                                     <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
                                 </div>
-                            </div>;
+                            </div>
                             break;
                         case 'youtu.be' :
                             output =
@@ -261,7 +264,7 @@ export class Main extends React.Component {
                                 <div className="media">
                                     <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
                                 </div>
-                            </div>;
+                            </div>
                             break;
                         case 'i.redd.it' :
                             output =
@@ -270,7 +273,7 @@ export class Main extends React.Component {
                                 <div className="media">
                                     <img className="image" src={url} alt={title}/>
                                 </div>
-                            </div>;
+                            </div>
                             break;
                         case 'streamable.com' :
                             if (data.secure_media) {
@@ -280,13 +283,25 @@ export class Main extends React.Component {
                                     <div className="media">
                                         {parse(decode(data.secure_media.oembed.html))}
                                     </div>
-                                </div>;
+                                </div>
                             } else {
                                 output =
                                 <div className="post-flex-item content">
                                     {titleLink}
-                                </div>;
+                                </div>
                             }
+                            break;
+                        case 'streamye.com' :
+                            output =
+                            <div className="post-flex-item content">
+                                {titleLink}
+                            </div>
+                            break;
+                        case 'streamja.com' :
+                            output =
+                            <div className="post-flex-item content">
+                                {titleLink}
+                            </div>
                             break;
                         default :
                             data.thumbnail === 'default' ? 
@@ -304,7 +319,7 @@ export class Main extends React.Component {
                                 <div className="media">
                                     <img className="thumbnail" src={data.thumbnail} alt={title} />
                                 </div>
-                            </div>;
+                            </div>
                             break;
                     }
                 } else {
@@ -319,7 +334,7 @@ export class Main extends React.Component {
                 output =
                     <div className="post-flex-item content">
                         {titleLink}
-                    </div>;
+                    </div>
                 break;
         }
         return output;

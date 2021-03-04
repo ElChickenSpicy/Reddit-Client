@@ -4,6 +4,7 @@ import { Navbar } from '../Navbar/Navbar';
 import { Main } from '../Main/Main';
 import { Options } from '../Options/Options';
 import { BrowserRouter as Router } from "react-router-dom";
+import { decode } from 'html-entities';
 
 export class App extends React.Component {
   constructor(props) {
@@ -22,6 +23,7 @@ export class App extends React.Component {
     this.addSubreddit = this.addSubreddit.bind(this);
     this.removeSubreddit = this.removeSubreddit.bind(this);
     this.Search = this.Search.bind(this);
+    this.getSubreddit = this.getSubreddit.bind(this);
 }
 
 async fetchInitialData() {
@@ -79,6 +81,7 @@ async fetchSubredditData(sub) {
     //Store the first 10 posts in state
     const subPosts = jsonResponse.data.children.slice(0, 10);
     this.setState({ posts: subPosts, activeSubreddit: sub });
+    console.log(subPosts);
 
     //Fetch the subredditsAbout data
     this.state.posts.forEach(({ data: { subreddit, subreddit_id }}) => {
@@ -115,6 +118,30 @@ async Search(query, str) {
     });
   
     document.querySelector('.top-container').scrollTo(0, 0);
+  }
+}
+
+getSubreddit(name) {
+  if (name === 'popular') {
+    return (
+      <div className="active-subreddit">
+        <h3>Current Subreddit:</h3>
+        <h1>r/All</h1>
+        <p>This is Reddit's Homepage, where you can see the most popular posts across a wide range of different subreddits.</p>
+      </div>
+    );
+  } else {
+    const active = this.state.subredditsAbout.filter(el => name === el.display_name);
+    const { accounts_active, display_name, public_description, subscribers } = active[0];
+    return (
+      <div className="active-subreddit">
+        <h3>Current Subreddit:</h3>
+        <h1>r/{display_name}</h1>
+        <p>{decode(public_description)}</p>
+        <h4>{subscribers > 999 ? subscribers.toLocaleString() + ' Subscibers' : subscribers.toLocaleString() + ' Subscibers'}</h4>
+        <h4>{accounts_active > 999 ? accounts_active.toLocaleString() + ' Active Users' : accounts_active.toLocaleString() + ' Active Users'}</h4>
+      </div>
+    );
   }
 }
 
@@ -174,7 +201,10 @@ componentDidMount() {
             fetchAbout={this.fetchAbout}
             about={this.state.subredditsAbout}
           />
-          <Options />
+          <Options 
+          activeSubreddit={this.state.activeSubreddit}
+          getSubreddit={this.getSubreddit}
+          />
         </Router>
       </div>
     )
