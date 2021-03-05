@@ -52,22 +52,27 @@ export class Navbar extends React.Component {
                 </section>
                 <section className="subreddit-container">
                     <header className="subreddit-title">
-                        <h2>Subreddits</h2>
+                        <h2>My Subreddits</h2>
                     </header>
                     <ul>
                         {this.props.navItems.map(item => {
-                            return (
-                                <Link to="/">
-                                    <li 
-                                    id="nav-item"
-                                    style={this.props.highlightActive[0] === item ? { backgroundColor: 'rgba(211, 211, 211, 0.212)' } : { backgroundColor: 'white' }} 
-                                    onClick={() => { this.props.fetchSubredditData(item) }}
-                                    >
-                                        <img src={`/subreddit/${item}.webp`} alt={item}/>
-                                        r/{item}
-                                    </li>
-                                </Link>
-                            );
+                            let find = this.props.subredditsAbout.filter(el => el.display_name === item);
+                            if (find.length > -1) {
+                                const { display_name, icon_img, title } = find[0];
+                                return (
+                                    <Link to="/">
+                                        <li 
+                                        id="nav-item"
+                                        title={title}
+                                        style={this.props.highlightActive[0] === display_name ? { backgroundColor: 'rgba(211, 211, 211, 0.212)' } : { backgroundColor: 'white' }} 
+                                        onClick={() => { this.props.fetchSubredditData(display_name) }}
+                                        >
+                                            <img src={`${icon_img}`} alt={display_name}/>
+                                            r/{display_name}
+                                        </li>
+                                    </Link>
+                                );
+                            }
                         })}
                     </ul>
                 </section>

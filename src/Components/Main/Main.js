@@ -48,7 +48,7 @@ export class Main extends React.Component {
                         <div className="awards-container">
                             {all_awardings.length > -1 ?
                                 all_awardings.map(el => {
-                                    return <div className="award"><img src={el.icon_url} alt={el.name} title={`${el.name} \n' ${el.description}`} />x{el.count}</div>
+                                    return <div className="award"><img src={el.icon_url} alt={el.name} title={`${el.name}\n${el.description}`} />x{el.count}</div>
                                 }) : ''}
                         </div>
                     </div>

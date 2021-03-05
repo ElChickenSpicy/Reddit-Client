@@ -12,12 +12,13 @@ export class App extends React.Component {
     this.state = {
       posts: [],
       activeSubreddit: 'popular',
-      nav: ['popular', 'soccer', 'AskReddit', 'dataisbeautiful', 'ProgrammerHumor', 'Art'],
+      nav: ['soccer', 'AskReddit', 'dataisbeautiful', 'ProgrammerHumor', 'Art'],
       subredditsAbout: [],
       view: 'hot',
       scrollPosition: []
     };
     this.fetchInitialData = this.fetchInitialData.bind(this);
+    this.fetchNavSubs = this.fetchNavSubs.bind(this);
     this.fetchAbout = this.fetchAbout.bind(this);
     this.fetchSubredditData = this.fetchSubredditData.bind(this);
     this.updatePost = this.updatePost.bind(this);
@@ -48,6 +49,21 @@ export class App extends React.Component {
     }
   }
 
+  fetchNavSubs(arr) {
+    arr.forEach(async sub => {
+      let exists = this.state.subredditsAbout.filter(el => el.display_name === sub);
+      if (exists.length === 0) {
+        const response = await fetch(`https://www.reddit.com/r/${sub}/about/.json`);
+        if (response.ok) {
+          const jsonResponse = await response.json();
+          const subreddit = jsonResponse.data;
+
+          this.setState({ subredditsAbout: [...this.state.subredditsAbout, subreddit] });
+        }
+      }
+    });
+  }
+
   //Return the About data of the given subreddit
   //Allows state to dynamically assign subreddit icons and descriptions to the corresponding posts
   async fetchAbout(post) {
@@ -69,9 +85,7 @@ export class App extends React.Component {
 
         //If it doesn't exist, add it to state
         if (exists.length === 0) {
-          this.setState({
-            subredditsAbout: [...copy, subreddit]
-          });
+          this.setState({ subredditsAbout: [...copy, subreddit] });
         }
       }
     }
@@ -186,7 +200,7 @@ export class App extends React.Component {
           <div className="active-subreddit">
             <h3>Current Subreddit</h3>
             <h1>r/All</h1>
-            <p>This is Reddit's Homepage, where you can see the most popular posts across a wide range of different subreddits.</p>
+            <p>This is Reddit's Homepage, where you can see the most popular posts across a wide range of subreddits.</p>
           </div>
           {view}
         </section>        
@@ -259,6 +273,7 @@ export class App extends React.Component {
 
   componentDidMount() {
     this.fetchInitialData();
+    this.fetchNavSubs(this.state.nav);
     this.highlightActive();
   }
 
@@ -271,7 +286,7 @@ export class App extends React.Component {
             fetchSubredditData={this.fetchSubredditData}
             highlightActive={this.highlightActive()}
             search={this.Search}
-            fetchAbout={this.fetchAbout}
+            subredditsAbout={this.state.subredditsAbout}
           />
           <Main
             posts={this.state.posts}
