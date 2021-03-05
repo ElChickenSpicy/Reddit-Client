@@ -410,6 +410,11 @@ ul {
   padding-right: 2px;
 }
 
+.add-remove {
+  display: flex;
+  align-items: center;
+}
+
 .active-subreddit h1 {
   padding: 8px 11px 8px 16px;
   margin-bottom: 5px;
@@ -417,6 +422,36 @@ ul {
   font-size: 19px;
   font-weight: 600;
   color: white;
+}
+
+.fa-plus-square {
+  color: lightgreen;
+  padding-bottom: 4px;
+  font-size: 14px;
+}
+
+.fa-plus-square:hover {
+  color: rgb(3, 226, 3);
+  cursor: pointer;
+}
+
+.fa-plus-square:hover ~ h1 {
+  color: rgb(161, 245, 161);
+}
+
+.fa-minus-square {
+  color: lightcoral;
+  padding-bottom: 4px;
+  font-size: 14px;
+}
+
+.fa-minus-square:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.fa-minus-square:hover ~ h1 {
+  color: rgb(247, 164, 164);
 }
 
 .active-subreddit p {

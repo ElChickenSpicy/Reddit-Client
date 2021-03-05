@@ -216,13 +216,22 @@ export class App extends React.Component {
         </section>
       );
     } else {
+      //Get the data of the active subreddit and destructure the necessary variables
       const active = this.state.subredditsAbout.filter(el => name === el.display_name);
       const { accounts_active, display_name, public_description, subscribers } = active[0];
+      //Is the subreddit included in the Navbar?
+      let included = this.state.nav.includes(display_name);
       return (
         <section className="current-view">
           <div className="active-subreddit">
             <h3>Current Subreddit</h3>
-            <h1>r/{display_name}</h1>
+            <div className="add-remove">
+              {included === true ? 
+                <i className="far fa-minus-square" title="Remove this subreddit from your Navigation Bar" style={{order: '1'}} onClick={() => this.removeSubreddit(display_name)}></i> : 
+                <i className="far fa-plus-square" title="Add this subreddit to your Navigation Bar" style={{order: '1'}} onClick={() => this.addSubreddit(display_name)}></i>
+              }
+              <h1>r/{display_name}</h1>
+            </div>
             <p>{decode(public_description)}</p>
             <h4><span className="subscribers">{subscribers.toLocaleString()}</span> Subscibers</h4>
             <h4><span className="accounts">{accounts_active.toLocaleString()}</span> Active Users</h4>

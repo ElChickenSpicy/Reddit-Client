@@ -57,7 +57,7 @@ export class Navbar extends React.Component {
                     <ul>
                         {this.props.navItems.map(item => {
                             let find = this.props.subredditsAbout.filter(el => el.display_name === item);
-                            if (find.length > -1) {
+                            if (find.length > 0) {
                                 const { display_name, icon_img, title } = find[0];
                                 return (
                                     <Link to="/">
