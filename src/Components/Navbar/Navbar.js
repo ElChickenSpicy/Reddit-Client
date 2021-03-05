@@ -40,14 +40,14 @@ export class Navbar extends React.Component {
                         />
                         <i className="fa fa-search"></i>
                     </div>
-                    <Link to="/" className="first40">
-                        <img id="normal" src={icon} alt="Icon" onClick={() => this.props.fetchSubredditData('popular')} onMouseOver={() => this.hoverImage()} />
-                        <img id="hoverImage" src={hoverIcon} alt="Icon" style={{ display: "none" }} onClick={() => this.props.fetchSubredditData('popular')} onMouseLeave={() => this.hoverImage()} />
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>R</h1>
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>e</h1>
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>l</h1>
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>a</h1>
-                        <h1 className="name" onClick={() => this.props.fetchSubredditData('popular')}>x</h1>
+                    <Link to="/" className="first40" onClick={() => this.props.fetchSubredditData('popular')}>
+                        <img id="normal" src={icon} alt="Icon" onMouseOver={() => this.hoverImage()} />
+                        <img id="hoverImage" src={hoverIcon} alt="Icon" style={{ display: "none" }} onMouseLeave={() => this.hoverImage()} />
+                        <h1 className="name">R</h1>
+                        <h1 className="name">e</h1>
+                        <h1 className="name">l</h1>
+                        <h1 className="name">a</h1>
+                        <h1 className="name">x</h1>
                     </Link>
                 </section>
                 <section className="subreddit-container">

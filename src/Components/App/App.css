@@ -307,9 +307,10 @@ input{
 }
 
 .subreddit-title h2 {
-  font-family: 'Circular Std Bold', sans-serif;
+  font-family: 'Circular Std Black', sans-serif;
+  color: rgb(92, 92, 92);
   font-weight: 700;
-  font-size: 18px;
+  font-size: 17px;
   padding-left: 4px;
 }
 
@@ -480,15 +481,15 @@ ul {
 }
 
 .hot:hover > i {
-  color: lightcoral;
+  color: lightcoral !important;
 }
 
 .top:hover > i {
-  color: lightgreen;
+  color: lightgreen !important;
 }
 
 .new:hover > i {
-  color: rgb(152, 229, 255);
+  color: rgb(152, 229, 255) !important;
 }
 
 .fa-fire-alt {
@@ -655,6 +656,7 @@ main #posts {
 .video {
   max-width: 90%;
   max-height: 800px;
+  border-radius: 8px;
 }
 
 .text {
@@ -778,6 +780,31 @@ main #posts {
   font-size: 22px;
 }
 
+.sort-comments {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 40%;
+  margin-top: 14px;
+  margin-bottom: 6px;
+}
+
+.sort {
+  font-size: 26px;
+  color: rgb(190, 190, 190);
+  padding: 8px 20px;
+  border-radius: 8px;
+}
+
+.sort:hover {
+  color: rgb(62, 158, 253) !important;
+  cursor: pointer;
+}
+
+.sort span {
+  padding-left: 4px;
+}
+
 /* Comments container and its children */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .comments-container {
@@ -793,8 +820,8 @@ main #posts {
 .comment-item {
   max-width: 100%;
   width: 96%;
-  padding-top: 20px;
-  padding-bottom: 30px;
+  padding-top: 25px;
+  padding-bottom: 25px;
   padding-left: 2%;
   padding-right: 2%;
   border-top: 2px solid lightgray;
@@ -806,12 +833,14 @@ main #posts {
 
 .author {
   display: flex;
+  align-items: center;
 }
 
 .author img {
   height: 20px;
   width: 20px;
   margin-right: 6px;
+  margin-bottom: 10px;
   border-radius: 50%;
 }
 
@@ -840,6 +869,8 @@ main #posts {
   margin-left: auto;
   margin-right: 10px;
   color: rgb(143, 143, 143);
+  display: flex;
+  align-items: center;
 }
 
 #posted-by img {
@@ -889,7 +920,7 @@ main #posts {
   width: 93%;
   margin-top: 20px;
   margin-bottom: 10px;
-  padding-top: 15px;
+  padding-top: 20px;
   padding-bottom: 20px;
   padding-left: 4%;
   padding-right: 2%;
@@ -905,8 +936,8 @@ main #posts {
   width: 93%;
   margin-top: 20px;
   margin-bottom: 10px;
-  padding-top: 15px;
-  padding-bottom: 20px;
+  padding-top: 18px;
+  padding-bottom: 18px;
   padding-left: 5%;
   padding-right: 2%;
   background-color: rgba(228, 228, 228, 0.884);

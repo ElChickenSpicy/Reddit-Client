@@ -5,6 +5,8 @@ import { Main } from '../Main/Main';
 import { Options } from '../Options/Options';
 import { BrowserRouter as Router } from "react-router-dom";
 import { decode } from 'html-entities';
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export class App extends React.Component {
   constructor(props) {
@@ -30,6 +32,7 @@ export class App extends React.Component {
     this.changeView = this.changeView.bind(this);
     this.saveScrollPosition = this.saveScrollPosition.bind(this);
     this.setScrollPosition = this.setScrollPosition.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   async fetchInitialData() {
@@ -163,7 +166,25 @@ export class App extends React.Component {
     }
   }
 
+  //Alert the user that if they search r/popular by NEW, they may come across NSFW content
+  submit() {
+    confirmAlert({
+      title: 'Please Note:',
+      message: 'Filtering r/popular by NEW can occasionally return Not Safe For Work (NSFW) content.',
+      buttons: [
+        {
+          label: 'Continue',
+          onClick: () => this.changeView(this.state.activeSubreddit, 'new')
+        },
+        {
+          label: 'Cancel',
+        }
+      ]
+    });
+  }
+
   getSubreddit(name) {
+    //Resusable JSX element
     const view =           
       <div className="change-view">
       <div
@@ -187,7 +208,9 @@ export class App extends React.Component {
       <div
         className="change new"
         title="View the Newest posts"
-        onClick={() => this.changeView(this.state.activeSubreddit, 'new')}>
+        onClick={() => {
+          name === 'popular' ? this.submit() : this.changeView(this.state.activeSubreddit, 'new')
+        }}>
         <i className="fas fa-certificate"
           style={this.state.view == "new" ? { color: 'lightskyblue' } : { color: 'white' }}>
           <span>New</span>

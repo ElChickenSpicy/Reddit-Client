@@ -9,7 +9,8 @@ export class Comments extends React.Component {
         super(props);
         this.state = {
             post: [],
-            comments: []
+            comments: [],
+            sort: '?sort=confidence'
         };
         this.commentsFetch = this.commentsFetch.bind(this);
         this.toggleFirstHidden = this.toggleFirstHidden.bind(this);
@@ -17,17 +18,18 @@ export class Comments extends React.Component {
         this.flairExists = this.flairExists.bind(this);
     }
 
-    async commentsFetch() {
+    async commentsFetch(sort = '?sort=confidence') {
         //Format the string to make the fetch request
         let str = this.props.rp.location.pathname;
         str = str.substring(9, str.length)
 
         //Request the data from Reddit
-        const response = await fetch(`https://www.reddit.com${str}.json`);
+        const response = await fetch(`https://www.reddit.com${str}.json${sort}`); 
         const jsonResponse = await response.json();
         this.setState({
             post: jsonResponse[0].data.children,
-            comments: jsonResponse[1].data.children
+            comments: jsonResponse[1].data.children,
+            sort: sort
         })
         this.props.updatePost(jsonResponse[0].data.children[0]);
     }
@@ -92,11 +94,41 @@ export class Comments extends React.Component {
                     </button>
                 </Link>
 
+                <div className="sort-comments">
+                    <i 
+                    className="fas fa-fire-alt sort"
+                    onClick={() => this.commentsFetch('?sort=confidence')}
+                    style={this.state.sort === '?sort=confidence' ? 
+                        {color: 'rgb(62, 158, 253)', backgroundColor: 'rgb(230, 245, 255)'} : 
+                        {color: 'rgb(190, 190, 190)', backgroundColor: 'white'} 
+                    }>
+                        <span>Hot</span>
+                    </i>
+                    <i 
+                    className="fas fa-medal sort"
+                    onClick={() => this.commentsFetch('?sort=top')}
+                    style={this.state.sort === '?sort=top' ? 
+                        {color: 'rgb(62, 158, 253)', backgroundColor: 'rgb(230, 245, 255)'} : 
+                        {color: 'rgb(190, 190, 190)', backgroundColor: 'white'} 
+                    }>
+                        <span>Top</span>
+                    </i>
+                    <i 
+                    className="fas fa-certificate sort"
+                    onClick={() => this.commentsFetch('?sort=new')}
+                    style={this.state.sort === '?sort=new' ? 
+                        {color: 'rgb(62, 158, 253)', backgroundColor: 'rgb(230, 245, 255)'} : 
+                        {color: 'rgb(190, 190, 190)', backgroundColor: 'white'} 
+                    }>
+                        <span>New</span>
+                    </i>
+                </div>
+
                 {/* Display the Comments */}
                 <section className="comments-container">
                     {this.state.comments.map(comment => {
                         //Object destructuring
-                        const { kind, data: { author, author_flair_richtext, body_html, collapsed, created_utc, replies, ups } } = comment;
+                        const { kind, data: { author, author_flair_richtext, body_html, collapsed, created_utc, is_submitter, replies, ups } } = comment;
                         //Does Author have a flair?                       
                         let commentFlair = this.flairExists(kind, author_flair_richtext);
                         return (
@@ -108,7 +140,11 @@ export class Comments extends React.Component {
                                     <div className="comment-item">
                                         <div className="author">
                                             {commentFlair}
-                                            <h2 className="username" onClick={() => { this.toggleFirstHidden(comment) }}>
+                                            <h2 
+                                            className="username" 
+                                            onClick={() => { this.toggleFirstHidden(comment) }}
+                                            style={is_submitter === true ? {color: "dodgerblue"} : {color: "black"}}
+                                            title={is_submitter === true ? 'This user is the Original Poster' : ''}>
                                                 u/{author}
                                                 <span id="comment-time">
                                                     ~ {dayjs(dayjs.unix(created_utc)).fromNow()}
@@ -127,7 +163,7 @@ export class Comments extends React.Component {
                                                 replies.data.children.slice(0, replies.data.children.length - 1).map(reply => {
                                                     //Object destructuring
                                                     const { kind: r_kind, data: { 
-                                                        author: r_author, author_flair_richtext: r_author_flair_richtext, body_html: r_body_html, collapsed: r_collapsed, created_utc: r_created_utc, replies: r_replies, ups: r_ups 
+                                                        author: r_author, author_flair_richtext: r_author_flair_richtext, body_html: r_body_html, collapsed: r_collapsed, created_utc: r_created_utc, is_submitter: r_is_submitter, replies: r_replies, ups: r_ups 
                                                     }} = reply;
                                                     //Does Author have a flair?
                                                     let fLayerFlair = this.flairExists(r_kind, r_author_flair_richtext);
@@ -139,7 +175,11 @@ export class Comments extends React.Component {
                                                             <div className="first-reply-layer">
                                                                 <div className="author">
                                                                     {fLayerFlair}
-                                                                    <h2 className="username" onClick={() => { this.toggleSecondHidden(comment, reply) }}>
+                                                                    <h2 
+                                                                    className="username" 
+                                                                    onClick={() => { this.toggleSecondHidden(comment, reply) }}
+                                                                    style={r_is_submitter === true ? {color: "dodgerblue"} : {color: "black"}}
+                                                                    title={r_is_submitter === true ? 'This user is the Original Poster' : ''}>
                                                                         u/{r_author}
                                                                         <span id="comment-time">
                                                                             ~ {dayjs(dayjs.unix(r_created_utc)).fromNow()}
@@ -157,7 +197,7 @@ export class Comments extends React.Component {
                                                                         r_replies.data.children.slice(0, r_replies.data.children.length - 1).map(secondLayer => {
                                                                             //Object destructuring
                                                                             const { kind: s_kind, data: { 
-                                                                                author: s_author, author_flair_richtext: s_author_flair_richtext, body_html: s_body_html, created_utc: s_created_utc, ups: s_ups
+                                                                                author: s_author, author_flair_richtext: s_author_flair_richtext, body_html: s_body_html, created_utc: s_created_utc, is_submitter: s_is_submitter, ups: s_ups
                                                                             }} = secondLayer;
                                                                             //Does Author have a flair?
                                                                             let sLayerFlair = this.flairExists(s_kind, s_author_flair_richtext);
@@ -167,7 +207,10 @@ export class Comments extends React.Component {
                                                                                 <div className="second-reply-layer">
                                                                                     <div className="author">
                                                                                         {sLayerFlair}
-                                                                                        <h2 className="username">
+                                                                                        <h2 
+                                                                                        className="username"
+                                                                                        style={s_is_submitter === true ? {color: "dodgerblue"} : {color: "black"}}
+                                                                                        title={s_is_submitter === true ? 'This user is the Original Poster' : ''}>
                                                                                             u/{s_author}
                                                                                             <span id="comment-time">
                                                                                                 ~ {dayjs(dayjs.unix(s_created_utc)).fromNow()}
