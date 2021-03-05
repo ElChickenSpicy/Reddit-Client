@@ -50,6 +50,7 @@ table {
 
 a {
   text-decoration: none;
+  word-wrap:break-word;
 }
 
 a:link, a:visited {
@@ -527,16 +528,21 @@ main #posts {
 /* Top row of a post container (subreddit & icon) */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .sub {
-  height: 40px;
   margin: 7px 0px 17px 0px;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   font-family: 'Circular Std Bold', sans-serif;
   font-size: 14px;
 }
 
-.sub img {
+.subreddit-data {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.subreddit-data img {
   margin-right: 7px;
   height: 35px;
   width: 35px;
@@ -548,6 +554,7 @@ main #posts {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  padding-top: 6px;
   padding-left: 10px;
 }
 

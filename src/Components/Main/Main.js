@@ -14,21 +14,8 @@ import Vimeo from '@u-wave/react-vimeo';
 export class Main extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            scrollPosition: [] 
-        };
         this.formatPost = this.formatPost.bind(this);
-        this.saveScrollPosition = this.saveScrollPosition.bind(this);
-        this.setScrollPosition = this.setScrollPosition.bind(this);
         this.displayPost = this.displayPost.bind(this);
-    }
-
-    saveScrollPosition() {
-        this.setState({ scrollPosition: [ document.querySelector('.top-container').scrollLeft, document.querySelector('.top-container').scrollTop ] });
-    }
-
-    setScrollPosition() {
-        document.querySelector('.top-container').scrollTo(...this.state.scrollPosition);
     }
 
     displayPost(post) {
@@ -49,13 +36,15 @@ export class Main extends React.Component {
             <article className="reddit-post">
                 <Link to="/">
                     <div className="post-flex-item sub">
-                        <img
-                            src={src}
-                            alt={subreddit}
-                            title={title}
-                            onClick={() => { this.props.fetchSubredditData(subreddit) }}
-                        />
-                        <h3 title={title} onClick={() => { this.props.fetchSubredditData(subreddit) }}>r/{subreddit}</h3>
+                        <div className="subreddit-data">
+                            <img
+                                src={src}
+                                alt={subreddit}
+                                title={title}
+                                onClick={() => { this.props.fetchSubredditData(subreddit) }}
+                            />
+                            <h3 title={title} onClick={() => { this.props.fetchSubredditData(subreddit) }}>r/{subreddit}</h3>
+                        </div>
                         <div className="awards-container">
                             {all_awardings.length > -1 ?
                                 all_awardings.map(el => {
@@ -72,8 +61,8 @@ export class Main extends React.Component {
                         <span id="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
                     </div>
                     <Link
-                        to={`/Comments${[permalink]}`} id="comments">
-                        <i className="far fa-comment-alt" title="Comments" onClick={() => this.saveScrollPosition()}></i>
+                        to={`/Comments${[permalink]}`} id="comments" onClick={() => this.props.saveScrollPosition()}>
+                        <i className="far fa-comment-alt" title="Comments"></i>
                         <span id="num-comments">{num_comments > 999 ? `${(num_comments / 1000).toFixed(1)}k Comments` : `${num_comments} Comments`}</span>
                     </Link>
                     <span id="posted-by">Posted by: {flair}{author} ~ {dayjs(dayjs.unix(created_utc)).fromNow()}</span>
@@ -362,7 +351,7 @@ export class Main extends React.Component {
                         rp={routeProps} 
                         updatePost={this.props.updatePost}
                         about={this.props.about}
-                        setScrollPosition={this.setScrollPosition}
+                        setScrollPosition={this.props.setScrollPosition}
                         displayPost={this.displayPost}
                         />
                     }/>

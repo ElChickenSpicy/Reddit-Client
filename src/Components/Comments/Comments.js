@@ -71,7 +71,7 @@ export class Comments extends React.Component {
 
     componentDidMount() {
         this.commentsFetch();
-        document.querySelector('.top-container').scrollTo(0, 0);
+        window.scrollTo(0, 0);
     }
 
     render() {
@@ -84,11 +84,10 @@ export class Comments extends React.Component {
                 })}
 
                 {/* Back Button */}
-                <Link to="/" id="back">
+                <Link to="/" id="back" onClick={() => this.props.setScrollPosition()}>
                     <button 
                     className="back" 
                     title="Go Back"
-                    onClick={() => this.props.setScrollPosition()}
                     >&#171;
                     </button>
                 </Link>
@@ -120,7 +119,7 @@ export class Comments extends React.Component {
                                         <div className="comment-info">
                                             <i class="fas fa-arrow-up" title="Upvote"></i>
                                             <i class="fas fa-arrow-down" title="Downvote"></i>
-                                            <span id="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)} k` : ups}</span>
+                                            <span id="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
                                         </div>
 
                                         {!replies.data ? '' :
@@ -151,7 +150,7 @@ export class Comments extends React.Component {
                                                                 <div className="comment-info">
                                                                     <i class="fas fa-arrow-up" title="Upvote"></i>
                                                                     <i class="fas fa-arrow-down" title="Downvote"></i>
-                                                                    <span id="votes">{r_ups > 999 ? `${(r_ups / 1000).toFixed(1)} k` : r_ups}</span>
+                                                                    <span id="votes">{r_ups > 999 ? `${(r_ups / 1000).toFixed(1)}k` : r_ups}</span>
                                                                 </div>
                                                                 {!r_replies.data ? '' :
                                                                     r_replies.data.children.length <= 1 ? '' :
@@ -179,7 +178,7 @@ export class Comments extends React.Component {
                                                                                     <div className="comment-info">
                                                                                         <i class="fas fa-arrow-up" title="Upvote"></i>
                                                                                         <i class="fas fa-arrow-down" title="Downvote"></i>
-                                                                                        <span id="votes">{s_ups > 999 ? `${(s_ups / 1000).toFixed(1)} k` : s_ups}</span>
+                                                                                        <span id="votes">{s_ups > 999 ? `${(s_ups / 1000).toFixed(1)}k` : s_ups}</span>
                                                                                     </div>
                                                                                 </div>
                                                                             )
