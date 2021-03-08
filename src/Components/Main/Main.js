@@ -22,8 +22,9 @@ export class Main extends React.Component {
         //Object destructuring
         const { data: { all_awardings, author, author_flair_richtext, created_utc, num_comments, permalink, subreddit, subreddit_id, ups } } = post;
         //Does Author have a flair?
-        let flair = author_flair_richtext.length > 0 ? author_flair_richtext[0].u ?
+        let flair = author_flair_richtext ? author_flair_richtext.length > 0 ? author_flair_richtext[0].u ?
             <img src={author_flair_richtext[0].u} alt="Author's flair" title={author_flair_richtext[0].a} />
+            : ''
             : ''
             : '';
         //Retrieve image src and title for the subreddit's info

@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
+import { Link } from "react-router-dom";
 import { Navbar } from '../Navbar/Navbar';
 import { Main } from '../Main/Main';
 import { Options } from '../Options/Options';
-import { BrowserRouter as Router } from "react-router-dom";
 import { decode } from 'html-entities';
 import { confirmAlert } from 'react-confirm-alert'; 
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -187,35 +187,41 @@ export class App extends React.Component {
     //Resusable JSX element
     const view =           
       <div className="change-view">
-      <div
-        className="change hot"
-        title="View the Hottest posts"
-        onClick={() => this.changeView(this.state.activeSubreddit, 'hot')}>
-        <i className="fas fa-fire-alt"
-          style={this.state.view == "hot" ? { color: 'lightcoral' } : { color: 'white' }}>
-          <span>Hot</span>
-        </i>
-      </div>
-      <div
-        className="change top"
-        title="View the Top posts of all time"
-        onClick={() => this.changeView(this.state.activeSubreddit, 'top', '?t=all')}>
-        <i className="fas fa-medal"
-          style={this.state.view == "top" ? { color: 'lightgreen' } : { color: 'white' }}>
-          <span>Top</span>
-        </i>
-      </div>
-      <div
-        className="change new"
-        title="View the Newest posts"
-        onClick={() => {
-          name === 'popular' ? this.submit() : this.changeView(this.state.activeSubreddit, 'new')
-        }}>
-        <i className="fas fa-certificate"
-          style={this.state.view == "new" ? { color: 'lightskyblue' } : { color: 'white' }}>
-          <span>New</span>
-        </i>
-      </div>
+        <Link to="/">
+          <div
+            className="change hot"
+            title="View the Hottest posts"
+            onClick={() => this.changeView(this.state.activeSubreddit, 'hot')}>
+            <i className="fas fa-fire-alt"
+              style={this.state.view == "hot" ? { color: 'lightcoral' } : { color: 'white' }}>
+              <span>Hot</span>
+            </i>
+          </div>
+        </Link>
+        <Link to="/">
+          <div
+            className="change top"
+            title="View the Top posts of all time"
+            onClick={() => this.changeView(this.state.activeSubreddit, 'top', '?t=all')}>
+            <i className="fas fa-medal"
+              style={this.state.view == "top" ? { color: 'lightgreen' } : { color: 'white' }}>
+              <span>Top</span>
+            </i>
+          </div>
+        </Link>
+        <Link to="/">
+          <div
+            className="change new"
+            title="View the Newest posts"
+            onClick={() => {
+              name === 'popular' ? this.submit() : this.changeView(this.state.activeSubreddit, 'new')
+            }}>
+            <i className="fas fa-certificate"
+              style={this.state.view == "new" ? { color: 'lightskyblue' } : { color: 'white' }}>
+              <span>New</span>
+            </i>
+          </div>
+        </Link>
     </div>
     if (name === 'popular') {
       return (
@@ -312,7 +318,6 @@ export class App extends React.Component {
   render() {
     return (
       <div className="top-container">
-        <Router>
           <Navbar
             navItems={this.state.nav}
             fetchSubredditData={this.fetchSubredditData}
@@ -336,7 +341,6 @@ export class App extends React.Component {
             activeSubreddit={this.state.activeSubreddit}
             getSubreddit={this.getSubreddit}
           />
-        </Router>
       </div>
     )
   }

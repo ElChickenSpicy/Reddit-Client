@@ -186,6 +186,7 @@ nav {
   padding-left: 12px;
   margin-bottom: 8px;
   margin-top: 6px;
+  overflow-x: hidden;
 }
 
 .form{
@@ -194,7 +195,7 @@ nav {
   align-items: center;
   margin-left: auto;
   margin-right: 8px;
-  transition: all 0.4s;
+  transition: all 1s;
   width: 40px;
   height: 40px;
   background: rgb(211, 211, 211);
@@ -226,7 +227,6 @@ input{
   color: #000000;
   text-align: center;
   font-size: 1.2em;
-  transition: all 0.4s;
   margin-left: auto;
 }
 
@@ -760,51 +760,6 @@ main #posts {
   color: red;
 }
 
-#back {
-  width: 100%;
-}
-
-.back {
-  width: 100%;
-  margin-top: 14px;
-  border: none;
-  outline: none;
-  font-size: 20px;
-  border-radius: 6px;
-  transition-duration: 0.2s;
-  cursor: pointer;
-}
-
-.back:hover {
-  background-color: rgb(224, 223, 223);
-  font-size: 22px;
-}
-
-.sort-comments {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  width: 40%;
-  margin-top: 14px;
-  margin-bottom: 6px;
-}
-
-.sort {
-  font-size: 26px;
-  color: rgb(190, 190, 190);
-  padding: 8px 20px;
-  border-radius: 8px;
-}
-
-.sort:hover {
-  color: rgb(62, 158, 253) !important;
-  cursor: pointer;
-}
-
-.sort span {
-  padding-left: 4px;
-}
-
 /* Comments container and its children */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .comments-container {
@@ -945,6 +900,112 @@ main #posts {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+}
+
+/* Navigation in the Comments Section */
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+.comment-navigation {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 40px;
+  width: 100%;
+}
+
+.fa-chevron-left {
+  margin-right: 16px;
+  font-size: 26px;
+}
+
+.fa-chevron-left:hover {
+  color: dodgerblue;
+}
+
+.sort-comments {
+  padding: 0px 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 40px;
+}
+
+#label {
+  min-width: max-content;
+  font-family: 'Circular Std Medium';
+  font-size: 14px;
+}
+
+#current-sort {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0px 4px;
+  font-family: 'Circular Std Black';
+  font-size: 14px;
+  color: dodgerblue;
+  width: 370px;
+}
+
+.fa-sort-down {
+  font-size: 15px;
+  padding-bottom: 7px;
+  padding-left: 5px;
+  color: black;
+}
+
+#current-sort:hover {
+  cursor: pointer;
+}
+
+#current-sort:hover > .sort-menu {
+  visibility: visible;
+  background-color: rgb(238, 238, 238);
+  border-radius: 8px;
+  margin-left: 10px;
+  padding: 0 10px;
+  width: 270px;
+}
+
+.sort-menu {
+  display: flex;
+  align-items: center;
+  width: 0px;
+  height: 40px;
+  visibility: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  transition: width 1s;
+  transition-timing-function: linear;
+}
+
+.sort-menu button {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  outline: none;
+  padding: 0px 0px;
+  margin: 0px 0px;
+  transition-duration: 0.2s;
+}
+
+.sort-menu button:active {
+  border-radius: 8px;
+  background-color: rgb(197, 234, 255);
+}
+
+.sort {
+  font-size: 20px;
+  padding: 8px 20px;
+  border-radius: 8px;
+}
+
+.sort:hover {
+  color: rgb(62, 158, 253) !important;
+  cursor: pointer;
+}
+
+.sort span {
+  padding-left: 4px;
 }
 
 /* Brand and Searchbar get different lines at this screen width */

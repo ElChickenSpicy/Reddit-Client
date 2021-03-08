@@ -30,7 +30,7 @@ export class Navbar extends React.Component {
                         <input
                             id="searchbar"
                             className="searchbar"
-                            placeholder="What do you want to see?"
+                            placeholder="Search Reddit..."
                             onKeyUp={({ key, target: { value } }) => {
                                 if (key === "Enter") {
                                     this.props.search(`https://www.reddit.com/search.json?q=${encodeURI(value)}`, value);

@@ -10,7 +10,6 @@
     "dayjs": "^1.10.4",
     "html-entities": "^2.1.0",
     "html-react-parser": "^1.2.4",
-    "jquery": "^3.5.1",
     "react": "^17.0.1",
     "react-confirm-alert": "^2.7.0",
     "react-dom": "^17.0.1",

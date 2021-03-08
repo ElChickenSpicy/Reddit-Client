@@ -85,43 +85,42 @@ export class Comments extends React.Component {
                     return this.props.displayPost(post);
                 })}
 
-                {/* Back Button */}
-                <Link to="/" id="back" onClick={() => this.props.setScrollPosition()}>
-                    <button 
-                    className="back" 
-                    title="Go Back"
-                    >&#171;
-                    </button>
-                </Link>
-
-                <div className="sort-comments">
-                    <i 
-                    className="fas fa-fire-alt sort"
-                    onClick={() => this.commentsFetch('?sort=confidence')}
-                    style={this.state.sort === '?sort=confidence' ? 
-                        {color: 'rgb(62, 158, 253)', backgroundColor: 'rgb(230, 245, 255)'} : 
-                        {color: 'rgb(190, 190, 190)', backgroundColor: 'white'} 
-                    }>
-                        <span>Hot</span>
-                    </i>
-                    <i 
-                    className="fas fa-medal sort"
-                    onClick={() => this.commentsFetch('?sort=top')}
-                    style={this.state.sort === '?sort=top' ? 
-                        {color: 'rgb(62, 158, 253)', backgroundColor: 'rgb(230, 245, 255)'} : 
-                        {color: 'rgb(190, 190, 190)', backgroundColor: 'white'} 
-                    }>
-                        <span>Top</span>
-                    </i>
-                    <i 
-                    className="fas fa-certificate sort"
-                    onClick={() => this.commentsFetch('?sort=new')}
-                    style={this.state.sort === '?sort=new' ? 
-                        {color: 'rgb(62, 158, 253)', backgroundColor: 'rgb(230, 245, 255)'} : 
-                        {color: 'rgb(190, 190, 190)', backgroundColor: 'white'} 
-                    }>
-                        <span>New</span>
-                    </i>
+               <div className="comment-navigation">
+                    {/* Back Button */}
+                    <Link to="/" onClick={() => this.props.setScrollPosition()}>
+                        <i class="fas fa-chevron-left" title="Go Back"></i>
+                    </Link>
+                    {/* Sort Menu */}
+                    <div className="sort-comments">
+                        <span id="label">Sorted by</span>
+                        <div id="current-sort">
+                            {this.state.sort === '?sort=confidence' ? 'HOT' : this.state.sort === '?sort=top' ? 'TOP' : this.state.sort === '?sort=new' ? 'NEW' : ''}
+                            <i class="fas fa-sort-down"></i>
+                            <div className="sort-menu">
+                                <button title="Sort Comments by Hot" onClick={() => this.commentsFetch('?sort=confidence')}>
+                                    <i 
+                                    className="fas fa-fire-alt sort"
+                                    style={this.state.sort === '?sort=confidence' ? {color: 'dodgerblue'} : { color: 'rgb(190, 190, 190)'}}>
+                                        <span>Hot</span>
+                                    </i>
+                                </button>
+                                <button title="Sort Comments by Top" onClick={() => this.commentsFetch('?sort=top')}>
+                                    <i 
+                                    className="fas fa-medal sort"
+                                    style={this.state.sort === '?sort=top' ? {color: 'dodgerblue'} : { color: 'rgb(190, 190, 190)'}}>
+                                        <span>Top</span>
+                                    </i>
+                                </button>
+                                <button title="Sort Comments by New" onClick={() => this.commentsFetch('?sort=new')}>
+                                    <i 
+                                    className="fas fa-certificate sort"
+                                    style={this.state.sort === '?sort=new' ? {color: 'dodgerblue'} : { color: 'rgb(190, 190, 190)'}}>
+                                        <span>New</span>
+                                    </i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Display the Comments */}
