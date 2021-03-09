@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import defaultImg from '../../Icons/popular.webp';
 
 export class Options extends React.Component {
     render() {
@@ -30,22 +31,34 @@ export class Options extends React.Component {
 
                     </div>
                     <ul>
-                        {this.props.top.map(({data: { display_name, icon_img, title }}) => {
-                            let src = icon_img !== "" && icon_img !== null ? icon_img : "subreddit/popular.webp";
-                            title = title !== "" && title !== null ? title : { display_name };
+                        {this.props.top.map(({ data: { display_name, icon_img, title } }) => {
+                            const src = icon_img === "" || icon_img === null ? defaultImg : icon_img;
+                            title = title === "" || title === null ? { display_name } : title;
                             return (
-                                <Link to="/">
-                                    <li
-                                    id="nav-item"
-                                    title={title}
-                                    onClick={() => { 
-                                        this.props.fetchAbout(display_name)
-                                        this.props.fetchSubredditData(display_name)
-                                    }}>
-                                        <img src={src} alt={display_name}/>
-                                        r/{display_name}
-                                    </li>
-                                </Link>
+                                <div className="returnedLI">
+                                    <div className="add-to-nav">
+                                        {this.props.nav.includes(display_name) ? '' :
+                                            <i 
+                                            className="fas fa-plus"
+                                            title="Add this subreddit to your Navigation Bar" 
+                                            onClick={() => this.props.addSubreddit(display_name)}
+                                            >
+                                            </i>}
+                                    </div>
+                                    <Link to="/">
+                                        <li
+                                            id="nav-item"
+                                            title={title}
+                                            onClick={() => {
+                                                this.props.fetchAbout(display_name);
+                                                this.props.fetchSubredditData(display_name);
+                                                this.props.fetchTop();
+                                            }}>
+                                                <img src={src} alt={display_name} />
+                                                r/{display_name}
+                                        </li>
+                                    </Link>
+                                </div>
                             );
                         })}    
                     </ul>

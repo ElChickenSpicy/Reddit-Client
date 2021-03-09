@@ -519,6 +519,14 @@ i span {
   overflow-y: auto;
 }
 
+.fa-plus {
+  font-size: 10px;
+}
+
+.fa-plus:hover {
+  color: rgb(1, 245, 1);
+}
+
 .top-title {
   width: 100%;
   position: absolute;
@@ -574,6 +582,25 @@ i span {
 
 #SSform:hover ~ .top-header {
   width: 0%;
+}
+
+.returnedLI {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.add-to-nav {
+  margin-left: 8px;
+  width: 10px;
+}
+
+.fa-plus {
+  cursor: pointer;
+}
+
+.fa-plus:hover {
+  color: rgb(3, 238, 3);
 }
 
 /* Central Container and its immediate children */
