@@ -6,12 +6,7 @@ import hoverIcon from '../../Icons/logoRelaxHover.webp';
 export class Navbar extends React.Component {
     constructor(props) {
         super(props);
-        this.clearSearch = this.clearSearch.bind(this);
         this.hoverImage = this.hoverImage.bind(this);
-    }
-
-    clearSearch() {
-        document.getElementById('searchbar').value = "";
     }
 
     hoverImage() {
@@ -22,19 +17,17 @@ export class Navbar extends React.Component {
     render() {
         return (
             <nav>
-                <section className="branding">
-                <div className="form">
+                <section className="branding"> 
+                    <div className="form">
                         {/* When the user inputs info to the searchbar and hits enter, 
-                        encode the text and call the search function with the text as the argument 
-                        Note: Below searchbar adapted from design available @ https://uicookies.com/html-search-box/*/}
+                        encode the text and call the search function with the text as the argument */}
                         <input
                             id="searchbar"
-                            className="searchbar"
                             placeholder="Search Reddit..."
                             onKeyUp={({ key, target: { value } }) => {
                                 if (key === "Enter") {
                                     this.props.search(`https://www.reddit.com/search.json?q=${encodeURI(value)}`, value);
-                                    this.clearSearch();
+                                    this.props.clearSearch('searchbar');
                                 }
                             }}
                         />

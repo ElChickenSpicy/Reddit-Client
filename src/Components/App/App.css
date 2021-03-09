@@ -182,80 +182,76 @@ nav {
   flex-direction: row-reverse;
   align-items: center;
   border-radius: 8px;
-  justify-content: flex-start;
+  justify-content: flex-end;
   padding-left: 12px;
   margin-bottom: 8px;
   margin-top: 6px;
   overflow-x: hidden;
 }
 
-.form{
+.form {
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin-left: auto;
-  margin-right: 8px;
-  transition: all 1s;
-  width: 40px;
+  justify-content: flex-end;
   height: 40px;
-  background: rgb(211, 211, 211);
-  box-sizing: border-box;
-  border-radius: 25px;
-  padding: 5px;
+  width: 40px;
+  margin-left: auto;
+  margin-right: 2px;
+  transition-duration: 2s;
 }
 
 input{
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;  
+  opacity: 0;
   width: 100%;
   height: 40px;
-  line-height: 30px;
-  outline: 0;
-  border: 0;
-  display: none;
+  border-radius: 50px;
+  border: none;
+  outline: none;
   font-family: 'Circular Std Book';
-  font-size: 0.85em;
-  border-radius: 20px;
-  padding: 0 10px;
-  background-color: rgb(255, 238, 217);
+  transition-duration: 1s;
 }
 
 .fa{
-  box-sizing: border-box;
-  padding: 10px;
-  width: 40px;
-  height: 40px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
-  color: #000000;
-  text-align: center;
-  font-size: 1.2em;
-  margin-left: auto;
-}
-
-.form:hover .fa{
-  background: rgb(41, 41, 41);
-  color: rgb(255, 230, 0);
-  margin-right: -6px;
+  width: 40px;
+  color: gold;
+  font-size: 24px;
+  background-color: rgb(136, 136, 136);
+  height: 40px;
+  border: 10px solid rgb(41, 41, 41);
+  cursor: pointer;
 }
 
 .form:hover{
-  width: 100%;
-  cursor: pointer;
-  background-color: rgb(255, 238, 217);
+  flex: 1;
 }
 
 .form:hover input{
-  display: block;
+ opacity: 1;
+ margin-right: 25px;
+ padding-left: 15px;
+ background-color: rgb(255, 250, 219);
 }
 
 .form:hover ~ .first40 {
-  display: none;
+  width: 0%;
 }
 
 .first40 {
-  width: 40%;
+  width: 45%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  overflow-x: hidden;
+  transition: width 2s;
 }
 
 .first40 img {
@@ -306,7 +302,7 @@ input{
   border-top-right-radius: 8px;
 }
 
-.subreddit-title h2 {
+h2 {
   font-family: 'Circular Std Black', sans-serif;
   color: rgb(92, 92, 92);
   font-weight: 700;
@@ -317,7 +313,6 @@ input{
 ul {
   padding-top: 26px;
   width: 98%;
-  height: 95%;
   margin-top: 20px;
 }
 
@@ -516,10 +511,69 @@ i span {
 .suggestions {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   flex: 1;
+  flex-flow: column wrap;
   width: 100%;
   margin-top: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
+  overflow-y: auto;
+}
+
+.top-title {
+  width: 100%;
+  position: absolute;
+  background-color: rgb(224, 224, 224);
+  z-index: 9;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row-reverse;
+  box-sizing: border-box;
+  padding-left: 10px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.top-header {
+  width: 50%;
+  white-space: nowrap;
+  overflow-x: hidden;
+  transition: width 2s;
+}
+
+.top-header h2 {
+  font-size: 16px;
+}
+
+#SSform {
+  height: 36px;
+  width: 36px;
+  margin-right: 6px;
+}
+
+#SSsearchbar { 
+  margin-right: 10px; 
+  height: 36px;
+}
+
+#SSicon {
+  width: 36px;
+  color: black;
+  font-size: 22px;
+  background-color: rgb(224, 224, 224);
+  height: 36px;
+  border: none
+}
+
+#SSform:hover #SSsearchbar{
+ opacity: 1;
+ margin-right: 15px;
+ background-color: white;
+}
+
+#SSform:hover ~ .top-header {
+  width: 0%;
 }
 
 /* Central Container and its immediate children */
@@ -1053,74 +1107,4 @@ and (max-width : 1250px) {
 /* Smartphones/Tablets (portrait) ----------- */
 @media only screen
 and (max-width : 768px) {
-  nav {
-    display: none;
-  }
-
-  main {
-    width: 100%;
-    padding-top: 60px;
-  }
-
-  .main-header {
-    width: 95%;
-    height: 60px;
-  }
-
-  .main-header h2 {
-    display: none;
-  }
-
-  .main-header #brand {
-    display: none;
-  }
-
-  .main-header input {
-    display: inline-block;
-    width: 50%;
-    height: 19px;
-    margin-left: 4%;
-    margin-top: 15px;
-  }
-
-  .main-header select {
-    display: inline-block;
-    width: 35%;
-    height: 25px;
-    margin-left: 4%;
-    margin-top: 15px;
-  }
-
-  .reddit-post {
-    height: 400px;
-  }
-
-  .sub {
-    height: 25px;
-  }
-
-  .content {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-around;
-  }
-
-  .content-title {
-    width: 100%;
-    text-align: left;
-  }
-
-  .content-media {
-    width: 100%;
-    height: 85%;
-    text-align: left;
-  }
-
-  .content-link {
-    max-width: fit-content;
-  }
-
-  .options {
-    height: 25px;
-  }
 }

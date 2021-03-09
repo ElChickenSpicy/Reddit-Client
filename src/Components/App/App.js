@@ -15,6 +15,8 @@ export class App extends React.Component {
       posts: [],
       activeSubreddit: 'popular',
       nav: ['soccer', 'AskReddit', 'dataisbeautiful', 'ProgrammerHumor', 'Art'],
+      top: [],
+      searchTerm: 'Top Subreddits',
       subredditsAbout: [],
       view: 'hot',
       scrollPosition: []
@@ -28,11 +30,14 @@ export class App extends React.Component {
     this.addSubreddit = this.addSubreddit.bind(this);
     this.removeSubreddit = this.removeSubreddit.bind(this);
     this.Search = this.Search.bind(this);
+    this.searchSubs = this.searchSubs.bind(this);
     this.getSubreddit = this.getSubreddit.bind(this);
     this.changeView = this.changeView.bind(this);
     this.saveScrollPosition = this.saveScrollPosition.bind(this);
     this.setScrollPosition = this.setScrollPosition.bind(this);
     this.submit = this.submit.bind(this);
+    this.fetchTop = this.fetchTop.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
   }
 
   async fetchInitialData() {
@@ -115,6 +120,27 @@ export class App extends React.Component {
       });
 
       window.scrollTo(0, 0);
+    }
+  }
+
+  async fetchTop() {
+    const response = await fetch('https://www.reddit.com/subreddits/.json');
+    if (response.ok) {
+      const jsonResponse = await response.json();
+      let topSubs = jsonResponse.data.children.slice(0, 11);
+      topSubs.shift();
+      this.setState({ top: topSubs });
+    }
+  }
+
+  async searchSubs(query, str) {
+    //Fetch data from the provided subreddit
+    const response = await fetch(query);
+    if (response.ok) {
+      const jsonResponse = await response.json();
+      const searchPosts = jsonResponse.data.children.slice(0, 8);
+      
+      this.setState({ top: searchPosts, searchTerm: `${str}...` });
     }
   }
 
@@ -309,8 +335,13 @@ export class App extends React.Component {
     window.scrollTo(...this.state.scrollPosition);
   }
 
+  clearSearch(str) {
+    document.getElementById(str).value = "";
+  }
+
   componentDidMount() {
     this.fetchInitialData();
+    this.fetchTop();
     this.fetchNavSubs(this.state.nav);
     this.highlightActive();
   }
@@ -324,6 +355,7 @@ export class App extends React.Component {
             highlightActive={this.highlightActive()}
             search={this.Search}
             subredditsAbout={this.state.subredditsAbout}
+            clearSearch={this.clearSearch}
           />
           <Main
             posts={this.state.posts}
@@ -340,6 +372,12 @@ export class App extends React.Component {
           <Options
             activeSubreddit={this.state.activeSubreddit}
             getSubreddit={this.getSubreddit}
+            top={this.state.top}
+            fetchSubredditData={this.fetchSubredditData}
+            fetchAbout={this.fetchAbout}
+            searchSubs={this.searchSubs}
+            clearSearch={this.clearSearch}
+            searchTerm={this.state.searchTerm}
           />
       </div>
     )
