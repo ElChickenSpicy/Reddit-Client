@@ -16,6 +16,7 @@ export class Comments extends React.Component {
         this.toggleFirstHidden = this.toggleFirstHidden.bind(this);
         this.toggleSecondHidden = this.toggleSecondHidden.bind(this);
         this.flairExists = this.flairExists.bind(this);
+        this.getCommentJSX = this.getCommentJSX.bind(this);
     }
 
     //Fetch the comments of a post
@@ -74,6 +75,36 @@ export class Comments extends React.Component {
         return commentFlair;
     }
 
+    //Generate JSX for comment items
+    getCommentJSX(comment) {
+        //Object destructuring
+        const { kind, data: { author, author_flair_richtext, body_html, created_utc, is_submitter, ups } } = comment;
+        //Does Author have a flair?                       
+        let commentFlair = this.flairExists(kind, author_flair_richtext);
+
+        return [
+            <div className="author">
+                {commentFlair}
+                <h2
+                    className="username"
+                    onClick={() => { this.toggleFirstHidden(comment) }}
+                    style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
+                    title={is_submitter === true ? 'This user is the Original Poster' : ''}>
+                    u/{author}
+                    <span id="comment-time">
+                        ~ {dayjs(dayjs.unix(created_utc)).fromNow()}
+                    </span>
+                </h2>
+            </div>,
+            <p>{parse(decode(body_html))}</p>,
+            <div className="comment-info">
+                <i class="fas fa-arrow-up" title="Upvote"></i>
+                <i class="fas fa-arrow-down" title="Downvote"></i>
+                <span id="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
+            </div>  
+        ];
+    }
+
     componentDidMount() {
         this.commentsFetch();
         window.scrollTo(0, 0);
@@ -129,143 +160,75 @@ export class Comments extends React.Component {
                 {/* Comments Section */}
                 <section className="comments-container">
                     {this.state.comments.map(comment => {
-
-                        //Object destructuring
-                        const { kind, data: { author, author_flair_richtext, body_html, collapsed, created_utc, is_submitter, replies, ups } } = comment;
-
-                        //Does Author have a flair?                       
-                        let commentFlair = this.flairExists(kind, author_flair_richtext);
-
+                        const { kind, data: { author, collapsed, replies, is_submitter } } = comment;
                         return (
-                            //Ensure object isn't the 'show more' option
+                            //Check that type isn't 'more', and collapsed status
                             kind === 'more' ? '' :
+                            collapsed === false ?
+                                <div className="comment-item">
+                                    {/* Pass each comment to JSX generator */}
+                                    {this.getCommentJSX(comment).map(el => el)}
 
-                                //Check if comment is collapsed or not
-                                collapsed === false ?
-                                    <div className="comment-item">
-                                        <div className="author">
-                                            {commentFlair}
-                                            <h2
-                                                className="username"
-                                                onClick={() => { this.toggleFirstHidden(comment) }}
-                                                style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
-                                                title={is_submitter === true ? 'This user is the Original Poster' : ''}>
-                                                u/{author}
-                                                <span id="comment-time">
-                                                    ~ {dayjs(dayjs.unix(created_utc)).fromNow()}
-                                                </span>
-                                            </h2>
-                                        </div>
-                                        <p>{parse(decode(body_html))}</p>
-                                        <div className="comment-info">
-                                            <i class="fas fa-arrow-up" title="Upvote"></i>
-                                            <i class="fas fa-arrow-down" title="Downvote"></i>
-                                            <span id="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
-                                        </div>
+                                    {/* Are there any replies? */}
+                                    {!replies.data ? '' :
+                                    replies.data.children.length <= 1 ? '' :
+                                    replies.data.children.slice(0, replies.data.children.length - 1).map(reply => {
 
-                                        {/* Are there any replies? */}
-                                        {!replies.data ? '' :
-                                            replies.data.children.length <= 1 ? '' :
-                                                replies.data.children.slice(0, replies.data.children.length - 1).map(reply => {
+                                        //Object destructuring
+                                        const { kind: r_kind, data: { author: r_author, collapsed: r_collapsed, is_submitter: r_is_submitter, replies: r_replies} } = reply;
+                                        return (
+                                            //Check that type isn't 'more', and collapsed status
+                                            r_kind === 'more' ? '' :
+                                            r_collapsed === false ?
+                                                <div className="first-reply-layer">
+                                                    {/* Pass each reply to JSX generator */}
+                                                    {this.getCommentJSX(reply).map(el => el)}
 
-                                                    //Object destructuring
-                                                    const { kind: r_kind, data: {
-                                                        author: r_author, author_flair_richtext: r_author_flair_richtext, body_html: r_body_html, collapsed: r_collapsed, created_utc: r_created_utc, is_submitter: r_is_submitter, replies: r_replies, ups: r_ups
-                                                    } } = reply;
+                                                    {/* Are there any replies? */}
+                                                    {!r_replies.data ? '' :
+                                                    r_replies.data.children.length <= 1 ? '' :
+                                                    r_replies.data.children.slice(0, r_replies.data.children.length - 1).map(secondLayer => {
 
-                                                    //Does Author have a flair?
-                                                    let fLayerFlair = this.flairExists(r_kind, r_author_flair_richtext);
-
-                                                    return (
-                                                        //Ensure object isn't the 'show more' option
-                                                        r_kind === 'more' ? '' :
-                                                            r_collapsed === false ?
-                                                                //Check if comment is collapsed or not
-                                                                <div className="first-reply-layer">
-                                                                    <div className="author">
-                                                                        {fLayerFlair}
-                                                                        <h2
-                                                                            className="username"
-                                                                            onClick={() => { this.toggleSecondHidden(comment, reply) }}
-                                                                            style={r_is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
-                                                                            title={r_is_submitter === true ? 'This user is the Original Poster' : ''}>
-                                                                            u/{r_author}
-                                                                            <span id="comment-time">
-                                                                                ~ {dayjs(dayjs.unix(r_created_utc)).fromNow()}
-                                                                            </span>
-                                                                        </h2>
-                                                                    </div>
-                                                                    <p>{parse(decode(r_body_html))}</p>
-                                                                    <div className="comment-info">
-                                                                        <i class="fas fa-arrow-up" title="Upvote"></i>
-                                                                        <i class="fas fa-arrow-down" title="Downvote"></i>
-                                                                        <span id="votes">{r_ups > 999 ? `${(r_ups / 1000).toFixed(1)}k` : r_ups}</span>
-                                                                    </div>
-                                                                    {!r_replies.data ? '' :
-                                                                        r_replies.data.children.length <= 1 ? '' :
-                                                                            r_replies.data.children.slice(0, r_replies.data.children.length - 1).map(secondLayer => {
-                                                                                //Object destructuring
-                                                                                const { kind: s_kind, data: {
-                                                                                    author: s_author, author_flair_richtext: s_author_flair_richtext, body_html: s_body_html, created_utc: s_created_utc, is_submitter: s_is_submitter, ups: s_ups
-                                                                                } } = secondLayer;
-                                                                                //Does Author have a flair?
-                                                                                let sLayerFlair = this.flairExists(s_kind, s_author_flair_richtext);
-                                                                                return (
-                                                                                    //Ensure the reply kind is not 'more'
-                                                                                    s_kind === 'more' ? '' :
-                                                                                        <div className="second-reply-layer">
-                                                                                            <div className="author">
-                                                                                                {sLayerFlair}
-                                                                                                <h2
-                                                                                                    className="username"
-                                                                                                    style={s_is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
-                                                                                                    title={s_is_submitter === true ? 'This user is the Original Poster' : ''}>
-                                                                                                    u/{s_author}
-                                                                                                    <span id="comment-time">
-                                                                                                        ~ {dayjs(dayjs.unix(s_created_utc)).fromNow()}
-                                                                                                    </span>
-                                                                                                </h2>
-                                                                                            </div>
-                                                                                            <p>{parse(decode(s_body_html))}</p>
-                                                                                            <div className="comment-info">
-                                                                                                <i class="fas fa-arrow-up" title="Upvote"></i>
-                                                                                                <i class="fas fa-arrow-down" title="Downvote"></i>
-                                                                                                <span id="votes">{s_ups > 999 ? `${(s_ups / 1000).toFixed(1)}k` : s_ups}</span>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                )
-                                                                            })
-                                                                    }
-                                                                </div> :
-                                                                //If the collapsed property is set to true, hide the reply and its children
-                                                                <div className="first-reply-layer" onClick={() => { this.toggleSecondHidden(comment, reply) }}>
-                                                                    <h2
-                                                                        className="username"
-                                                                        style={r_is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
-                                                                        title={r_is_submitter === true ? 'This user is the Original Poster' : ''}>
-                                                                        u/{r_author}
-                                                                    </h2>
-                                                                    <p>...</p>
+                                                        //Object destructuring
+                                                        const { kind: s_kind } = secondLayer;
+                                                        return (
+                                                            //Ensure the reply kind is not 'more'
+                                                            s_kind === 'more' ? '' :
+                                                                <div className="second-reply-layer">
+                                                                    {/* Pass each reply to JSX generator */}
+                                                                    {this.getCommentJSX(secondLayer)}
                                                                 </div>
-                                                    )
-                                                })
-                                        }
-                                    </div> :
-                                    //If the collapsed property is set to true, hide the comment and its children
-                                    <div className="comment-item">
-                                        <h2
-                                            className="username"
-                                            style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
-                                            title={is_submitter === true ? 'This user is the Original Poster' : ''}
-                                            onClick={() => { this.toggleFirstHidden(comment) }}>
-                                            u/{author}
-                                        </h2>
-                                        <p>...</p>
-                                    </div>
-                        )
+                                                        );
+                                                    })}
+                                                </div> :
+                                                //If the collapsed property is set to true, hide the reply and its children
+                                                <div className="first-reply-layer" onClick={() => { this.toggleSecondHidden(comment, reply) }}>
+                                                    <h2
+                                                    className="username"
+                                                    style={r_is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
+                                                    title={r_is_submitter === true ? 'This user is the Original Poster' : ''}>
+                                                        u/{r_author}
+                                                    </h2>
+                                                    <p>...</p>
+                                                </div>
+                                        );
+                                    })}
+                                </div> :
+                                //If the collapsed property is set to true, hide the comment and its children
+                                <div className="comment-item">
+                                    <h2
+                                    className="username"
+                                    style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
+                                    title={is_submitter === true ? 'This user is the Original Poster' : ''}
+                                    onClick={() => { this.toggleFirstHidden(comment) }}>
+                                        u/{author}
+                                    </h2>
+                                    <p>...</p>
+                                </div>
+                        );
                     })}
                 </section>
             </div>
-        )
+        );
     }
 };
