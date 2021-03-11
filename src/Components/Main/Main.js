@@ -59,7 +59,9 @@ export class Main extends React.Component {
                         </div>
                     </div>
                 </Link>
-                {postOutput}
+                <div className="post-flex-item content">
+                    {postOutput}
+                </div>
                 <div className="post-flex-item options">
                     <div className="voting-buttons">
                         <i class="far fa-arrow-alt-circle-up" title="Upvote"></i>
@@ -91,7 +93,7 @@ export class Main extends React.Component {
         };
 
         //Variable to store returned JSX
-        let output;
+        let output = [];
 
         //Object destructuring
         let { data, data: { domain, selftext, title, url } } = post;
@@ -108,101 +110,89 @@ export class Main extends React.Component {
             //Link
             case 'link':
                 if (data.thumbnail === 'default') {
-                    output =
-                        <div className="post-flex-item content">
-                            <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
-                                {title}
-                            </a>
-                        </div>
+                    output.push(
+                        <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
+                            {title}
+                        </a>
+                    );       
                 } else {
-                    output =
-                        <div className="post-flex-item content">
-                            {titleLink}
-                            <div className="media">
-                                <img className="thumbnail" src={data.thumbnail} alt={title} />
-                            </div>
+                    output.push(
+                        titleLink,
+                        <div className="media">
+                            <img className="thumbnail" src={data.thumbnail} alt={title} />
                         </div>
+                    );          
                 }
                 break;
             //Image
             case 'image':
-                output =
-                    <div className="post-flex-item content">
-                        {titleLink}
-                        <div className="media">
-                            <img className="image" src={url} alt={title} />
-                        </div>
+                output.push(
+                    titleLink,
+                    <div className="media">
+                        <img className="image" src={url} alt={title} />
                     </div>
+                );      
                 break;
             //Hosted Video
             case 'hosted:video':
-                output =
-                    <div className="post-flex-item content">
-                        {titleLink}
-                        <div className="media">
-                            <video className="video" controls>
-                                <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
-                            </video>
-                        </div>
+                output.push(
+                    titleLink,
+                    <div className="media">
+                        <video className="video" controls>
+                            <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
+                        </video>
                     </div>
+                );     
                 break;
             //Rich Video
             case 'rich:video':
                 switch (domain) {
                     case 'youtube.com':
-                        output =
-                            <div className="post-flex-item content">
-                                {titleLink}
-                                <div className="media">
-                                    <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
-                                </div>
+                        output.push(
+                            titleLink,
+                            <div className="media">
+                                <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
                             </div>
+                        );      
                         break;
                     case 'youtu.be':
-                        output =
-                            <div className="post-flex-item content">
-                                {titleLink}
-                                <div className="media">
-                                    <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
-                                </div>
+                        output.push(
+                            titleLink,
+                            <div className="media">
+                                <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
                             </div>
+                        );             
                         break;
                     case 'gfycat.com':
-                        output =
-                            <div className="post-flex-item content">
-                                {titleLink}
-                                <div className="media">
-                                    {parse(decode(data.media_embed.content))}
-                                </div>
-                            </div>
+                        output.push(
+                            titleLink,
+                            <div className="media">
+                                {parse(decode(data.media_embed.content))}
+                            </div>                           
+                        );     
                         break;
                     case 'vimeo':
-                        output =
-                            <div className="post-flex-item content">
-                                {titleLink}
-                                <div className="media">
-                                    <Vimeo
-                                        video={url.split("/")[3]}
-                                        width="640"
-                                        height="390"
-                                    />
-                                </div>
+                        output.push(
+                            titleLink,
+                            <div className="media">
+                                <Vimeo
+                                    video={url.split("/")[3]}
+                                    width="640"
+                                    height="390"
+                                />
                             </div>
+                        );     
                         break;
                     case 'streamable.com':
                         if (data.secure_media) {
-                            output =
-                                <div className="post-flex-item content">
-                                    {titleLink}
-                                    <div className="media">
-                                        {parse(decode(data.secure_media.oembed.html))}
-                                    </div>
+                            output.push(
+                                titleLink,
+                                <div className="media">
+                                    {parse(decode(data.secure_media.oembed.html))}
                                 </div>
+                            );    
                         } else {
-                            output =
-                                <div className="post-flex-item content">
-                                    {titleLink}
-                                </div>
+                            output.push(titleLink);         
                         }
                         break;
                 }
@@ -210,127 +200,105 @@ export class Main extends React.Component {
             //Undefined
             case undefined:
                 if (selftext !== "") {
-                    output =
-                        <div className="post-flex-item content">
-                            {titleLink}
-                            <p className="text">{parse(decode(data.selftext_html))}</p>
+                    output.push(
+                        titleLink,
+                        <div className="special-text" >
+                            {parse(decode(data.selftext_html))}
                         </div>
+                    );   
+                    break;
                 } else if (!domain.startsWith("self")) {
                     switch (domain) {
                         case 'twitter.com':
-                            output =
-                                <div className="post-flex-item content">
-                                    {titleLink}
-                                    <div className="media">
-                                        <TweetEmbed id={url.split("/")[5].split("?")[0]} />
-                                    </div>
+                            output.push(
+                                titleLink,
+                                <div className="media">
+                                    <TweetEmbed id={url.split("/")[5].split("?")[0]} />
                                 </div>
+                            );   
                             break;
                         case 'v.redd.it':
                             if (data.media) {
-                                output =
-                                    <div className="post-flex-item content">
-                                        {titleLink}
-                                        <div className="media">
-                                            <video className="video" controls>
-                                                <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
-                                            </video>
-                                        </div>
+                                output.push(
+                                    titleLink,
+                                    <div className="media">
+                                        <video className="video" controls>
+                                            <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
+                                        </video>
                                     </div>
+                                );    
                             } else {
-                                output =
-                                    <div className="post-flex-item content">
-                                        {titleLink}
-                                    </div>
+                                output.push(titleLink);
                             }
                             break;
                         case 'youtube.com':
-                            output =
-                                <div className="post-flex-item content">
-                                    Crosspost: {titleLink}
+                            output.push(
+                                    titleLink,
                                     <div className="media">
                                         <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
                                     </div>
-                                </div>
+                            );    
                             break;
                         case 'youtu.be':
-                            output =
-                                <div className="post-flex-item content">
-                                    {titleLink}
-                                    <div className="media">
-                                        <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
-                                    </div>
+                            output.push(
+                                titleLink,
+                                <div className="media">
+                                    <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
                                 </div>
+                            );       
                             break;
                         case 'i.redd.it':
-                            output =
-                                <div className="post-flex-item content">
-                                    {titleLink}
-                                    <div className="media">
-                                        <img className="image" src={url} alt={title} />
-                                    </div>
+                            output.push(
+                                titleLink,
+                                <div className="media">
+                                    <img className="image" src={url} alt={title} />
                                 </div>
+                            );   
                             break;
                         case 'streamable.com':
                             if (data.secure_media) {
-                                output =
-                                    <div className="post-flex-item content">
-                                        {titleLink}
-                                        <div className="media">
-                                            {parse(decode(data.secure_media.oembed.html))}
-                                        </div>
+                                output.push(
+                                    titleLink,
+                                    <div className="media">
+                                        {parse(decode(data.secure_media.oembed.html))}
                                     </div>
+                                );   
                             } else {
-                                output =
-                                    <div className="post-flex-item content">
-                                        {titleLink}
-                                    </div>
+                                output.push(titleLink);     
                             }
                             break;
                         case 'streamye.com':
-                            output =
-                                <div className="post-flex-item content">
-                                    {titleLink}
-                                </div>
+                            output.push(titleLink); 
                             break;
                         case 'streamja.com':
-                            output =
-                                <div className="post-flex-item content">
-                                    {titleLink}
-                                </div>
+                            output.push(titleLink); 
                             break;
                         default:
                             data.thumbnail === 'default' ?
-                                output =
-                                <div className="post-flex-item content">
+                                output.push(
                                     <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
                                         {title}
                                     </a>
-                                </div> :
-                                output =
-                                <div className="post-flex-item content">
+                                ):
+                                output.push(
                                     <a className="title link" href={url} target="_blank" rel="noreferrer">
                                         {title}
-                                    </a>
+                                    </a>,
                                     <div className="media">
                                         <img className="thumbnail" src={data.thumbnail} alt={title} />
                                     </div>
-                                </div>
+                                );     
                             break;
                     }
                 } else {
-                    output =
-                        <div className="post-flex-item content">
-                            <h1 className="title oneliner">{title}</h1>
-                        </div>
+                    output.push(
+                        <h1 className="title oneliner">{title}</h1>
+                    );  
                 }
                 break;
             //Default
             default:
-                output =
-                    <div className="post-flex-item content">
-                        {titleLink}
-                    </div>
+                output.push(titleLink);
                 break;
         }
         return output;

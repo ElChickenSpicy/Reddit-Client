@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@u-wave/react-vimeo": "^0.9.3",
     "dayjs": "^1.10.4",
+    "detect-element-overflow": "^1.2.0",
     "html-entities": "^2.1.0",
     "html-react-parser": "^1.2.4",
     "react": "^17.0.1",

@@ -197,7 +197,7 @@ nav {
   width: 40px;
   margin-left: auto;
   margin-right: 2px;
-  transition-duration: 2s;
+  transition-duration: 1s;
 }
 
 input{
@@ -211,7 +211,7 @@ input{
   border: none;
   outline: none;
   font-family: 'Circular Std Book';
-  transition-duration: 1s;
+  transition-duration: 0.5s;
 }
 
 .fa{
@@ -251,7 +251,7 @@ input{
   align-items: center;
   justify-content: flex-start;
   overflow-x: hidden;
-  transition: width 2s;
+  transition: width 1s;
 }
 
 .first40 img {
@@ -547,7 +547,7 @@ i span {
   width: 50%;
   white-space: nowrap;
   overflow-x: hidden;
-  transition: width 2s;
+  transition: width 1s;
 }
 
 .top-header h2 {
@@ -740,12 +740,23 @@ main #posts {
   border-radius: 8px;
 }
 
-.text {
+.special-text {
   width: 60%;
   padding: 50px 30px;
   font-family: 'Circular Std Book', sans-serif;
-  background-color: rgb(243, 243, 243);
-  border-radius: 14px;
+  font-size: 15px;
+  background-color: rgb(238, 238, 238);
+  border-radius: 8px;
+  max-height: 300px;
+  overflow: hidden;
+}
+
+#tooLong {
+  border: 3px solid red;
+}
+
+#showFull {
+  border: 3px solid green;
 }
 
 .thumbnail {
@@ -1056,8 +1067,7 @@ main #posts {
   visibility: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
-  transition: width 1s;
-  transition-timing-function: linear;
+  transition: width 1s linear;
 }
 
 .sort-menu button {
