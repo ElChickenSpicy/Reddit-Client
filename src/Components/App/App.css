@@ -740,7 +740,16 @@ main #posts {
   border-radius: 8px;
 }
 
-.special-text {
+.text {
+  width: 60%;
+  padding: 50px 30px;
+  font-family: 'Circular Std Book', sans-serif;
+  font-size: 15px;
+  background-color: rgb(238, 238, 238);
+  border-radius: 8px;
+}
+
+.long {
   width: 60%;
   padding: 50px 30px;
   font-family: 'Circular Std Book', sans-serif;
@@ -749,14 +758,37 @@ main #posts {
   border-radius: 8px;
   max-height: 300px;
   overflow: hidden;
+  position: relative;
 }
 
-#tooLong {
-  border: 3px solid red;
+.readmore {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  left: 0px;
+  right: 0px;
+  top: 50px;
+  height: 350px;
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgb(238, 238, 238));
 }
 
-#showFull {
-  border: 3px solid green;
+.read {
+  border: none;
+  outline: none;
+  margin-bottom: 5px;
+  width: 100%;
+  background-color: rgba(238, 238, 238, 0);
+  font-family: 'Circular Std Bold', sans-serif;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}
+
+.read:hover {
+  color: red;
+  cursor: pointer;
 }
 
 .thumbnail {

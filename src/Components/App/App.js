@@ -108,7 +108,7 @@ export class App extends React.Component {
     if (response.ok) {
       const jsonResponse = await response.json();
 
-      const subPosts = jsonResponse.data.children.slice(0, 10);
+      const subPosts = jsonResponse.data.children.slice(0, 25);
       this.setState({ posts: subPosts, activeSubreddit: sub, view: 'hot' });
 
       this.checkData();

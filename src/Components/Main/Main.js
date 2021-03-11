@@ -14,12 +14,11 @@ import Vimeo from '@u-wave/react-vimeo';
 export class Main extends React.Component {
     constructor(props) {
         super(props);
-        this.formatPost = this.formatPost.bind(this);
         this.displayPost = this.displayPost.bind(this);
+        this.formatPost = this.formatPost.bind(this);
     }
-
-
-    displayPost(post) {
+    
+    displayPost(post, i) {
         //Object destructuring
         const { data: { all_awardings, author, author_flair_richtext, created_utc, num_comments, permalink, subreddit, subreddit_id, ups } } = post;
 
@@ -36,7 +35,7 @@ export class Main extends React.Component {
         let title = icon[0] ? icon[0].title !== "" && icon[0].title !== null ? icon[0].title : { subreddit } : { subreddit };
 
         //Save JSX returned from the formatPost function
-        const postOutput = this.formatPost(post);
+        const postOutput = this.formatPost(post, i);
 
         return (
             <article className="reddit-post">
@@ -80,7 +79,7 @@ export class Main extends React.Component {
     }
 
     //Based on post type, display it in a certain way
-    formatPost(post) {
+    formatPost(post, i) {
 
         //YouTube config settings
         const opts = {
@@ -114,14 +113,14 @@ export class Main extends React.Component {
                         <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
                             {title}
                         </a>
-                    );       
+                    );
                 } else {
                     output.push(
                         titleLink,
                         <div className="media">
                             <img className="thumbnail" src={data.thumbnail} alt={title} />
                         </div>
-                    );          
+                    );
                 }
                 break;
             //Image
@@ -131,7 +130,7 @@ export class Main extends React.Component {
                     <div className="media">
                         <img className="image" src={url} alt={title} />
                     </div>
-                );      
+                );
                 break;
             //Hosted Video
             case 'hosted:video':
@@ -142,7 +141,7 @@ export class Main extends React.Component {
                             <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
                         </video>
                     </div>
-                );     
+                );
                 break;
             //Rich Video
             case 'rich:video':
@@ -153,7 +152,7 @@ export class Main extends React.Component {
                             <div className="media">
                                 <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
                             </div>
-                        );      
+                        );
                         break;
                     case 'youtu.be':
                         output.push(
@@ -161,15 +160,15 @@ export class Main extends React.Component {
                             <div className="media">
                                 <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
                             </div>
-                        );             
+                        );
                         break;
                     case 'gfycat.com':
                         output.push(
                             titleLink,
                             <div className="media">
                                 {parse(decode(data.media_embed.content))}
-                            </div>                           
-                        );     
+                            </div>
+                        );
                         break;
                     case 'vimeo':
                         output.push(
@@ -181,7 +180,7 @@ export class Main extends React.Component {
                                     height="390"
                                 />
                             </div>
-                        );     
+                        );
                         break;
                     case 'streamable.com':
                         if (data.secure_media) {
@@ -190,9 +189,9 @@ export class Main extends React.Component {
                                 <div className="media">
                                     {parse(decode(data.secure_media.oembed.html))}
                                 </div>
-                            );    
+                            );
                         } else {
-                            output.push(titleLink);         
+                            output.push(titleLink);
                         }
                         break;
                 }
@@ -200,12 +199,50 @@ export class Main extends React.Component {
             //Undefined
             case undefined:
                 if (selftext !== "") {
-                    output.push(
-                        titleLink,
-                        <div className="special-text" >
-                            {parse(decode(data.selftext_html))}
-                        </div>
-                    );   
+                    if (data.selftext.length < 1800) {
+                        output.push(
+                            titleLink,
+                            <div className="text" >
+                                {parse(decode(data.selftext_html))}
+                            </div>
+                        );
+                    } else {
+                        output.push(
+                            titleLink,
+                            <div id={`long-${i}`} className="long">
+                                <div id={`readmore-${i}`} className="readmore"></div>
+                                <button
+                                    id={`expand-${i}`}
+                                    className="read"
+                                    title="Expand the Post"
+                                    style={{ display: 'block' }}
+                                    onClick={({target: { id } }) => {
+                                        let num = id.split("-")[1];
+                                        document.getElementById(`long-${num}`).style.maxHeight === '100%' ? document.getElementById(`long-${num}`).style.maxHeight = '300px' : document.getElementById(`long-${num}`).style.maxHeight = '100%';
+                                        document.getElementById(`readmore-${num}`).style.display === 'none' ? document.getElementById(`readmore-${num}`).style.display = 'block' : document.getElementById(`readmore-${num}`).style.display = 'none';
+                                        document.getElementById(`expand-${num}`).style.display === 'block' ? document.getElementById(`expand-${num}`).style.display = 'none' : document.getElementById(`expand-${num}`).style.display = 'block';
+                                        document.getElementById(`collapse-${num}`).style.display === 'block' ? document.getElementById(`collapse-${num}`).style.display = 'none' : document.getElementById(`collapse-${num}`).style.display = 'block';
+                                    }}>
+                                    Show More
+                                </button>
+                                <button
+                                    id={`collapse-${i}`}
+                                    className="read"
+                                    title="Collapse the Post"
+                                    style={{ display: 'none' }}
+                                    onClick={({target: { id } }) => {
+                                        let num = id.split("-")[1];
+                                        document.getElementById(`long-${num}`).style.maxHeight === '100%' ? document.getElementById(`long-${num}`).style.maxHeight = '300px' : document.getElementById(`long-${num}`).style.maxHeight = '100%';
+                                        document.getElementById(`readmore-${num}`).style.display === 'none' ? document.getElementById(`readmore-${num}`).style.display = 'block' : document.getElementById(`readmore-${num}`).style.display = 'none';
+                                        document.getElementById(`expand-${num}`).style.display === 'block' ? document.getElementById(`expand-${num}`).style.display = 'none' : document.getElementById(`expand-${num}`).style.display = 'block';
+                                        document.getElementById(`collapse-${num}`).style.display === 'block' ? document.getElementById(`collapse-${num}`).style.display = 'none' : document.getElementById(`collapse-${num}`).style.display = 'block';
+                                    }}>
+                                    Show Less
+                                </button>
+                                {parse(decode(data.selftext_html))}
+                            </div>
+                        );
+                    }
                     break;
                 } else if (!domain.startsWith("self")) {
                     switch (domain) {
@@ -215,7 +252,7 @@ export class Main extends React.Component {
                                 <div className="media">
                                     <TweetEmbed id={url.split("/")[5].split("?")[0]} />
                                 </div>
-                            );   
+                            );
                             break;
                         case 'v.redd.it':
                             if (data.media) {
@@ -226,18 +263,18 @@ export class Main extends React.Component {
                                             <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
                                         </video>
                                     </div>
-                                );    
+                                );
                             } else {
                                 output.push(titleLink);
                             }
                             break;
                         case 'youtube.com':
                             output.push(
-                                    titleLink,
-                                    <div className="media">
-                                        <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
-                                    </div>
-                            );    
+                                titleLink,
+                                <div className="media">
+                                    <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
+                                </div>
+                            );
                             break;
                         case 'youtu.be':
                             output.push(
@@ -245,7 +282,13 @@ export class Main extends React.Component {
                                 <div className="media">
                                     <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
                                 </div>
-                            );       
+                            );
+                        case 'streamwo.com':
+                            output.push(
+                                <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
+                                    {title}
+                                </a>
+                            );
                             break;
                         case 'i.redd.it':
                             output.push(
@@ -253,7 +296,7 @@ export class Main extends React.Component {
                                 <div className="media">
                                     <img className="image" src={url} alt={title} />
                                 </div>
-                            );   
+                            );
                             break;
                         case 'streamable.com':
                             if (data.secure_media) {
@@ -262,24 +305,24 @@ export class Main extends React.Component {
                                     <div className="media">
                                         {parse(decode(data.secure_media.oembed.html))}
                                     </div>
-                                );   
+                                );
                             } else {
-                                output.push(titleLink);     
+                                output.push(titleLink);
                             }
                             break;
                         case 'streamye.com':
-                            output.push(titleLink); 
+                            output.push(titleLink);
                             break;
                         case 'streamja.com':
-                            output.push(titleLink); 
+                            output.push(titleLink);
                             break;
                         default:
-                            data.thumbnail === 'default' ?
+                            data.thumbnail === 'default' || data.thumbnail === "" ?
                                 output.push(
                                     <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
                                         {title}
                                     </a>
-                                ):
+                                ) :
                                 output.push(
                                     <a className="title link" href={url} target="_blank" rel="noreferrer">
                                         {title}
@@ -287,13 +330,13 @@ export class Main extends React.Component {
                                     <div className="media">
                                         <img className="thumbnail" src={data.thumbnail} alt={title} />
                                     </div>
-                                );     
+                                );
                             break;
                     }
                 } else {
                     output.push(
                         <h1 className="title oneliner">{title}</h1>
-                    );  
+                    );
                 }
                 break;
             //Default

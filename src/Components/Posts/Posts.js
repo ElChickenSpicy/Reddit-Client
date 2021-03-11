@@ -9,9 +9,9 @@ export class Posts extends React.Component {
 
         return (
             <div id="posts">
-                {this.props.initialPosts.map(post => {
+                {this.props.initialPosts.map((post, i) => {
                     return (
-                        this.props.displayPost(post)
+                        this.props.displayPost(post, i)
                     );
                 })}
             </div>
