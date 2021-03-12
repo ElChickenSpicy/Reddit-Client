@@ -21,13 +21,12 @@ export class Navbar extends React.Component {
             <nav>
                 <section className="branding">
                     <div className="form">
-                        {/* On enter key, call the search function with the encoded text as the argument */}
                         <input
                             id="searchbar"
                             placeholder="Search Reddit..."
                             onKeyUp={({ key, target: { value } }) => {
                                 if (key === "Enter") {
-                                    this.props.search(`https://www.reddit.com/search.json?q=${encodeURI(value)}`, value);
+                                    this.props.fetchPosts(`search.json?q=${encodeURI(value)}`, `Search Results: ${value}`);
                                     this.props.clearSearch('searchbar');
                                 }
                             }}
@@ -40,7 +39,7 @@ export class Navbar extends React.Component {
                         to="/"
                         className="first40"
                         onClick={() => {
-                            this.props.fetchSubredditData('popular');
+                            this.props.fetchPosts('r/popular.json', 'popular');
                             this.props.fetchTop();
                         }}
                     >
@@ -54,7 +53,7 @@ export class Navbar extends React.Component {
                     </Link>
                 </section>
 
-                {/* Display each of the users saved subreddits in the My Subreddits section */}
+                {/* Display each of the users saved subreddits in Nav section */}
                 <section className="subreddit-container">
                     <header className="subreddit-title">
                         <h2>My Subreddits</h2>
@@ -67,23 +66,25 @@ export class Navbar extends React.Component {
                                 let src = icon_img !== "" && icon_img !== null ? icon_img : defaultImg;
                                 title = title !== "" && title !== null ? title : { display_name };
                                 return (
-                                    <Link to="/">
+                                    <Link to="/" key={display_name}>
                                         <li
                                             id="nav-item"
                                             title={title}
                                             style={this.props.highlightActive[0] === display_name ? { backgroundColor: 'rgba(211, 211, 211, 0.212)' } : { backgroundColor: 'white' }}
-                                            onClick={() => { this.props.fetchSubredditData(display_name) }}
+                                            onClick={() => {this.props.fetchPosts(`r/${display_name}.json`, display_name)}}
                                         >
                                             <img src={src} alt={display_name} />
                                             r/{display_name}
                                         </li>
                                     </Link>
                                 );
+                            } else {
+                                return null;
                             }
                         })}
                     </ul>
                 </section>
             </nav>
-        )
+        );
     }
 };

@@ -21,12 +21,8 @@ export class Comments extends React.Component {
 
     //Fetch the comments of a post
     async commentsFetch(sort = '?sort=confidence') {
-
-        //Format query string
         let str = this.props.rp.location.pathname;
         str = str.substring(9, str.length)
-
-        //Make request
         const response = await fetch(`https://www.reddit.com${str}.json${sort}`);
         const jsonResponse = await response.json();
         this.setState({

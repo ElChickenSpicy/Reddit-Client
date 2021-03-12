@@ -19,7 +19,6 @@ export class Main extends React.Component {
     }
     
     displayPost(post, i) {
-        //Object destructuring
         const { data: { all_awardings, author, author_flair_richtext, created_utc, num_comments, permalink, subreddit, subreddit_id, ups } } = post;
 
         //Does Author have a flair?
@@ -38,22 +37,21 @@ export class Main extends React.Component {
         const postOutput = this.formatPost(post, i);
 
         return (
-            <article className="reddit-post">
+            <article className="reddit-post" key={i}>
                 <Link to="/">
                     <div className="post-flex-item sub">
-                        <div className="subreddit-data">
+                        <div className="subreddit-data" onClick={() => {this.props.fetchPosts(`r/${subreddit}.json`, subreddit)}}>
                             <img
                                 src={src}
                                 alt={subreddit}
                                 title={title}
-                                onClick={() => { this.props.fetchSubredditData(subreddit) }}
                             />
-                            <h3 title={title} onClick={() => { this.props.fetchSubredditData(subreddit) }}>r/{subreddit}</h3>
+                            <h3 title={title}>r/{subreddit}</h3>
                         </div>
                         <div className="awards-container">
                             {all_awardings.length > -1 ?
                                 all_awardings.map(({ icon_url, name, description, count }) => {
-                                    return <div className="award"><img src={icon_url} alt={name} title={`${name}\n${description}`} />x{count}</div>
+                                    return <div className="award" key={name}><img src={icon_url} alt={name} title={`${name}\n${description}`} />x{count}</div>
                                 }) : ''}
                         </div>
                     </div>
@@ -94,7 +92,6 @@ export class Main extends React.Component {
         //Variable to store returned JSX
         let output = [];
 
-        //Object destructuring
         let { data, data: { domain, selftext, title, url } } = post;
         title = decode(title);
 
@@ -194,6 +191,8 @@ export class Main extends React.Component {
                             output.push(titleLink);
                         }
                         break;
+                    default :
+                        output.push(titleLink);
                 }
                 break;
             //Undefined
@@ -283,6 +282,7 @@ export class Main extends React.Component {
                                     <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
                                 </div>
                             );
+                            break;
                         case 'streamwo.com':
                             output.push(
                                 <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
@@ -351,22 +351,18 @@ export class Main extends React.Component {
         return (
             <main>
                 <Switch>
-                    <Route path="/" exact render={routeProps =>
+                    <Route path="/" exact>
                         <Posts
-                            rp={routeProps}
-                            initialPosts={this.props.posts}
-                            fetchSubredditData={this.props.fetchSubredditData}
-                            about={this.props.about}
                             displayPost={this.displayPost}
+                            initialPosts={this.props.posts}
                         />
-                    } />
+                    </Route>
                     <Route path="/Comments/:id" render={routeProps =>
                         <Comments
                             rp={routeProps}
-                            updatePost={this.props.updatePost}
-                            about={this.props.about}
-                            setScrollPosition={this.props.setScrollPosition}
                             displayPost={this.displayPost}
+                            setScrollPosition={this.props.setScrollPosition}
+                            updatePost={this.props.updatePost}
                         />
                     } />
                 </Switch>
