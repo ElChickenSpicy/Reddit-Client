@@ -1,17 +1,26 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import icon from '../../Icons/logoRelax.webp';
-import hoverIcon from '../../Icons/logoRelaxHover.webp';
+import icon from '../../Icons/black.webp';
 import defaultImg from '../../Icons/popular.webp';
+import green from '../../Icons/green.webp';
+import red from '../../Icons/red.webp';
+import yellow from '../../Icons/yellow.webp';
+import sand from '../../Icons/sand.webp';
+import retroSearch from '../../Icons/retro-Search.png';
+import heart from '../../Icons/heart.webp';
 
 export class Navbar extends React.Component {
     constructor(props) {
         super(props);
+        this.state = { 
+            img: [green, red, yellow, sand],
+            hover: 0
+         };
         this.hoverImage = this.hoverImage.bind(this);
     }
 
-    //Hover effect on Relax icon
     hoverImage() {
+        this.setState({ hover: Math.floor(Math.random() * 4) });
         document.getElementById('normal').style.display === "none" ? document.getElementById('normal').style.display = "inline-block" : document.getElementById('normal').style.display = "none";
         document.getElementById('hoverImage').style.display === "none" ? document.getElementById('hoverImage').style.display = "inline-block" : document.getElementById('hoverImage').style.display = "none";
     }
@@ -31,10 +40,12 @@ export class Navbar extends React.Component {
                                 }
                             }}
                         />
-                        <i className="fa fa-search"></i>
+                        <div className="search-container">
+                            <img className="search-icon" src={retroSearch} />
+                        </div>
                     </div>
 
-                    {/* Clicking the relax icon or text will return user to home screen and r/popular posts */}
+                    {/* Clicking the icon or text will return user to home screen and r/popular posts */}
                     <Link
                         to="/"
                         className="first40"
@@ -44,18 +55,20 @@ export class Navbar extends React.Component {
                         }}
                     >
                         <img id="normal" src={icon} alt="Icon" onMouseOver={() => this.hoverImage()} />
-                        <img id="hoverImage" src={hoverIcon} alt="Icon" style={{ display: "none" }} onMouseLeave={() => this.hoverImage()} />
+                        <img id="hoverImage" src={this.state.img[this.state.hover]} alt="Icon" style={{ display: "none" }} onMouseLeave={() => this.hoverImage()} />
                         <h1 className="name">R</h1>
                         <h1 className="name">e</h1>
-                        <h1 className="name">l</h1>
-                        <h1 className="name">a</h1>
-                        <h1 className="name">x</h1>
+                        <h1 className="name">t</h1>
+                        <h1 className="name">r</h1>
+                        <h1 className="name">o</h1>
                     </Link>
                 </section>
 
                 {/* Display each of the users saved subreddits in Nav section */}
                 <section className="subreddit-container">
+                    <div className="decorative"></div>
                     <header className="subreddit-title">
+                        <img className="icon" src={heart} alt="Heart Icon" />
                         <h2>My Subreddits</h2>
                     </header>
                     <ul>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import defaultImg from '../../Icons/popular.webp';
+import retroSearch from '../../Icons/retro-Search.png';
 
 export class Options extends React.Component {
     render() {
@@ -20,7 +21,9 @@ export class Options extends React.Component {
                                     }
                                 }}
                             />
-                            <i id="SSicon" className="fa fa-search"></i>
+                            <div id="SScontainer" className="search-container">
+                                <img id="SSicon"className="search-icon" src={retroSearch} />
+                            </div>
                         </div> 
                         <div className="top-header">
                             <h2>{this.props.searchTerm}</h2>

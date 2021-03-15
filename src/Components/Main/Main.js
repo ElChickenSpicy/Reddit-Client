@@ -37,42 +37,48 @@ export class Main extends React.Component {
         const postOutput = this.formatPost(post, i);
 
         return (
-            <article className="reddit-post" key={i}>
-                <Link to="/">
-                    <div className="post-flex-item sub">
-                        <div className="subreddit-data" onClick={() => {this.props.fetchPosts(`r/${subreddit}.json`, subreddit)}}>
-                            <img
-                                src={src}
-                                alt={subreddit}
-                                title={title}
-                            />
-                            <h3 title={title}>r/{subreddit}</h3>
-                        </div>
-                        <div className="awards-container">
-                            {all_awardings.length > -1 ?
-                                all_awardings.map(({ icon_url, name, description, count }) => {
-                                    return <div className="award" key={name}><img src={icon_url} alt={name} title={`${name}\n${description}`} />x{count}</div>
-                                }) : ''}
-                        </div>
-                    </div>
-                </Link>
-                <div className="post-flex-item content">
-                    {postOutput}
+            <div className="post-divider">
+                <div className="sub-image">
+                    <img
+                        src={src}
+                        alt={subreddit}
+                        title={title}
+                    />
                 </div>
-                <div className="post-flex-item options">
-                    <div className="voting-buttons">
-                        <i class="far fa-arrow-alt-circle-up" title="Upvote"></i>
-                        <i class="far fa-arrow-alt-circle-down" title="Downvote"></i>
-                        <span id="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
-                    </div>
-                    <Link
-                        to={`/Comments${[permalink]}`} id="comments" onClick={() => this.props.saveScrollPosition()}>
-                        <i className="far fa-comment-alt" title="Comments"></i>
-                        <span id="num-comments">{num_comments > 999 ? `${(num_comments / 1000).toFixed(1)}k Comments` : `${num_comments} Comments`}</span>
+                <article className="reddit-post" key={i}>
+                    <Link to="/">
+                        <div className="post-flex-item sub">
+                            <div className="subreddit-data" onClick={() => {this.props.fetchPosts(`r/${subreddit}.json`, subreddit)}}>
+                                <h3 title={title}>r/{subreddit}</h3>
+                                
+                                {all_awardings.length > 0 ?
+                                    <div className="awards-container">
+                                        {all_awardings.map(({ icon_url, name, description, count }) => {
+                                            return <div className="award" key={name}><img src={icon_url} alt={name} title={`${name}\n${description}`} />x{count}</div>
+                                        })}
+                                    </div>
+                                     : ''}
+                                </div>
+                        </div>
                     </Link>
-                    <span id="posted-by">Posted by: {flair}{author} ~ {dayjs(dayjs.unix(created_utc)).fromNow()}</span>
-                </div>
-            </article>
+                    <div className="post-flex-item content">
+                        {postOutput}
+                    </div>
+                    <div className="post-flex-item options">
+                        <div className="voting-buttons">
+                            <i class="far fa-arrow-alt-circle-up" title="Upvote"></i>
+                            <i class="far fa-arrow-alt-circle-down" title="Downvote"></i>
+                            <span id="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
+                        </div>
+                        <Link
+                            to={`/Comments${[permalink]}`} id="comments" onClick={() => this.props.saveScrollPosition()}>
+                            <i className="far fa-comment-alt" title="Comments"></i>
+                            <span id="num-comments">{num_comments > 999 ? `${(num_comments / 1000).toFixed(1)}k Comments` : `${num_comments} Comments`}</span>
+                        </Link>
+                        <span id="posted-by">Posted by: {flair}<span id="retro">{author}</span> ~ {dayjs(dayjs.unix(created_utc)).fromNow()}</span>
+                    </div>
+                </article>
+            </div>
         );
     }
 
@@ -81,8 +87,8 @@ export class Main extends React.Component {
 
         //YouTube config settings
         const opts = {
-            height: '390',
-            width: '640',
+            height: '590',
+            width: '1040',
             playerVars: {
                 // https://developers.google.com/youtube/player_parameters
                 autoplay: 0,
@@ -173,8 +179,8 @@ export class Main extends React.Component {
                             <div className="media">
                                 <Vimeo
                                     video={url.split("/")[3]}
-                                    width="640"
-                                    height="390"
+                                    width="1040"
+                                    height="590"
                                 />
                             </div>
                         );
@@ -198,7 +204,7 @@ export class Main extends React.Component {
             //Undefined
             case undefined:
                 if (selftext !== "") {
-                    if (data.selftext.length < 1800) {
+                    if (data.selftext.length < 2500) {
                         output.push(
                             titleLink,
                             <div className="text" >

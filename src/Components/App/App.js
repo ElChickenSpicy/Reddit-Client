@@ -6,6 +6,7 @@ import { Main } from '../Main/Main';
 import { Options } from '../Options/Options';
 import { decode } from 'html-entities';
 import { confirmAlert } from 'react-confirm-alert';
+import bg from '../../Icons/retro-BG.webp';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export class App extends React.Component {
@@ -43,6 +44,7 @@ export class App extends React.Component {
   async makeRequest(query) {
     try {
       const response = await fetch(`https://www.reddit.com/${query}`);
+      console.log(query);
       if (response.ok) {
         const jsonResponse = await response.json();
         return jsonResponse;
@@ -170,7 +172,7 @@ export class App extends React.Component {
           <div
             className="change top"
             title="View the Top posts of all time"
-            onClick={() => this.fetchPosts(`r/${this.state.activeSubreddit}/top/.json`, this.state.activeSubreddit, 'top', '?t=all')}>
+            onClick={() => this.fetchPosts(`r/${this.state.activeSubreddit}/top/.json?t=all`, this.state.activeSubreddit, 'top', '?t=all')}>
             <i className="fas fa-medal"
               style={this.state.view === "top" ? { color: 'lightgreen' } : { color: 'white' }}>
               <span>Top</span>
@@ -305,6 +307,7 @@ export class App extends React.Component {
   render() {
     return (
       <div className="top-container">
+        <div className="top-bg"></div>
         <Navbar
           clearSearch={this.clearSearch}
           fetchPosts={this.fetchPosts}

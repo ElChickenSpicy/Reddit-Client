@@ -148,6 +148,15 @@ a:link, a:visited {
   font-style: italic;
 }
 
+@font-face {
+  font-family: 'franchise';
+  src: local('franchise'), local('franchise'),
+      url('../../Fonts/franchise-webfont.woff2') format('woff2'),
+      url('../../Fonts/franchise-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* || Home Page Layout - Desktop  */
 /* Including Subreddit/Search Views */
 
@@ -156,7 +165,18 @@ a:link, a:visited {
   overflow: auto;
   display: flex;
   justify-content: center;
-  padding-top: 5px;
+  background-color: #f8f8f8;
+}
+
+.top-bg {
+  opacity: 0.15;
+  position: fixed;
+  flex-grow: 1;
+  height: 100%;
+  width: 100%;
+  background-image: url('../../Icons/2.webp');
+  background-size: 27%;
+  background-repeat: repeat;
 }
 
 /* Container of left-hand side and its children */
@@ -164,28 +184,26 @@ a:link, a:visited {
 nav {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-evenly;
-  width: 17.5%;
-  height: 98%;
+  width: 15%;
+  height: 100%;
   position: fixed;
-  left: 1%;
+  left: 0%;
+  background-color: white;
+  box-shadow: 0 0 2rem 0 rgb(41 48 66 / 10%);
 }
 
 .branding {
   box-sizing: border-box;
-  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.288), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  width: 95%;
-  height: 60px;
-  background-color: rgb(41, 41, 41);
+  width: 100%;
+  height: 130px;
+  background-color: white;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  border-radius: 8px;
   justify-content: flex-end;
   padding-left: 12px;
-  margin-bottom: 8px;
-  margin-top: 6px;
   overflow-x: hidden;
 }
 
@@ -210,23 +228,27 @@ input{
   border-radius: 50px;
   border: none;
   outline: none;
-  font-family: 'Circular Std Book';
+  font-family: 'Press Start 2P';
+  font-size: 10px;
   transition-duration: 0.5s;
 }
-
-.fa{
+.search-container {
   position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: rgb(156, 156, 156);
   border-radius: 50%;
-  width: 40px;
-  color: gold;
-  font-size: 24px;
-  background-color: rgb(136, 136, 136);
-  height: 40px;
-  border: 10px solid rgb(41, 41, 41);
+  height: 50px;
+  width: 50px;
+  margin-right: 10px;
+}
+
+.search-icon {
+  width: 26px;
+  height: 26px;
   cursor: pointer;
+  padding: 6px 6px;
 }
 
 .form:hover{
@@ -237,7 +259,7 @@ input{
  opacity: 1;
  margin-right: 25px;
  padding-left: 15px;
- background-color: rgb(255, 250, 219);
+ background-color: rgb(236, 236, 236);
 }
 
 .form:hover ~ .first40 {
@@ -245,7 +267,7 @@ input{
 }
 
 .first40 {
-  width: 45%;
+  width: 65%;
   height: 100%;
   display: flex;
   align-items: center;
@@ -264,10 +286,10 @@ input{
 
 .name {
   display: inline-block;
-  font-family: 'Fascinate', cursive;
-  font-size: 1.8em;
-  color: rgb(255, 255, 255);
-  margin-top: 4px;
+  font-family: 'franchise', cursive;
+  font-size: 3em;
+  color: black;
+  margin-top: 9px;
 }
 
 .name:hover {
@@ -275,55 +297,60 @@ input{
 }
 
 .subreddit-container {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  width: 95%;
+  width: 100%;
   height: 89%;
   background-color: white;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  border-radius: 8px;
+  align-items: flex-start;
   overflow: auto;
   overflow-x: hidden;
 }
 
-.subreddit-title {
-  width: 95%;
-  position: absolute;
-  background-color: rgb(224, 224, 224);
-  z-index: 9;
+.decorative {
+  width: 100%;
+  background-image: url('../../Icons/retro-BG.webp');
+  background-size: 80%;
   height: 40px;
+}
+
+.subreddit-title {
+  width: 100%;
+  height: 46px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: flex-start;
   box-sizing: border-box;
-  padding-left: 10px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  padding-left: 26px;
+  border-bottom: 2px solid rgb(209, 209, 209);
+  padding-bottom: 8px;
+}
+
+.icon {
+  height: 22px;
+  margin-right: 14px;
 }
 
 h2 {
   font-family: 'Circular Std Black', sans-serif;
-  color: rgb(92, 92, 92);
+  color: rgb(117, 117, 117);
   font-weight: 700;
-  font-size: 17px;
-  padding-left: 4px;
+  font-size: 16px;
+  padding-bottom: 3px;
 }
 
 ul {
-  padding-top: 26px;
-  width: 98%;
-  margin-top: 20px;
+  width: 100%;
+  margin-top: 4px;
 }
 
 #nav-item {
   font-family: 'Circular Std', sans-serif;
   font-size: 14px;
-  padding: 7px 7px;
+  padding: 7px 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  border-radius: 14px;
 }
 
 #nav-item:hover {
@@ -343,7 +370,7 @@ ul {
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  width: 17.5%;
+  width: 18.5%;
   height: 98%;
   position: fixed;
   right: 1%;
@@ -351,9 +378,9 @@ ul {
 }
 
 .current-view {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 0 2rem 0 rgb(41 48 66 / 10%);
   width: 100%;
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -509,14 +536,19 @@ i span {
 }
 
 .suggestions {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 0 2rem 0 rgb(41 48 66 / 10%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   flex: 1;
   flex-flow: column wrap;
   width: 100%;
   margin-top: 20px;
-  border-radius: 8px;
+  border-radius: 6px;
   margin-bottom: 20px;
   overflow-y: auto;
+  background-color: white;
 }
 
 .fa-plus {
@@ -529,7 +561,6 @@ i span {
 
 .top-title {
   width: 100%;
-  position: absolute;
   background-color: rgb(224, 224, 224);
   z-index: 9;
   height: 40px;
@@ -539,8 +570,8 @@ i span {
   flex-direction: row-reverse;
   box-sizing: border-box;
   padding-left: 10px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 .top-header {
@@ -565,13 +596,15 @@ i span {
   height: 36px;
 }
 
-#SSicon {
-  width: 36px;
-  color: black;
-  font-size: 22px;
+#SScontainer {
+  height: 40px;
+  width: 40px;
   background-color: rgb(224, 224, 224);
-  height: 36px;
-  border: none
+}
+
+#SSicon {
+  height: 24px;
+  width: 24px;
 }
 
 #SSform:hover #SSsearchbar{
@@ -610,7 +643,9 @@ main {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 60%;
+  position: relative;
+  right: 2%;
+  width: 61%;
   height: fit-content;
   min-height: 100%;
   margin-bottom: 25px;
@@ -625,18 +660,32 @@ main #posts {
 
 /* Post Containers */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+.post-divider {
+  box-shadow: 0 0 1.5rem 0 rgb(41 48 66 / 40%);
+  background-color: white;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: 18px;
+  border-radius: 6px;
+}
+
+.sub-image img {
+  margin: 13px 13px;
+  height: 55px;
+  width: 55px;
+  border-radius: 50%;
+}
+
 .reddit-post {
-  box-shadow: 0 4px 6px 0 rgba(48, 48, 48, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.062);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
   width: 100%;
   height: fit-content;
-  margin-top: 15px;
-  background-color: white;
-  border-radius: 16px;
-  padding-left: 15px;
+  border-radius: 6px;
 }
 
 .post-flex-item {
@@ -647,25 +696,29 @@ main #posts {
 /* Top row of a post container (subreddit & icon) */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .sub {
-  margin: 7px 0px 17px 0px;
+  margin-top: 10px;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   font-family: 'Circular Std Bold', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .subreddit-data {
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 55px;
 }
 
-.subreddit-data img {
-  margin-right: 7px;
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
+.subreddit-data h3 {
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 3px;
+  padding-left: 2px;
+  height: 28px;
 }
 
 .awards-container {
@@ -673,14 +726,11 @@ main #posts {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  padding-top: 6px;
-  padding-left: 10px;
 }
 
 .awards-container img {
   height: 18px;
   width: 18px;
-  padding-left: 10px;
   margin: 2px 1px;
 }
 
@@ -689,23 +739,28 @@ main #posts {
   align-items: center;
   color: rgb(146, 146, 146);
   font-weight: 400;
-  font-size: 12px;
-
+  font-size: 11px;
+  margin-right: 9px;
 }
 
 /* Content of a post */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .content {
+  box-sizing: border-box;
   height: 100%;
   background-color: white;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 20px;
 }
 
 .title {
-  width: 40%;
+  box-sizing: border-box;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 20px 30px 30px 30px;
+  padding: 15px 30px 15px 0px;
   font-family: 'Circular Std Book';
 }
 
@@ -722,26 +777,27 @@ main #posts {
 }
 
 .media {
-  width: 60%;
+  width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
 .image {
-  max-width: 90%;
-  max-height: 800px;
-  border-radius: 8px;
+  max-width: 95%;
+  max-height: 700px;
+  border-radius: 16px;
 }
 
 .video {
-  max-width: 90%;
-  max-height: 800px;
-  border-radius: 8px;
+  max-width: 95%;
+  max-height: 700px;
+  border-radius: 16px;
 }
 
 .text {
-  width: 60%;
+  box-sizing: border-box;
+  width: 100%;
   padding: 50px 30px;
   font-family: 'Circular Std Book', sans-serif;
   font-size: 15px;
@@ -750,7 +806,8 @@ main #posts {
 }
 
 .long {
-  width: 60%;
+  box-sizing: border-box;
+  width: 100%;
   padding: 50px 30px;
   font-family: 'Circular Std Book', sans-serif;
   font-size: 15px;
@@ -799,16 +856,16 @@ main #posts {
 
 /* Uniform width for Twitter content */
 [id^="twitter-widget"] {
-  width: 450px !important;
+  width: 650px !important;
 }
 
 /* Bottom row of a post container (buttons, etc) */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .options {
   height: 24px;
-  margin: 26px 0px 16px 0px;
+  padding: 12px 0px;
   font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 900;
   color: rgb(107, 107, 107);
   align-items: center;
@@ -941,8 +998,8 @@ main #posts {
 }
 
 #posted-by {
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 13px;
+  font-family: 'Circular Std Book', sans-serif;
+  font-size: 12px;
   font-weight: 300;
   font-style: italic;
   margin-left: auto;
@@ -957,6 +1014,12 @@ main #posts {
   width: 20px;
   margin: 0px 4px;
   border-radius: 50%;
+}
+
+#retro {
+  font-family: 'Press Start 2P';
+  font-size: 8px;
+  margin: 0px 4px;
 }
 
 .fa-arrow-up {
