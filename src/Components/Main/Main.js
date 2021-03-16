@@ -61,9 +61,7 @@ export class Main extends React.Component {
                                 </div>
                         </div>
                     </Link>
-                    <div className="post-flex-item content">
-                        {postOutput}
-                    </div>
+                    {postOutput}
                     <div className="post-flex-item options">
                         <div className="voting-buttons">
                             <div className="upvote">
@@ -106,6 +104,7 @@ export class Main extends React.Component {
 
         //Variable to store returned JSX
         let output = [];
+        let flex = 'column';
 
         let { data, data: { domain, selftext, title, url } } = post;
         title = decode(title);
@@ -137,6 +136,14 @@ export class Main extends React.Component {
                 break;
             //Image
             case 'image':
+                let pic = new Image();
+                pic.src = url;
+                let h = pic.height;
+                let w = pic.width;
+                flex = h > w ? 'row' : 'column';
+                console.log(h);
+                console.log(w);
+                console.log(flex);
                 output.push(
                     titleLink,
                     <div className="media">
@@ -261,6 +268,7 @@ export class Main extends React.Component {
                 } else if (!domain.startsWith("self")) {
                     switch (domain) {
                         case 'twitter.com':
+                            flex = 'row';
                             output.push(
                                 titleLink,
                                 <div className="media">
@@ -359,7 +367,11 @@ export class Main extends React.Component {
                 output.push(titleLink);
                 break;
         }
-        return output;
+        return (
+            <div className="post-flex-item content" style={{flexDirection: flex}}>
+                {output}
+            </div>
+        );
     }
 
     render() {

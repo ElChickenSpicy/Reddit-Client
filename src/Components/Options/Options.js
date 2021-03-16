@@ -22,7 +22,7 @@ export class Options extends React.Component {
                                 }}
                             />
                             <div id="SScontainer" className="search-container">
-                                <img id="SSicon"className="search-icon" src={retroSearch} />
+                                <img id="SSicon"className="search-icon" src={retroSearch} alt="Searchbar Icon" />
                             </div>
                         </div> 
                         <div className="top-header">

@@ -30,7 +30,7 @@ export class Navbar extends React.Component {
                             }}
                         />
                         <div className="search-container">
-                            <img className="search-icon" src={retroSearch} />
+                            <img className="search-icon" src={retroSearch} alt="Searchbar Icon" />
                         </div>
                     </div>
 

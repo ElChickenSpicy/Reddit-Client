@@ -6,7 +6,6 @@ import { Main } from '../Main/Main';
 import { Options } from '../Options/Options';
 import { decode } from 'html-entities';
 import { confirmAlert } from 'react-confirm-alert';
-import bg from '../../Icons/retro-BG.webp';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export class App extends React.Component {
@@ -44,7 +43,6 @@ export class App extends React.Component {
   async makeRequest(query) {
     try {
       const response = await fetch(`https://www.reddit.com/${query}`);
-      console.log(query);
       if (response.ok) {
         const jsonResponse = await response.json();
         return jsonResponse;

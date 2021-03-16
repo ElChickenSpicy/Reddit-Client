@@ -372,7 +372,7 @@ ul {
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  width: 18.5%;
+  width: 19%;
   height: 98%;
   position: fixed;
   right: 1%;
@@ -646,7 +646,7 @@ main {
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  right: 2%;
+  right: 2.4%;
   width: 61%;
   height: fit-content;
   min-height: 100%;
@@ -784,6 +784,7 @@ main #posts {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  margin-right: 60px;
 }
 
 .image {
@@ -793,14 +794,16 @@ main #posts {
 }
 
 .video {
+  flex: 1;
   max-width: 95%;
   max-height: 700px;
   border-radius: 16px;
+  outline: none;
 }
 
 .text {
   box-sizing: border-box;
-  width: 100%;
+  width: 96%;
   padding: 50px 30px;
   font-family: 'Circular Std Book', sans-serif;
   font-size: 15px;
@@ -810,7 +813,7 @@ main #posts {
 
 .long {
   box-sizing: border-box;
-  width: 100%;
+  width: 96%;
   padding: 50px 30px;
   font-family: 'Circular Std Book', sans-serif;
   font-size: 15px;
