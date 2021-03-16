@@ -2,27 +2,16 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import icon from '../../Icons/black.webp';
 import defaultImg from '../../Icons/popular.webp';
-import green from '../../Icons/green.webp';
-import red from '../../Icons/red.webp';
-import yellow from '../../Icons/yellow.webp';
-import sand from '../../Icons/sand.webp';
 import retroSearch from '../../Icons/retro-Search.png';
 import heart from '../../Icons/heart.webp';
 
 export class Navbar extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            img: [green, red, yellow, sand],
-            hover: 0
-         };
-        this.hoverImage = this.hoverImage.bind(this);
-    }
-
-    hoverImage() {
-        this.setState({ hover: Math.floor(Math.random() * 4) });
-        document.getElementById('normal').style.display === "none" ? document.getElementById('normal').style.display = "inline-block" : document.getElementById('normal').style.display = "none";
-        document.getElementById('hoverImage').style.display === "none" ? document.getElementById('hoverImage').style.display = "inline-block" : document.getElementById('hoverImage').style.display = "none";
+        this.state = {
+            name: 'Retro',
+            colors: [ '#ff2941', '#fe18d3', '#4206f1', '#74ee15', '#4deeea' ]
+        };
     }
 
     render() {
@@ -54,13 +43,24 @@ export class Navbar extends React.Component {
                             this.props.fetchTop();
                         }}
                     >
-                        <img id="normal" src={icon} alt="Icon" onMouseOver={() => this.hoverImage()} />
-                        <img id="hoverImage" src={this.state.img[this.state.hover]} alt="Icon" style={{ display: "none" }} onMouseLeave={() => this.hoverImage()} />
-                        <h1 className="name">R</h1>
-                        <h1 className="name">e</h1>
-                        <h1 className="name">t</h1>
-                        <h1 className="name">r</h1>
-                        <h1 className="name">o</h1>
+                        <img 
+                            id="I" 
+                            src={icon} 
+                            alt="Icon"
+                            onMouseEnter={({ target: { id }}) => document.getElementById(id).style.backgroundColor = this.state.colors[Math.floor(Math.random() * 5)]}
+                            onMouseLeave={({ target: { id }}) => document.getElementById(id).style.backgroundColor = '#888'}
+                        />
+                        {[...this.state.name].map(letter => {
+                            return (
+                                <h1 
+                                    id={letter} 
+                                    className="name" 
+                                    onMouseEnter={({ target: { id }}) => document.getElementById(id).style.color = this.state.colors[Math.floor(Math.random() * 5)]}
+                                    onMouseLeave={({ target: { id }}) => document.getElementById(id).style.color = 'black'}>
+                                    {letter}
+                                </h1>
+                            )
+                        })}
                     </Link>
                 </section>
 

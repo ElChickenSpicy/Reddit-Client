@@ -66,13 +66,22 @@ export class Main extends React.Component {
                     </div>
                     <div className="post-flex-item options">
                         <div className="voting-buttons">
-                            <i class="far fa-arrow-alt-circle-up" title="Upvote"></i>
-                            <i class="far fa-arrow-alt-circle-down" title="Downvote"></i>
+                            <div className="upvote">
+                                <i className="bi bi-heart" title="Upvote"></i>
+                                <i className="bi bi-heart-fill"></i>
+                            </div>
+                            <div className="downvote">
+                                <i class="bi bi-x-circle" title="Downvote"></i>
+                                <i class="bi bi-x-circle-fill"></i>
+                            </div>
                             <span id="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
                         </div>
                         <Link
                             to={`/Comments${[permalink]}`} id="comments" onClick={() => this.props.saveScrollPosition()}>
-                            <i className="far fa-comment-alt" title="Comments"></i>
+                            <div className="comment-icons">
+                                <i className="bi bi-chat-left" title="Comments"></i>
+                                <i className="bi bi-chat-left-fill" title="Comments"></i>
+                            </div>
                             <span id="num-comments">{num_comments > 999 ? `${(num_comments / 1000).toFixed(1)}k Comments` : `${num_comments} Comments`}</span>
                         </Link>
                         <span id="posted-by">Posted by: {flair}<span id="retro">{author}</span> ~ {dayjs(dayjs.unix(created_utc)).fromNow()}</span>
