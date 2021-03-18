@@ -1,5 +1,5 @@
-# Relax - Reddit Client
-> An alternative way to browse Reddit!
+# RETRO - Reddit Client
+> An alternate view of Reddit!
 
 
 ## Status
@@ -8,19 +8,39 @@ Project is: _In Progress._ Aim to deploy by the end of March 2021.
 
 ## Table of contents
 * [Project Outline](#project-outline)
-* [Primary Technologies](#primary-technologies)
+* [Primary Languages](#primary-languages)
+* [API](#api)
+* [Libraries](#libraries)
 * [The view so far](#the-view-so-far)
 
 
 ## Project Outline
-The aim of this project is to create a relaxed, comfortable view of your favourite Reddit content. The application fetches Reddit data via the Reddit API, and displays the content using a React front-end!
+The aim of this project is to create a better Reddit browsing experience for the user. The application fetches Reddit data via the Reddit API, and displays the content using a React front-end.
 
 
-## Primary Technologies
-* React - v 17.0.1
+## Primary Languages
+* JavaScript
+* HTML
+* CSS
+* JSON
+
+
+## API
 * [Reddit API](https://www.reddit.com/dev/api/)
-* Enzyme v 3.11.0
-* _The project also uses a range of JS libraries, which I will document in due course!_
+
+
+## Libraries
+* React - 17.0.1
+* React Router - 5.2.0
+* Enzyme - 3.11.0
+* Bootstrap Icons - 1.4.0
+* Day.js - 1.10.4
+* html-entities - 2.1.0
+* html-react-parser - 1.2.4
+* react-confirm-alert - 2.7.0
+* react-tweet-embed - 1.2.2
+* react-youtube - 7.13.1
+* react-vimeo - 0.9.3
 
 
 ## The view so far
