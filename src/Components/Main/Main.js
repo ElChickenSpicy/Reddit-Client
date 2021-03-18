@@ -17,7 +17,7 @@ export class Main extends React.Component {
         this.displayPost = this.displayPost.bind(this);
         this.formatPost = this.formatPost.bind(this);
     }
-    
+
     displayPost(post, i) {
         const { data: { all_awardings, author, author_flair_richtext, created_utc, num_comments, permalink, subreddit, subreddit_id, ups } } = post;
 
@@ -48,17 +48,17 @@ export class Main extends React.Component {
                 <article className="reddit-post" key={i}>
                     <Link to="/">
                         <div className="post-flex-item sub">
-                            <div className="subreddit-data" onClick={() => {this.props.fetchPosts(`r/${subreddit}.json`, subreddit)}}>
+                            <div className="subreddit-data" onClick={() => { this.props.fetchPosts(`r/${subreddit}.json`, subreddit) }}>
                                 <h3 title={title}>r/{subreddit}</h3>
-                                
+
                                 {all_awardings.length > 0 ?
                                     <div className="awards-container">
                                         {all_awardings.map(({ icon_url, name, description, count }) => {
                                             return <div className="award" key={name}><img src={icon_url} alt={name} title={`${name}\n${description}`} />x{count}</div>
                                         })}
                                     </div>
-                                     : ''}
-                                </div>
+                                    : ''}
+                            </div>
                         </div>
                     </Link>
                     {postOutput}
@@ -105,6 +105,7 @@ export class Main extends React.Component {
         //Variable to store returned JSX
         let output = [];
         let flex = 'column';
+        let ac = 'flex-start';
 
         let { data, data: { domain, selftext, title, url } } = post;
         title = decode(title);
@@ -136,18 +137,19 @@ export class Main extends React.Component {
                 break;
             //Image
             case 'image':
-                let pic = new Image();
-                pic.src = url;
-                let h = pic.height;
-                let w = pic.width;
-                flex = h > w ? 'row' : 'column';
-                console.log(h);
-                console.log(w);
-                console.log(flex);
                 output.push(
                     titleLink,
-                    <div className="media">
-                        <img className="image" src={url} alt={title} />
+                    <div id={'media' + url} className="media">
+                        <img
+                            className="image"
+                            src={url}
+                            alt={title}
+                            onLoad={({ target: { offsetHeight: h, offsetWidth: w } }) => {
+                                flex = h > w ? 'row' : 'column';
+                                ac = h > w ? 'center' : 'flex-start';
+                                document.getElementById(url).style.flexDirection = flex;
+                                document.getElementById('media' + url).style.justifyContent = ac;
+                            }} />
                     </div>
                 );
                 break;
@@ -213,7 +215,7 @@ export class Main extends React.Component {
                             output.push(titleLink);
                         }
                         break;
-                    default :
+                    default:
                         output.push(titleLink);
                 }
                 break;
@@ -237,7 +239,7 @@ export class Main extends React.Component {
                                     className="read"
                                     title="Expand the Post"
                                     style={{ display: 'block' }}
-                                    onClick={({target: { id } }) => {
+                                    onClick={({ target: { id } }) => {
                                         let num = id.split("-")[1];
                                         document.getElementById(`long-${num}`).style.maxHeight === '100%' ? document.getElementById(`long-${num}`).style.maxHeight = '300px' : document.getElementById(`long-${num}`).style.maxHeight = '100%';
                                         document.getElementById(`readmore-${num}`).style.display === 'none' ? document.getElementById(`readmore-${num}`).style.display = 'block' : document.getElementById(`readmore-${num}`).style.display = 'none';
@@ -251,7 +253,7 @@ export class Main extends React.Component {
                                     className="read"
                                     title="Collapse the Post"
                                     style={{ display: 'none' }}
-                                    onClick={({target: { id } }) => {
+                                    onClick={({ target: { id } }) => {
                                         let num = id.split("-")[1];
                                         document.getElementById(`long-${num}`).style.maxHeight === '100%' ? document.getElementById(`long-${num}`).style.maxHeight = '300px' : document.getElementById(`long-${num}`).style.maxHeight = '100%';
                                         document.getElementById(`readmore-${num}`).style.display === 'none' ? document.getElementById(`readmore-${num}`).style.display = 'block' : document.getElementById(`readmore-${num}`).style.display = 'none';
@@ -368,7 +370,12 @@ export class Main extends React.Component {
                 break;
         }
         return (
-            <div className="post-flex-item content" style={{flexDirection: flex}}>
+            <div
+                key={url}
+                className="post-flex-item content"
+                id={url}
+                style={{ flexDirection: flex }}
+            >
                 {output}
             </div>
         );
@@ -379,10 +386,15 @@ export class Main extends React.Component {
             <main>
                 <Switch>
                     <Route path="/" exact>
-                        <Posts
-                            displayPost={this.displayPost}
-                            initialPosts={this.props.posts}
-                        />
+                        {this.props.posts.map((post, i) => {
+                            return (
+                                <Posts
+                                    displayPost={this.displayPost}
+                                    post={post}
+                                    i={i}
+                                />
+                            );
+                        })}
                     </Route>
                     <Route path="/Comments/:id" render={routeProps =>
                         <Comments

@@ -113,7 +113,7 @@ export class App extends React.Component {
   }
 
   //Fetch Reddit posts
-  async fetchPosts(query, active, view = 'hot', sort = '') {
+  async fetchPosts(query, active, view = 'hot') {
     const jsonResponse = await this.makeRequest(query);
     const subPosts = jsonResponse.data.children.slice(0, 10);
     this.setState({ posts: subPosts, activeSubreddit: active, view: view });
@@ -170,7 +170,7 @@ export class App extends React.Component {
           <div
             className="change top"
             title="View the Top posts of all time"
-            onClick={() => this.fetchPosts(`r/${this.state.activeSubreddit}/top/.json?t=all`, this.state.activeSubreddit, 'top', '?t=all')}>
+            onClick={() => this.fetchPosts(`r/${this.state.activeSubreddit}/top/.json?t=all`, this.state.activeSubreddit, 'top')}>
             <i className="fas fa-medal"
               style={this.state.view === "top" ? { color: 'lightgreen' } : { color: 'white' }}>
               <span>Top</span>

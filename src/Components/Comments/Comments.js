@@ -118,7 +118,7 @@ export class Comments extends React.Component {
 
                 {/* Comment Navigation Options */}
                 <div className="comment-navigation">
-                    <Link to="/" onClick={() => this.props.setScrollPosition()}>
+                    <Link to="/" onClick={() => {setTimeout(() => this.props.setScrollPosition(), 0)}}>
                         <i class="fas fa-chevron-left" title="Go Back"></i>
                     </Link>
                     <div className="sort-comments">

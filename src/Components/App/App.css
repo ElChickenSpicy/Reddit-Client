@@ -577,6 +577,7 @@ i span {
 }
 
 .top-header {
+  display: flex;
   width: 50%;
   white-space: nowrap;
   overflow-x: hidden;

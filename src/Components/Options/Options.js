@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import defaultImg from '../../Icons/popular.webp';
 import retroSearch from '../../Icons/retro-Search.png';
 
-export class Options extends React.Component {
+export class Options extends React.Component { 
     render() {
         return (
             <header className="main-header">
@@ -49,8 +49,8 @@ export class Options extends React.Component {
                                             id="nav-item"
                                             title={title}
                                             onClick={() => {
-                                                this.props.fetchAbout(display_name);
                                                 this.props.fetchPosts(`r/${display_name}.json`, display_name);
+                                                this.props.fetchAbout(display_name);
                                                 this.props.fetchTop();
                                             }}>
                                                 <img src={src} alt={display_name} />
