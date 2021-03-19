@@ -14,7 +14,7 @@ export class App extends React.Component {
     this.state = {
       posts: [],
       activeSubreddit: 'popular',
-      nav: [ 'soccer', 'AskReddit', 'dataisbeautiful', 'ProgrammerHumor', 'Art' ],
+      nav: [ 'soccer', 'Art', 'ProgrammerHumor', 'AskReddit', 'dataisbeautiful', 'TwoXChromosomes', 'food', 'pics', 'lgbt' ],
       top: [],
       searchTerm: '',
       subredditsAbout: [],

@@ -65,14 +65,36 @@ export class Main extends React.Component {
                     <div className="post-flex-item options">
                         <div className="voting-buttons">
                             <div className="upvote">
-                                <i className="bi bi-heart" title="Upvote"></i>
-                                <i className="bi bi-heart-fill"></i>
+                                <i 
+                                    id={'h-' + i} 
+                                    className="bi bi-heart" 
+                                    title="Upvote"
+                                    onClick={({ target: { id } }) => {
+                                        let fill = document.getElementById('hFill-' + id.split("-")[1]);
+                                        let xfill = document.getElementById('xFill-' + id.split("-")[1]);
+                                        fill.style.color === '' ? fill.style.color = 'gold' : fill.style.color = '';
+                                        xfill.style.color = '';
+                                    }}
+                                >
+                                </i>
+                                <i id={'hFill-' + i} className="bi bi-heart-fill"></i>
                             </div>
                             <div className="downvote">
-                                <i class="bi bi-x-circle" title="Downvote"></i>
-                                <i class="bi bi-x-circle-fill"></i>
+                                <i 
+                                    id={'x-' + i} 
+                                    class="bi bi-x-circle" 
+                                    title="Downvote"
+                                    onClick={({ target: { id } }) => {
+                                        let fill = document.getElementById('xFill-' + id.split("-")[1]);
+                                        let hfill = document.getElementById('hFill-' + id.split("-")[1]);
+                                        fill.style.color === '' ? fill.style.color = 'lightcoral' : fill.style.color = '';
+                                        hfill.style.color = '';
+                                    }} 
+                                >
+                                </i>
+                                <i id={'xFill-' + i} class="bi bi-x-circle-fill"></i>
                             </div>
-                            <span id="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
+                            <span className="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
                         </div>
                         <Link
                             to={`/Comments${[permalink]}`} id="comments" onClick={() => this.props.saveScrollPosition()}>

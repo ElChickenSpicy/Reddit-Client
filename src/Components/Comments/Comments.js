@@ -74,7 +74,7 @@ export class Comments extends React.Component {
     //Generate JSX for comment items
     getCommentJSX(comment) {
         //Object destructuring
-        const { kind, data: { author, author_flair_richtext, body_html, created_utc, is_submitter, ups } } = comment;
+        const { kind, data: { author, author_flair_richtext, body_html, created_utc, id, is_submitter, ups } } = comment;
         //Does Author have a flair?                       
         let commentFlair = this.flairExists(kind, author_flair_richtext);
 
@@ -94,9 +94,33 @@ export class Comments extends React.Component {
             </div>,
             <p>{parse(decode(body_html))}</p>,
             <div className="comment-info">
-                <i class="fas fa-arrow-up" title="Upvote"></i>
-                <i class="fas fa-arrow-down" title="Downvote"></i>
-                <span id="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
+                <i 
+                    id={'u-' + id} 
+                    className="fas fa-arrow-up" 
+                    title="Upvote"
+                    onClick={({ target: { id } }) => {
+                        let up = document.getElementById('u-' + id.split("-")[1]);
+                        let down = document.getElementById('d-' + id.split("-")[1]);
+                        let votes = document.getElementById('v-' + id.split("-")[1]);
+                        up.style.color === '' ? up.style.color = 'goldenrod' : up.style.color = '';
+                        down.style.color = '';
+                        up.style.color === 'goldenrod' ? votes.style.color = 'goldenrod' : votes.style.color = '';
+                    }}>
+                </i>
+                <i 
+                    id={'d-' + id} 
+                    className="fas fa-arrow-down" 
+                    title="Downvote"
+                    onClick={({ target: { id } }) => {
+                        let up = document.getElementById('u-' + id.split("-")[1]);
+                        let down = document.getElementById('d-' + id.split("-")[1]);
+                        let votes = document.getElementById('v-' + id.split("-")[1]);
+                        down.style.color === '' ? down.style.color = 'red' : down.style.color = '';
+                        up.style.color = '';
+                        down.style.color === 'red' ? votes.style.color = 'red' : votes.style.color = '';
+                    }}>
+                </i>
+                <span id={'v-' + id} className="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
             </div>  
         ];
     }

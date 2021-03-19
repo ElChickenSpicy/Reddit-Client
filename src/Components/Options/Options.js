@@ -28,6 +28,7 @@ export class Options extends React.Component {
                         <div className="top-header">
                             <h2>{this.props.searchTerm}</h2>
                         </div>
+                        <div className="subs-BG"></div>
                     </div>
                     <ul>
                         {this.props.top.map(({ data: { display_name, icon_img, title } }) => {
