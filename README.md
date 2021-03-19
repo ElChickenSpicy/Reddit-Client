@@ -38,9 +38,8 @@ The aim of this project is to create a better Reddit browsing experience for the
 * html-entities - 2.1.0
 * html-react-parser - 1.2.4
 * react-confirm-alert - 2.7.0
+* react-player - 2.9.0
 * react-tweet-embed - 1.2.2
-* react-youtube - 7.13.1
-* react-vimeo - 0.9.3
 
 
 ## The view so far

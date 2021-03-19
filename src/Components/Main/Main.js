@@ -8,8 +8,7 @@ import * as dayjs from 'dayjs';
 import defaultImg from '../../Icons/popular.webp';
 //For embedding content
 import TweetEmbed from 'react-tweet-embed'
-import YouTube from 'react-youtube';
-import Vimeo from '@u-wave/react-vimeo';
+import ReactPlayer from 'react-player/lazy';
 
 export class Main extends React.Component {
     constructor(props) {
@@ -114,17 +113,6 @@ export class Main extends React.Component {
     //Based on post type, display it in a certain way
     formatPost(post, i) {
 
-        //YouTube config settings
-        const opts = {
-            height: '590',
-            width: '1040',
-            playerVars: {
-                // https://developers.google.com/youtube/player_parameters
-                autoplay: 0,
-            },
-        };
-
-        //Variable to store returned JSX
         let output = [];
         let flex = 'column';
         let ac = 'flex-start';
@@ -132,13 +120,13 @@ export class Main extends React.Component {
         let { data, data: { domain, selftext, title, url } } = post;
         title = decode(title);
 
-        //Reusable JSX element
+        //Reusable JSX
         const titleLink =
             <a className="title link" href={url} target="_blank" rel="noreferrer">
                 {title}
             </a>;
 
-        //Switch statement based on the post_hint property
+        //Switch post_hint property
         switch (data.post_hint) {
             //Link
             case 'link':
@@ -180,9 +168,7 @@ export class Main extends React.Component {
                 output.push(
                     titleLink,
                     <div className="media">
-                        <video className="video" controls>
-                            <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
-                        </video>
+                        <ReactPlayer controls="true" width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
                     </div>
                 );
                 break;
@@ -190,18 +176,13 @@ export class Main extends React.Component {
             case 'rich:video':
                 switch (domain) {
                     case 'youtube.com':
-                        output.push(
-                            titleLink,
-                            <div className="media">
-                                <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
-                            </div>
-                        );
-                        break;
                     case 'youtu.be':
+                    case 'vimeo':
+                    case 'streamable.com':
                         output.push(
                             titleLink,
                             <div className="media">
-                                <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
+                                <ReactPlayer controls="true" width="1040px" height="590px" url={url} />
                             </div>
                         );
                         break;
@@ -213,32 +194,13 @@ export class Main extends React.Component {
                             </div>
                         );
                         break;
-                    case 'vimeo':
+                    default:
                         output.push(
                             titleLink,
                             <div className="media">
-                                <Vimeo
-                                    video={url.split("/")[3]}
-                                    width="1040"
-                                    height="590"
-                                />
+                                <ReactPlayer controls="true" width="1040px" height="590px" url={url} />
                             </div>
                         );
-                        break;
-                    case 'streamable.com':
-                        if (data.secure_media) {
-                            output.push(
-                                titleLink,
-                                <div className="media">
-                                    {parse(decode(data.secure_media.oembed.html))}
-                                </div>
-                            );
-                        } else {
-                            output.push(titleLink);
-                        }
-                        break;
-                    default:
-                        output.push(titleLink);
                 }
                 break;
             //Undefined
@@ -305,9 +267,7 @@ export class Main extends React.Component {
                                 output.push(
                                     titleLink,
                                     <div className="media">
-                                        <video className="video" controls>
-                                            <source src={data.secure_media.reddit_video.fallback_url} type="video/mp4"></source>
-                                        </video>
+                                        <ReactPlayer controls="true" width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
                                     </div>
                                 );
                             } else {
@@ -315,26 +275,17 @@ export class Main extends React.Component {
                             }
                             break;
                         case 'youtube.com':
-                            output.push(
-                                titleLink,
-                                <div className="media">
-                                    <YouTube videoId={url.split("=")[1].split("&")[0]} opts={opts} onReady={this._onReady} />
-                                </div>
-                            );
-                            break;
                         case 'youtu.be':
-                            output.push(
-                                titleLink,
-                                <div className="media">
-                                    <YouTube videoId={url.split("/")[3]} opts={opts} onReady={this._onReady} />
-                                </div>
-                            );
-                            break;
+                        case 'vimeo':
+                        case 'streamable.com':
+                        case 'streamye.com':
+                        case 'streamja.com':
                         case 'streamwo.com':
                             output.push(
-                                <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
-                                    {title}
-                                </a>
+                                titleLink,
+                                <div className="media">
+                                    <ReactPlayer controls="true" width="1040px" height="590px" url={url} />
+                                </div>
                             );
                             break;
                         case 'i.redd.it':
@@ -344,24 +295,6 @@ export class Main extends React.Component {
                                     <img className="image" src={url} alt={title} />
                                 </div>
                             );
-                            break;
-                        case 'streamable.com':
-                            if (data.secure_media) {
-                                output.push(
-                                    titleLink,
-                                    <div className="media">
-                                        {parse(decode(data.secure_media.oembed.html))}
-                                    </div>
-                                );
-                            } else {
-                                output.push(titleLink);
-                            }
-                            break;
-                        case 'streamye.com':
-                            output.push(titleLink);
-                            break;
-                        case 'streamja.com':
-                            output.push(titleLink);
                             break;
                         default:
                             data.thumbnail === 'default' || data.thumbnail === "" ?
@@ -386,7 +319,6 @@ export class Main extends React.Component {
                     );
                 }
                 break;
-            //Default
             default:
                 output.push(titleLink);
                 break;

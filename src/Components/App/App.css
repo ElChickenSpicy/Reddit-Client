@@ -811,14 +811,6 @@ main #posts {
   border-radius: 16px;
 }
 
-.video {
-  flex: 1;
-  max-width: 95%;
-  max-height: 700px;
-  border-radius: 16px;
-  outline: none;
-}
-
 .text {
   box-sizing: border-box;
   width: 96%;

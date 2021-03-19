@@ -6,7 +6,6 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@u-wave/react-vimeo": "^0.9.3",
     "bootstrap-icons": "^1.4.0",
     "dayjs": "^1.10.4",
     "html-entities": "^2.1.0",
@@ -14,11 +13,11 @@
     "react": "^17.0.1",
     "react-confirm-alert": "^2.7.0",
     "react-dom": "^17.0.1",
+    "react-player": "^2.9.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
     "react-test-renderer": "^17.0.1",
     "react-tweet-embed": "^1.2.2",
-    "react-youtube": "^7.13.1",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
