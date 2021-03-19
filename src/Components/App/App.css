@@ -1024,6 +1024,10 @@ main #posts {
   justify-content: flex-start;
 }
 
+.comment-item p {
+  font-family: 'Zilla Slab', serif;
+}
+
 .author {
   display: flex;
   align-items: center;
