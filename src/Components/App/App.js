@@ -19,13 +19,13 @@ export class App extends React.Component {
       searchTerm: '',
       subredditsAbout: [],
       view: 'hot',
-      scrollPosition: []
+      scrollPosition: [],
+      after: ''
     };
     this.addSubreddit = this.addSubreddit.bind(this);
     this.checkData = this.checkData.bind(this);
     this.clearSearch = this.clearSearch.bind(this);
     this.fetchAbout = this.fetchAbout.bind(this);
-    this.fetchInitialData = this.fetchInitialData.bind(this);
     this.fetchNavSubs = this.fetchNavSubs.bind(this);
     this.fetchPosts = this.fetchPosts.bind(this);
     this.fetchTop = this.fetchTop.bind(this);
@@ -52,15 +52,27 @@ export class App extends React.Component {
     }
   }
 
-  //Fetch the initial set of posts
-  async fetchInitialData() {
-    const jsonResponse = await this.makeRequest('r/popular.json');
-    const popularPosts = jsonResponse.data.children.slice(0, 10);
-    this.setState({ posts: popularPosts });
+  //Fetch Reddit posts
+  async fetchPosts(query, active, view = 'hot') {
+    const jsonResponse = await this.makeRequest(query);
+    console.log(jsonResponse);
+    const subPosts = jsonResponse.data.children.slice(0, 10);
+    const after = jsonResponse.data.after;
+    this.setState({ posts: subPosts, activeSubreddit: active, view: view, after: after });
+    this.checkData();
+  }
 
-    this.state.posts.forEach(({ data: { subreddit } }) => {
-      this.fetchAbout(subreddit);
+  checkData() {
+    this.state.posts.forEach(({ data: { subreddit, subreddit_id } }) => {
+      let exists = this.state.subredditsAbout.filter(({ name }) => {
+        return name === subreddit_id;
+      });
+      if (exists.length === 0) {
+        this.fetchAbout(subreddit);
+      }
     });
+
+    window.scrollTo(0, 0);
   }
 
   //Fecth the subreddit data of each sub in Nav
@@ -110,27 +122,6 @@ export class App extends React.Component {
     const jsonResponse = await this.makeRequest(query);
     const searchPosts = jsonResponse.data.children.slice(0, 8);
     this.setState({ top: searchPosts, searchTerm: `${str}...` });
-  }
-
-  //Fetch Reddit posts
-  async fetchPosts(query, active, view = 'hot') {
-    const jsonResponse = await this.makeRequest(query);
-    const subPosts = jsonResponse.data.children.slice(0, 10);
-    this.setState({ posts: subPosts, activeSubreddit: active, view: view });
-    this.checkData();
-  }
-
-  checkData() {
-    this.state.posts.forEach(({ data: { subreddit, subreddit_id } }) => {
-      let exists = this.state.subredditsAbout.filter(({ name }) => {
-        return name === subreddit_id;
-      });
-      if (exists.length === 0) {
-        this.fetchAbout(subreddit);
-      }
-    });
-
-    window.scrollTo(0, 0);
   }
 
   //Alert if search r/all by new
@@ -296,7 +287,7 @@ export class App extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchInitialData();
+    this.fetchPosts('r/popular.json', 'popular')
     this.fetchTop();
     this.fetchNavSubs(this.state.nav);
     this.highlightActive();

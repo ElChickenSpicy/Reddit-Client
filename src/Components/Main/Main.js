@@ -130,7 +130,14 @@ export class Main extends React.Component {
         switch (data.post_hint) {
             //Link
             case 'link':
-                if (data.thumbnail === 'default') {
+                if (domain === 'i.imgur.com' && data.preview.reddit_video_preview) {
+                    output.push(
+                        titleLink,
+                        <div className="media">
+                            <ReactPlayer controls="true" width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                        </div>
+                    );
+                } else if (data.thumbnail === 'default') {
                     output.push(
                         <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
                             {title}
