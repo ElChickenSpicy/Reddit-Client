@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route, Link } from "react-router-dom";
-import { Posts } from '../Posts/Posts';
 import { Comments } from '../Comments/Comments';
 import { decode } from 'html-entities';
 import parse from 'html-react-parser';
@@ -47,7 +46,15 @@ export class Main extends React.Component {
                 <article className="reddit-post" key={i}>
                     <Link to="/">
                         <div className="post-flex-item sub">
-                            <div className="subreddit-data" onClick={() => { this.props.fetchPosts(`r/${subreddit}.json`, subreddit) }}>
+                            <div
+                                className="subreddit-data"
+                                onClick={() => {
+                                    this.props.fetchPosts({
+                                        query: `r/${subreddit}.json`,
+                                        active: subreddit
+                                    })
+                                }}
+                            >
                                 <h3 title={title}>r/{subreddit}</h3>
 
                                 {all_awardings.length > 0 ?
@@ -64,9 +71,9 @@ export class Main extends React.Component {
                     <div className="post-flex-item options">
                         <div className="voting-buttons">
                             <div className="upvote">
-                                <i 
-                                    id={'h-' + i} 
-                                    className="bi bi-heart" 
+                                <i
+                                    id={'h-' + i}
+                                    className="bi bi-heart"
                                     title="Upvote"
                                     onClick={({ target: { id } }) => {
                                         let fill = document.getElementById('hFill-' + id.split("-")[1]);
@@ -79,16 +86,16 @@ export class Main extends React.Component {
                                 <i id={'hFill-' + i} className="bi bi-heart-fill"></i>
                             </div>
                             <div className="downvote">
-                                <i 
-                                    id={'x-' + i} 
-                                    class="bi bi-x-circle" 
+                                <i
+                                    id={'x-' + i}
+                                    class="bi bi-x-circle"
                                     title="Downvote"
                                     onClick={({ target: { id } }) => {
                                         let fill = document.getElementById('xFill-' + id.split("-")[1]);
                                         let hfill = document.getElementById('hFill-' + id.split("-")[1]);
                                         fill.style.color === '' ? fill.style.color = 'lightcoral' : fill.style.color = '';
                                         hfill.style.color = '';
-                                    }} 
+                                    }}
                                 >
                                 </i>
                                 <i id={'xFill-' + i} class="bi bi-x-circle-fill"></i>
@@ -113,7 +120,7 @@ export class Main extends React.Component {
     //Based on post type, display it in a certain way
     formatPost(post, i) {
 
-        let output = [];
+        let output;
         let flex = 'column';
         let ac = 'flex-start';
 
@@ -130,31 +137,71 @@ export class Main extends React.Component {
         switch (data.post_hint) {
             //Link
             case 'link':
-                if (domain === 'i.imgur.com' && data.preview.reddit_video_preview) {
-                    output.push(
-                        titleLink,
-                        <div className="media">
-                            <ReactPlayer controls="true" width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
-                        </div>
-                    );
-                } else if (data.thumbnail === 'default') {
-                    output.push(
-                        <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
-                            {title}
-                        </a>
-                    );
-                } else {
-                    output.push(
-                        titleLink,
-                        <div className="media">
-                            <img className="thumbnail" src={data.thumbnail} alt={title} />
-                        </div>
-                    );
+                switch (domain) {
+                    case 'gfycat.com':
+                        if (data.media_embed.content) {
+                            output = [
+                                titleLink,
+                                <div className="media">
+                                    {parse(decode(data.media_embed.content))}
+                                </div>
+                            ];
+                        } else {
+                            output = [
+                                titleLink,
+                                <div className="media">
+                                    <ReactPlayer controls="true" width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                                </div>
+                            ];
+                        }
+                        break;
+                    case 'i.imgur.com':
+                    case 'imgur.com':
+                        if (data.preview.reddit_video_preview) {
+                            output = [
+                                titleLink,
+                                <div className="media">
+                                    <ReactPlayer controls="true" width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                                </div>
+                            ];
+                        } else {
+                            output = [
+                                titleLink,
+                                <div className="media">
+                                    <img className="thumbnail" src={data.thumbnail} alt={title} />
+                                </div>
+                            ];
+                        }
+                        break;
+                    case 'vimeo':
+                    case 'streamable.com':
+                        output = [
+                            titleLink,
+                            <div className="media">
+                                <ReactPlayer controls="true" width="1040px" height="590px" url={url} />
+                            </div>
+                        ];
+                        break;
+                    default:
+                        if (data.thumbnail === 'default') {
+                            output = [
+                                <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
+                                    {title}
+                                </a>
+                            ];
+                        } else {
+                            output = [
+                                titleLink,
+                                <div className="media">
+                                    <img className="thumbnail" src={data.thumbnail} alt={title} />
+                                </div>
+                            ];
+                        }
                 }
                 break;
             //Image
             case 'image':
-                output.push(
+                output = [
                     titleLink,
                     <div id={'media' + url} className="media">
                         <img
@@ -168,16 +215,16 @@ export class Main extends React.Component {
                                 document.getElementById('media' + url).style.justifyContent = ac;
                             }} />
                     </div>
-                );
+                ];
                 break;
             //Hosted Video
             case 'hosted:video':
-                output.push(
+                output = [
                     titleLink,
                     <div className="media">
                         <ReactPlayer controls="true" width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
                     </div>
-                );
+                ];
                 break;
             //Rich Video
             case 'rich:video':
@@ -186,42 +233,42 @@ export class Main extends React.Component {
                     case 'youtu.be':
                     case 'vimeo':
                     case 'streamable.com':
-                        output.push(
+                        output = [
                             titleLink,
                             <div className="media">
                                 <ReactPlayer controls="true" width="1040px" height="590px" url={url} />
                             </div>
-                        );
+                        ];
                         break;
                     case 'gfycat.com':
-                        output.push(
+                        output = [
                             titleLink,
                             <div className="media">
                                 {parse(decode(data.media_embed.content))}
                             </div>
-                        );
+                        ];
                         break;
                     default:
-                        output.push(
+                        output = [
                             titleLink,
                             <div className="media">
                                 <ReactPlayer controls="true" width="1040px" height="590px" url={url} />
                             </div>
-                        );
+                        ];
                 }
                 break;
             //Undefined
             case undefined:
                 if (selftext !== "") {
                     if (data.selftext.length < 2500) {
-                        output.push(
+                        output = [
                             titleLink,
                             <div className="text" >
                                 {parse(decode(data.selftext_html))}
                             </div>
-                        );
+                        ];
                     } else {
-                        output.push(
+                        output = [
                             titleLink,
                             <div id={`long-${i}`} className="long">
                                 <div id={`readmore-${i}`} className="readmore"></div>
@@ -255,30 +302,30 @@ export class Main extends React.Component {
                                 </button>
                                 {parse(decode(data.selftext_html))}
                             </div>
-                        );
+                        ];
                     }
                     break;
                 } else if (!domain.startsWith("self")) {
                     switch (domain) {
                         case 'twitter.com':
                             flex = 'row';
-                            output.push(
+                            output = [
                                 titleLink,
                                 <div className="media">
                                     <TweetEmbed id={url.split("/")[5].split("?")[0]} />
                                 </div>
-                            );
+                            ];
                             break;
                         case 'v.redd.it':
                             if (data.media) {
-                                output.push(
+                                output = [
                                     titleLink,
                                     <div className="media">
                                         <ReactPlayer controls="true" width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
                                     </div>
-                                );
+                                ];
                             } else {
-                                output.push(titleLink);
+                                output = [titleLink];
                             }
                             break;
                         case 'youtube.com':
@@ -288,46 +335,46 @@ export class Main extends React.Component {
                         case 'streamye.com':
                         case 'streamja.com':
                         case 'streamwo.com':
-                            output.push(
+                            output = [
                                 titleLink,
                                 <div className="media">
                                     <ReactPlayer controls="true" width="1040px" height="590px" url={url} />
                                 </div>
-                            );
+                            ];
                             break;
                         case 'i.redd.it':
-                            output.push(
+                            output = [
                                 titleLink,
                                 <div className="media">
                                     <img className="image" src={url} alt={title} />
                                 </div>
-                            );
+                            ];
                             break;
                         default:
                             data.thumbnail === 'default' || data.thumbnail === "" ?
-                                output.push(
+                                output = [
                                     <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
                                         {title}
                                     </a>
-                                ) :
-                                output.push(
+                                ] :
+                                output = [
                                     <a className="title link" href={url} target="_blank" rel="noreferrer">
                                         {title}
                                     </a>,
                                     <div className="media">
                                         <img className="thumbnail" src={data.thumbnail} alt={title} />
                                     </div>
-                                );
+                                ];
                             break;
                     }
                 } else {
-                    output.push(
+                    output = [
                         <h1 className="title oneliner">{title}</h1>
-                    );
+                    ];
                 }
                 break;
             default:
-                output.push(titleLink);
+                output = [titleLink];
                 break;
         }
         return (
@@ -343,19 +390,17 @@ export class Main extends React.Component {
     }
 
     render() {
+        const relativeTime = require('dayjs/plugin/relativeTime');
+        dayjs.extend(relativeTime);
         return (
             <main>
                 <Switch>
                     <Route path="/" exact>
-                        {this.props.posts.map((post, i) => {
-                            return (
-                                <Posts
-                                    displayPost={this.displayPost}
-                                    post={post}
-                                    i={i}
-                                />
-                            );
-                        })}
+                        <div id="posts">
+                            {this.props.posts.map((post, i) => {
+                                return this.displayPost(post, i)
+                            })}
+                        </div>
                     </Route>
                     <Route path="/Comments/:id" render={routeProps =>
                         <Comments

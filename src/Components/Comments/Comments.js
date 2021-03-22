@@ -180,12 +180,12 @@ export class Comments extends React.Component {
                 {/* Comments Section */}
                 <section className="comments-container">
                     {this.state.comments.map(comment => {
-                        const { kind, data: { author, collapsed, replies, is_submitter } } = comment;
+                        const { kind, data: { author, collapsed, id, replies, is_submitter } } = comment;
                         return (
                             //Check that type isn't 'more', and collapsed status
                             kind === 'more' ? '' :
                             collapsed === false ?
-                                <div className="comment-item">
+                                <div className="comment-item" key={id}>
                                     {/* Pass each comment to JSX generator */}
                                     {this.getCommentJSX(comment).map(el => el)}
 
@@ -195,12 +195,12 @@ export class Comments extends React.Component {
                                     replies.data.children.slice(0, replies.data.children.length - 1).map(reply => {
 
                                         //Object destructuring
-                                        const { kind: r_kind, data: { author: r_author, collapsed: r_collapsed, is_submitter: r_is_submitter, replies: r_replies} } = reply;
+                                        const { kind: r_kind, data: { author: r_author, collapsed: r_collapsed, id: r_id, is_submitter: r_is_submitter, replies: r_replies} } = reply;
                                         return (
                                             //Check that type isn't 'more', and collapsed status
                                             r_kind === 'more' ? '' :
                                             r_collapsed === false ?
-                                                <div className="first-reply-layer">
+                                                <div className="first-reply-layer" key={r_id}>
                                                     {/* Pass each reply to JSX generator */}
                                                     {this.getCommentJSX(reply).map(el => el)}
 
@@ -210,11 +210,11 @@ export class Comments extends React.Component {
                                                     r_replies.data.children.slice(0, r_replies.data.children.length - 1).map(secondLayer => {
 
                                                         //Object destructuring
-                                                        const { kind: s_kind } = secondLayer;
+                                                        const { kind: s_kind, id: s_id } = secondLayer;
                                                         return (
                                                             //Ensure the reply kind is not 'more'
                                                             s_kind === 'more' ? '' :
-                                                                <div className="second-reply-layer">
+                                                                <div className="second-reply-layer" key={s_id}>
                                                                     {/* Pass each reply to JSX generator */}
                                                                     {this.getCommentJSX(secondLayer)}
                                                                 </div>

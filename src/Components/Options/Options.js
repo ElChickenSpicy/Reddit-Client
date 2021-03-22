@@ -50,7 +50,10 @@ export class Options extends React.Component {
                                             id="nav-item"
                                             title={title}
                                             onClick={() => {
-                                                this.props.fetchPosts(`r/${display_name}.json`, display_name);
+                                                this.props.fetchPosts({
+                                                    query: `r/${display_name}.json`, 
+                                                    active: display_name
+                                                });
                                                 this.props.fetchAbout(display_name);
                                                 this.props.fetchTop();
                                             }}>

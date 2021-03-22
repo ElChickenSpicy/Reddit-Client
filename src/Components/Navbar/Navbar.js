@@ -24,7 +24,10 @@ export class Navbar extends React.Component {
                             placeholder="Search Reddit..."
                             onKeyUp={({ key, target: { value } }) => {
                                 if (key === "Enter") {
-                                    this.props.fetchPosts(`search.json?q=${encodeURI(value)}`, `Search Results: ${value}`);
+                                    this.props.fetchPosts({
+                                        query: `search.json?q=${encodeURI(value)}`, 
+                                        active: `Search Results: ${value}`
+                                    });
                                     this.props.clearSearch('searchbar');
                                 }
                             }}
@@ -39,7 +42,10 @@ export class Navbar extends React.Component {
                         to="/"
                         className="first40"
                         onClick={() => {
-                            this.props.fetchPosts('r/popular.json', 'popular');
+                            this.props.fetchPosts({
+                                query: 'r/popular.json', 
+                                active: 'popular'
+                            });
                             this.props.fetchTop();
                         }}
                     >
@@ -50,9 +56,10 @@ export class Navbar extends React.Component {
                             onMouseEnter={({ target: { id }}) => document.getElementById(id).style.backgroundColor = this.state.colors[Math.floor(Math.random() * 5)]}
                             onMouseLeave={({ target: { id }}) => document.getElementById(id).style.backgroundColor = '#888'}
                         />
-                        {[...this.state.name].map(letter => {
+                        {[...this.state.name].map((letter, i) => {
                             return (
                                 <h1 
+                                    key={letter + i}
                                     id={letter} 
                                     className="name" 
                                     onMouseEnter={({ target: { id }}) => document.getElementById(id).style.color = this.state.colors[Math.floor(Math.random() * 5)]}
@@ -84,7 +91,10 @@ export class Navbar extends React.Component {
                                             id="nav-item"
                                             title={title}
                                             style={this.props.highlightActive[0] === display_name ? { backgroundColor: 'rgba(211, 211, 211, 0.212)' } : { backgroundColor: 'white' }}
-                                            onClick={() => {this.props.fetchPosts(`r/${display_name}.json`, display_name)}}
+                                            onClick={() => {this.props.fetchPosts({
+                                                query: `r/${display_name}.json`, 
+                                                active: display_name
+                                            })}}
                                         >
                                             <img src={src} alt={display_name} />
                                             r/{display_name}

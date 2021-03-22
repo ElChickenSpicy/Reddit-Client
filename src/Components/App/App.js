@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import './App.css';
 import { Link } from "react-router-dom";
 import { Navbar } from '../Navbar/Navbar';
@@ -20,7 +20,9 @@ export class App extends React.Component {
       subredditsAbout: [],
       view: 'hot',
       scrollPosition: [],
-      after: ''
+      after: '',
+      displayNumber: 10,
+      loading: true
     };
     this.addSubreddit = this.addSubreddit.bind(this);
     this.checkData = this.checkData.bind(this);
@@ -42,9 +44,11 @@ export class App extends React.Component {
 
   async makeRequest(query) {
     try {
+      this.setState({ loading: true });
       const response = await fetch(`https://www.reddit.com/${query}`);
       if (response.ok) {
         const jsonResponse = await response.json();
+        this.setState({ loading: false })
         return jsonResponse;
       }
     } catch(err) {
@@ -53,16 +57,28 @@ export class App extends React.Component {
   }
 
   //Fetch Reddit posts
-  async fetchPosts(query, active, view = 'hot') {
-    const jsonResponse = await this.makeRequest(query);
+  async fetchPosts(obj) {
+
+    const view = obj.view || 'hot'
+    const more = obj.more || false
+    const displayNum = obj.displayNum || 10
+
+    const jsonResponse = await this.makeRequest(obj.query);
     console.log(jsonResponse);
-    const subPosts = jsonResponse.data.children.slice(0, 10);
-    const after = jsonResponse.data.after;
-    this.setState({ posts: subPosts, activeSubreddit: active, view: view, after: after });
-    this.checkData();
+    const subPosts = jsonResponse.data.children.slice(0, 25);
+
+    this.setState({
+      posts: more === false ? subPosts : [...this.state.posts, ...subPosts],
+      activeSubreddit: obj.active,
+      view: view,
+      after: jsonResponse.data.after,
+      displayNumber: displayNum
+    });
+
+    this.checkData(more);
   }
 
-  checkData() {
+  checkData(more) {
     this.state.posts.forEach(({ data: { subreddit, subreddit_id } }) => {
       let exists = this.state.subredditsAbout.filter(({ name }) => {
         return name === subreddit_id;
@@ -72,7 +88,9 @@ export class App extends React.Component {
       }
     });
 
-    window.scrollTo(0, 0);
+    if (more === false) {
+      window.scrollTo(0, 0);
+    }
   }
 
   //Fecth the subreddit data of each sub in Nav
@@ -132,7 +150,11 @@ export class App extends React.Component {
       buttons: [
         {
           label: 'Continue',
-          onClick: () => this.fetchPosts(`r/${this.state.activeSubreddit}/new/.json`, this.state.activeSubreddit, 'new')
+          onClick: () => this.fetchPosts({
+            query: `r/${this.state.activeSubreddit}/new/.json`, 
+            active: this.state.activeSubreddit, 
+            view: 'new'
+          })
         },
         {
           label: 'Cancel',
@@ -150,7 +172,12 @@ export class App extends React.Component {
           <div
             className="change hot"
             title="View the Hottest posts"
-            onClick={() => this.fetchPosts(`r/${this.state.activeSubreddit}/hot/.json`, this.state.activeSubreddit, 'hot')}>
+            onClick={() => this.fetchPosts({
+              query: `r/${this.state.activeSubreddit}/hot/.json`, 
+              active: this.state.activeSubreddit, 
+              view: 'hot'
+            })}
+          >
             <i className="fas fa-fire-alt"
               style={this.state.view === "hot" ? { color: 'lightcoral' } : { color: 'white' }}>
               <span>Hot</span>
@@ -161,7 +188,12 @@ export class App extends React.Component {
           <div
             className="change top"
             title="View the Top posts of all time"
-            onClick={() => this.fetchPosts(`r/${this.state.activeSubreddit}/top/.json?t=all`, this.state.activeSubreddit, 'top')}>
+            onClick={() => this.fetchPosts({
+              query: `r/${this.state.activeSubreddit}/top/.json?t=all`, 
+              active: this.state.activeSubreddit, 
+              view: 'top'
+            })}
+          >
             <i className="fas fa-medal"
               style={this.state.view === "top" ? { color: 'lightgreen' } : { color: 'white' }}>
               <span>Top</span>
@@ -173,8 +205,12 @@ export class App extends React.Component {
             className="change new"
             title="View the Newest posts"
             onClick={() => {
-              name === 'popular' ? this.submit() : this.fetchPosts(`r/${this.state.activeSubreddit}/new/.json`, this.state.activeSubreddit, 'new')
-            }}>
+              name === 'popular' ? this.submit() : this.fetchPosts({
+                query: `r/${this.state.activeSubreddit}/new/.json`, 
+                active: this.state.activeSubreddit, 
+                view: 'new'
+            })}}
+          >
             <i className="fas fa-certificate"
               style={this.state.view === "new" ? { color: 'lightskyblue' } : { color: 'white' }}>
               <span>New</span>
@@ -287,7 +323,10 @@ export class App extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchPosts('r/popular.json', 'popular')
+    this.fetchPosts({
+      query: 'r/popular.json', 
+      active: 'popular'
+    })
     this.fetchTop();
     this.fetchNavSubs(this.state.nav);
     this.highlightActive();
@@ -297,6 +336,7 @@ export class App extends React.Component {
     return (
       <div className="top-container">
         <div className="top-bg"></div>
+        <div className="loading">{this.state.loading && 'Loading...'}</div>
         <Navbar
           clearSearch={this.clearSearch}
           fetchPosts={this.fetchPosts}
@@ -311,12 +351,31 @@ export class App extends React.Component {
           fetchAbout={this.fetchAbout}
           fetchPosts={this.fetchPosts}
           navItems={this.state.nav}
-          posts={this.state.posts}
+          posts={this.state.posts.slice(0, this.state.displayNumber)}
           removeSubreddit={this.removeSubreddit}
           saveScrollPosition={this.saveScrollPosition}
           setScrollPosition={this.setScrollPosition}
           updatePost={this.updatePost}
         />
+        <button 
+          id="trial" 
+          onClick={() => {
+            this.setState(prevState => ({
+              displayNumber: prevState.displayNumber + 10
+            }));
+            if ((this.state.displayNumber + 10) >= this.state.posts.length) {
+              this.fetchPosts({
+                query: `r/${this.state.activeSubreddit}.json?after=${this.state.after}`, 
+                active: this.state.activeSubreddit, 
+                view: 'hot', 
+                more: true,
+                displayNum: this.state.displayNumber
+              });
+            }
+          }}
+        >
+          Click Me
+        </button>
         <Options
           activeSubreddit={this.state.activeSubreddit}
           addSubreddit={this.addSubreddit}
