@@ -64,7 +64,6 @@ export class App extends React.Component {
     const displayNum = obj.displayNum || 10
 
     const jsonResponse = await this.makeRequest(obj.query);
-    console.log(jsonResponse);
     const subPosts = jsonResponse.data.children.slice(0, 25);
 
     this.setState({
@@ -347,12 +346,8 @@ export class App extends React.Component {
         />
         <Main
           about={this.state.subredditsAbout}
-          addSubreddit={this.addSubreddit}
-          fetchAbout={this.fetchAbout}
           fetchPosts={this.fetchPosts}
-          navItems={this.state.nav}
           posts={this.state.posts.slice(0, this.state.displayNumber)}
-          removeSubreddit={this.removeSubreddit}
           saveScrollPosition={this.saveScrollPosition}
           setScrollPosition={this.setScrollPosition}
           updatePost={this.updatePost}

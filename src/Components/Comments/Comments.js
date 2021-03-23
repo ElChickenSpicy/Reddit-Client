@@ -222,7 +222,7 @@ export class Comments extends React.Component {
                                                     })}
                                                 </div> :
                                                 //If the collapsed property is set to true, hide the reply and its children
-                                                <div className="first-reply-layer" onClick={() => { this.toggleSecondHidden(comment, reply) }}>
+                                                <div className="first-reply-layer" key={r_id} onClick={() => { this.toggleSecondHidden(comment, reply) }}>
                                                     <h2
                                                     className="username"
                                                     style={r_is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
@@ -235,7 +235,7 @@ export class Comments extends React.Component {
                                     })}
                                 </div> :
                                 //If the collapsed property is set to true, hide the comment and its children
-                                <div className="comment-item">
+                                <div className="comment-item" key={id}>
                                     <h2
                                     className="username"
                                     style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}

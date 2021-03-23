@@ -1,22 +1,16 @@
-import React from 'react';
 import { Switch, Route, Link } from "react-router-dom";
 import { Comments } from '../Comments/Comments';
 import { decode } from 'html-entities';
 import parse from 'html-react-parser';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import defaultImg from '../../Icons/popular.webp';
 //For embedding content
 import TweetEmbed from 'react-tweet-embed'
-import ReactPlayer from 'react-player/lazy';
+import ReactPlayer from 'react-player/lazy'; 
 
-export class Main extends React.Component {
-    constructor(props) {
-        super(props);
-        this.displayPost = this.displayPost.bind(this);
-        this.formatPost = this.formatPost.bind(this);
-    }
+export const Main = ({ about, fetchPosts, posts, saveScrollPosition, setScrollPosition, updatePost }) => {
 
-    displayPost(post, i) {
+    const displayPost = (post, i) => {
         const { data: { all_awardings, author, author_flair_richtext, created_utc, num_comments, permalink, subreddit, subreddit_id, ups } } = post;
 
         //Does Author have a flair?
@@ -27,12 +21,12 @@ export class Main extends React.Component {
             : '';
 
         //Retrieve image src and title for the subreddit's info
-        const icon = this.props.about.filter(el => el.name === subreddit_id);
+        const icon = about.filter(el => el.name === subreddit_id);
         let src = icon[0] ? icon[0].icon_img !== "" && icon[0].icon_img !== null ? icon[0].icon_img : defaultImg : defaultImg;
         let title = icon[0] ? icon[0].title !== "" && icon[0].title !== null ? icon[0].title : { subreddit } : { subreddit };
 
         //Save JSX returned from the formatPost function
-        const postOutput = this.formatPost(post, i);
+        const postOutput = formatPost(post, i);
 
         return (
             <div className="post-divider">
@@ -49,7 +43,7 @@ export class Main extends React.Component {
                             <div
                                 className="subreddit-data"
                                 onClick={() => {
-                                    this.props.fetchPosts({
+                                    fetchPosts({
                                         query: `r/${subreddit}.json`,
                                         active: subreddit
                                     })
@@ -103,7 +97,7 @@ export class Main extends React.Component {
                             <span className="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
                         </div>
                         <Link
-                            to={`/Comments${[permalink]}`} id="comments" onClick={() => this.props.saveScrollPosition()}>
+                            to={`/Comments${[permalink]}`} id="comments" onClick={() => saveScrollPosition()}>
                             <div className="comment-icons">
                                 <i className="bi bi-chat-left" title="Comments"></i>
                                 <i className="bi bi-chat-left-fill" title="Comments"></i>
@@ -118,7 +112,7 @@ export class Main extends React.Component {
     }
 
     //Based on post type, display it in a certain way
-    formatPost(post, i) {
+    const formatPost = (post, i) => {
 
         let output;
         let flex = 'column';
@@ -150,7 +144,7 @@ export class Main extends React.Component {
                             output = [
                                 titleLink,
                                 <div className="media">
-                                    <ReactPlayer controls="true" width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                                    <ReactPlayer controls='true' width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
                                 </div>
                             ];
                         }
@@ -161,7 +155,7 @@ export class Main extends React.Component {
                             output = [
                                 titleLink,
                                 <div className="media">
-                                    <ReactPlayer controls="true" width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                                    <ReactPlayer controls='true' width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
                                 </div>
                             ];
                         } else {
@@ -178,7 +172,7 @@ export class Main extends React.Component {
                         output = [
                             titleLink,
                             <div className="media">
-                                <ReactPlayer controls="true" width="1040px" height="590px" url={url} />
+                                <ReactPlayer controls='true' width="1040px" height="590px" url={url} />
                             </div>
                         ];
                         break;
@@ -222,7 +216,7 @@ export class Main extends React.Component {
                 output = [
                     titleLink,
                     <div className="media">
-                        <ReactPlayer controls="true" width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
+                        <ReactPlayer controls='true' width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
                     </div>
                 ];
                 break;
@@ -236,7 +230,7 @@ export class Main extends React.Component {
                         output = [
                             titleLink,
                             <div className="media">
-                                <ReactPlayer controls="true" width="1040px" height="590px" url={url} />
+                                <ReactPlayer controls='true' width="1040px" height="590px" url={url} />
                             </div>
                         ];
                         break;
@@ -252,7 +246,7 @@ export class Main extends React.Component {
                         output = [
                             titleLink,
                             <div className="media">
-                                <ReactPlayer controls="true" width="1040px" height="590px" url={url} />
+                                <ReactPlayer controls='true' width="1040px" height="590px" url={url} />
                             </div>
                         ];
                 }
@@ -321,7 +315,7 @@ export class Main extends React.Component {
                                 output = [
                                     titleLink,
                                     <div className="media">
-                                        <ReactPlayer controls="true" width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
+                                        <ReactPlayer controls='true' width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
                                     </div>
                                 ];
                             } else {
@@ -338,7 +332,7 @@ export class Main extends React.Component {
                             output = [
                                 titleLink,
                                 <div className="media">
-                                    <ReactPlayer controls="true" width="1040px" height="590px" url={url} />
+                                    <ReactPlayer controls='true' width="1040px" height="590px" url={url} />
                                 </div>
                             ];
                             break;
@@ -389,29 +383,27 @@ export class Main extends React.Component {
         );
     }
 
-    render() {
-        const relativeTime = require('dayjs/plugin/relativeTime');
-        dayjs.extend(relativeTime);
-        return (
-            <main>
-                <Switch>
-                    <Route path="/" exact>
-                        <div id="posts">
-                            {this.props.posts.map((post, i) => {
-                                return this.displayPost(post, i)
-                            })}
-                        </div>
-                    </Route>
-                    <Route path="/Comments/:id" render={routeProps =>
-                        <Comments
-                            rp={routeProps}
-                            displayPost={this.displayPost}
-                            setScrollPosition={this.props.setScrollPosition}
-                            updatePost={this.props.updatePost}
-                        />
-                    } />
-                </Switch>
-            </main>
-        );
-    }
+    const relativeTime = require('dayjs/plugin/relativeTime');
+    dayjs.extend(relativeTime);
+    return (
+        <main>
+            <Switch>
+                <Route path="/" exact>
+                    <div id="posts">
+                        {posts.map((post, i) => {
+                            return displayPost(post, i)
+                        })}
+                    </div>
+                </Route>
+                <Route path="/Comments/:id" render={routeProps =>
+                    <Comments
+                        rp={routeProps}
+                        displayPost={displayPost}
+                        setScrollPosition={setScrollPosition}
+                        updatePost={updatePost}
+                    />
+                } />
+            </Switch>
+        </main>
+    );
 };

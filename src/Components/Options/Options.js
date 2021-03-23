@@ -1,13 +1,11 @@
-import React from 'react';
 import { Link } from "react-router-dom";
 import defaultImg from '../../Icons/popular.webp';
 import retroSearch from '../../Icons/retro-Search.png';
 
-export class Options extends React.Component { 
-    render() {
+export const Options = ({ activeSubreddit, addSubreddit, clearSearch, fetchAbout, fetchPosts, fetchTop, getSubreddit, nav, searchSubs, searchTerm, top }) => { 
         return (
             <header className="main-header">
-                {this.props.getSubreddit(this.props.activeSubreddit)}
+                {getSubreddit(activeSubreddit)}
                 <section className="suggestions">
                     <div className="top-title">
                         <div id="SSform" className="form">
@@ -16,8 +14,8 @@ export class Options extends React.Component {
                                 placeholder="Search Reddit..."
                                 onKeyUp={({ key, target: { value } }) => {
                                     if (key === "Enter") {
-                                        this.props.searchSubs(`subreddits/search.json?q=${encodeURI(value)}`, value);
-                                        this.props.clearSearch('SSsearchbar');
+                                        searchSubs(`subreddits/search.json?q=${encodeURI(value)}`, value);
+                                        clearSearch('SSsearchbar');
                                     }
                                 }}
                             />
@@ -26,22 +24,22 @@ export class Options extends React.Component {
                             </div>
                         </div> 
                         <div className="top-header">
-                            <h2>{this.props.searchTerm}</h2>
+                            <h2>{searchTerm}</h2>
                         </div>
                         <div className="subs-BG"></div>
                     </div>
                     <ul>
-                        {this.props.top.map(({ data: { display_name, icon_img, title } }) => {
+                        {top.map(({ data: { display_name, icon_img, title } }) => {
                             const src = icon_img === "" || icon_img === null ? defaultImg : icon_img;
                             title = title === "" || title === null ? { display_name } : title;
                             return (
                                 <div className="returnedLI" key={display_name}>
                                     <div className="add-to-nav">
-                                        {this.props.nav.includes(display_name) ? '' :
+                                        {nav.includes(display_name) ? '' :
                                             <i 
                                                 className="fas fa-plus"
                                                 title="Add this subreddit to your Navigation Bar" 
-                                                onClick={() => this.props.addSubreddit(display_name)}
+                                                onClick={() => addSubreddit(display_name)}
                                             >
                                             </i>}
                                     </div>
@@ -50,12 +48,12 @@ export class Options extends React.Component {
                                             id="nav-item"
                                             title={title}
                                             onClick={() => {
-                                                this.props.fetchPosts({
+                                                fetchPosts({
                                                     query: `r/${display_name}.json`, 
                                                     active: display_name
                                                 });
-                                                this.props.fetchAbout(display_name);
-                                                this.props.fetchTop();
+                                                fetchAbout(display_name);
+                                                fetchTop();
                                             }}>
                                                 <img src={src} alt={display_name} />
                                                 r/{display_name}
@@ -68,5 +66,4 @@ export class Options extends React.Component {
                 </section>
             </header>
         );
-    }
 };
