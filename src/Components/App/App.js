@@ -113,15 +113,14 @@ export class App extends React.Component {
 
     //Add element if empty, otherwise check if it exists
     if (this.state.subredditsAbout.length <= 0) {
-      this.setState({ subredditsAbout: [subreddit] });
-    } else {
-      const copy = this.state.subredditsAbout;
-      let exists = copy.filter(({ name }) => {
-        return name === subreddit.name;
-      });
-      if (exists.length === 0) {
-        this.setState({ subredditsAbout: [...copy, subreddit] });
-      }
+      return this.setState({ subredditsAbout: [subreddit] });
+    }
+    const copy = this.state.subredditsAbout;
+    let exists = copy.filter(({ name }) => {
+      return name === subreddit.name;
+    });
+    if (exists.length === 0) {
+      this.setState({ subredditsAbout: [...copy, subreddit] });
     }
   }
 
@@ -229,7 +228,8 @@ export class App extends React.Component {
           {view}
         </section>
       );
-    } else if (name.startsWith('Search Results: ')) {
+    } 
+    if (name.startsWith('Search Results: ')) {
       return (
         <section className="current-view">
           <div className="active-subreddit">
@@ -239,35 +239,31 @@ export class App extends React.Component {
           </div>
         </section>
       );
-
-      //Get subreddit data and display
-    } else {
-      //Get the active subreddit
-      const active = this.state.subredditsAbout.filter(el => name === el.display_name);
-      const { accounts_active, display_name, public_description, subscribers } = active[0];
-
-      //Is the subreddit included in the Navbar?
-      let included = this.state.nav.includes(display_name);
-
-      return (
-        <section className="current-view">
-          <div className="active-subreddit">
-            <h3>Current Subreddit</h3>
-            <div className="add-remove">
-              {included === true ?
-                <i className="far fa-minus-square" title="Remove this subreddit from your Navigation Bar" style={{ order: '1' }} onClick={() => this.removeSubreddit(display_name)}></i> :
-                <i className="far fa-plus-square" title="Add this subreddit to your Navigation Bar" style={{ order: '1' }} onClick={() => this.addSubreddit(display_name)}></i>
-              }
-              <h1>r/{display_name}</h1>
-            </div>
-            <p>{decode(public_description)}</p>
-            <h4><span className="subscribers">{subscribers.toLocaleString()}</span> Subscibers</h4>
-            <h4><span className="accounts">{accounts_active.toLocaleString()}</span> Active Users</h4>
-          </div>
-          {view}
-        </section>
-      );
     }
+
+    //Get subreddit data and display
+    const active = this.state.subredditsAbout.filter(el => name === el.display_name);
+    const { accounts_active, display_name, public_description, subscribers } = active[0];
+    //Is the subreddit included in the Navbar?
+    let included = this.state.nav.includes(display_name);
+    return (
+      <section className="current-view">
+        <div className="active-subreddit">
+          <h3>Current Subreddit</h3>
+          <div className="add-remove">
+            {included === true ?
+              <i className="far fa-minus-square" title="Remove this subreddit from your Navigation Bar" style={{ order: '1' }} onClick={() => this.removeSubreddit(display_name)}></i> :
+              <i className="far fa-plus-square" title="Add this subreddit to your Navigation Bar" style={{ order: '1' }} onClick={() => this.addSubreddit(display_name)}></i>
+            }
+            <h1>r/{display_name}</h1>
+          </div>
+          <p>{decode(public_description)}</p>
+          <h4><span className="subscribers">{subscribers.toLocaleString()}</span> Subscibers</h4>
+          <h4><span className="accounts">{accounts_active.toLocaleString()}</span> Active Users</h4>
+        </div>
+        {view}
+      </section>
+    );
   }
 
   //Highlight active subreddit in Nav bar

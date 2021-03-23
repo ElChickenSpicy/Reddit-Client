@@ -17,19 +17,14 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting && hasMore) {
-                console.log('Visible');
-                console.log(activeSubreddit);
-                if ((displayNumber + 5) >= posts.length) {
-                    fetchPosts({
-                        query: `r/${activeSubreddit}.json?after=${after}`, 
-                        active: activeSubreddit, 
-                        view: 'hot',
-                        displayNum: displayNumber + 10, 
-                        more: true
-                    });
-                } else {
-                    increaseDisplay(10);
-                }
+                if ((displayNumber + 5) < posts.length) return increaseDisplay(10);
+                fetchPosts({
+                    query: `r/${activeSubreddit}.json?after=${after}`, 
+                    active: activeSubreddit, 
+                    view: 'hot',
+                    displayNum: displayNumber + 10, 
+                    more: true
+                });
             }
         });
         if (node) observer.current.observe(node);
@@ -39,18 +34,18 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
         const { data: { all_awardings, author, author_flair_richtext, created_utc, num_comments, permalink, subreddit, subreddit_id, ups } } = post;
 
         //Does Author have a flair?
-        let flair = author_flair_richtext ? author_flair_richtext.length > 0 ? author_flair_richtext[0].u ?
-            <img src={author_flair_richtext[0].u} alt="Author's flair" title={author_flair_richtext[0].a} />
-            : '' : '' : '';
+        let flairImg = author_flair_richtext?.[0]?.u;
+        let flair = flairImg === undefined ? '' : <img src={flairImg} alt="Author's flair" title={author_flair_richtext[0].a} />;
 
         //Retrieve image src and title for the subreddit's info
         const icon = about.filter(el => el.name === subreddit_id);
-        let src = icon[0] ? icon[0].icon_img !== "" && icon[0].icon_img !== null ? icon[0].icon_img : defaultImg : defaultImg;
-        let title = icon[0] ? icon[0].title !== "" && icon[0].title !== null ? icon[0].title : { subreddit } : { subreddit };
+        let src = icon?.[0]?.icon_img;
+        src = [undefined, "", null].includes(src) ? defaultImg : src;
+        let title = icon?.[0]?.title;
+        title = [undefined, "", null].includes(title) ? subreddit : title;
 
         //Returned JSX
         const postOutput = formatPost(post, i);
-
         return (
             <>
                 <div className="sub-image">
@@ -149,39 +144,35 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
             case 'link':
                 switch (domain) {
                     case 'gfycat.com':
-                        if (data.media_embed.content) {
-                            output = [
-                                titleLink,
-                                <div className="media">
-                                    {parse(decode(data.media_embed.content))}
-                                </div>
-                            ];
-                        } else {
-                            output = [
-                                titleLink,
-                                <div className="media">
-                                    <ReactPlayer controls='true' width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
-                                </div>
-                            ];
-                        }
+                        output = data.media_embed.content ? 
+                        [
+                            titleLink,
+                            <div className="media">
+                                {parse(decode(data.media_embed.content))}
+                            </div>
+                        ] :
+                        [
+                            titleLink,
+                            <div className="media">
+                                <ReactPlayer controls='true' width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                            </div>
+                        ] ;
                         break;
                     case 'i.imgur.com':
                     case 'imgur.com':
-                        if (data.preview.reddit_video_preview) {
-                            output = [
-                                titleLink,
-                                <div className="media">
-                                    <ReactPlayer controls='true' width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
-                                </div>
-                            ];
-                        } else {
-                            output = [
-                                titleLink,
-                                <div className="media">
-                                    <img className="thumbnail" src={data.thumbnail} alt={title} />
-                                </div>
-                            ];
-                        }
+                        output = data.preview.reddit_video_preview ?
+                        [
+                            titleLink,
+                            <div className="media">
+                                <ReactPlayer controls='true' width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                            </div>
+                        ] :
+                        [
+                            titleLink,
+                            <div className="media">
+                                <img className="thumbnail" src={data.thumbnail} alt={title} />
+                            </div>
+                        ] ;
                         break;
                     case 'vimeo':
                     case 'streamable.com':
@@ -193,20 +184,18 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                         ];
                         break;
                     default:
-                        if (data.thumbnail === 'default') {
-                            output = [
-                                <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
-                                    {title}
-                                </a>
-                            ];
-                        } else {
-                            output = [
-                                titleLink,
-                                <div className="media">
-                                    <img className="thumbnail" src={data.thumbnail} alt={title} />
-                                </div>
-                            ];
-                        }
+                        output = data.thumbnail === 'default' ?
+                        [
+                            <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
+                                {title}
+                            </a>
+                        ] :
+                        [
+                            titleLink,
+                            <div className="media">
+                                <img className="thumbnail" src={data.thumbnail} alt={title} />
+                            </div>
+                        ] ;
                 }
                 break;
             //Image
@@ -270,50 +259,48 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
             //Undefined
             case undefined:
                 if (selftext !== "") {
-                    if (data.selftext.length < 2500) {
-                        output = [
-                            titleLink,
-                            <div className="text" >
-                                {parse(decode(data.selftext_html))}
-                            </div>
-                        ];
-                    } else {
-                        output = [
-                            titleLink,
-                            <div id={`long-${i}`} className="long">
-                                <div id={`readmore-${i}`} className="readmore"></div>
-                                <button
-                                    id={`expand-${i}`}
-                                    className="read"
-                                    title="Expand the Post"
-                                    style={{ display: 'block' }}
-                                    onClick={({ target: { id } }) => {
-                                        let num = id.split("-")[1];
-                                        document.getElementById(`long-${num}`).style.maxHeight === '100%' ? document.getElementById(`long-${num}`).style.maxHeight = '300px' : document.getElementById(`long-${num}`).style.maxHeight = '100%';
-                                        document.getElementById(`readmore-${num}`).style.display === 'none' ? document.getElementById(`readmore-${num}`).style.display = 'block' : document.getElementById(`readmore-${num}`).style.display = 'none';
-                                        document.getElementById(`expand-${num}`).style.display === 'block' ? document.getElementById(`expand-${num}`).style.display = 'none' : document.getElementById(`expand-${num}`).style.display = 'block';
-                                        document.getElementById(`collapse-${num}`).style.display === 'block' ? document.getElementById(`collapse-${num}`).style.display = 'none' : document.getElementById(`collapse-${num}`).style.display = 'block';
-                                    }}>
-                                    Show More
-                                </button>
-                                <button
-                                    id={`collapse-${i}`}
-                                    className="read"
-                                    title="Collapse the Post"
-                                    style={{ display: 'none' }}
-                                    onClick={({ target: { id } }) => {
-                                        let num = id.split("-")[1];
-                                        document.getElementById(`long-${num}`).style.maxHeight === '100%' ? document.getElementById(`long-${num}`).style.maxHeight = '300px' : document.getElementById(`long-${num}`).style.maxHeight = '100%';
-                                        document.getElementById(`readmore-${num}`).style.display === 'none' ? document.getElementById(`readmore-${num}`).style.display = 'block' : document.getElementById(`readmore-${num}`).style.display = 'none';
-                                        document.getElementById(`expand-${num}`).style.display === 'block' ? document.getElementById(`expand-${num}`).style.display = 'none' : document.getElementById(`expand-${num}`).style.display = 'block';
-                                        document.getElementById(`collapse-${num}`).style.display === 'block' ? document.getElementById(`collapse-${num}`).style.display = 'none' : document.getElementById(`collapse-${num}`).style.display = 'block';
-                                    }}>
-                                    Show Less
-                                </button>
-                                {parse(decode(data.selftext_html))}
-                            </div>
-                        ];
-                    }
+                    output = data.selftext.length < 2500 ?
+                    [
+                        titleLink,
+                        <div className="text" >
+                            {parse(decode(data.selftext_html))}
+                        </div>
+                    ] :
+                    [
+                        titleLink,
+                        <div id={`long-${i}`} className="long">
+                            <div id={`readmore-${i}`} className="readmore"></div>
+                            <button
+                                id={`expand-${i}`}
+                                className="read"
+                                title="Expand the Post"
+                                style={{ display: 'block' }}
+                                onClick={({ target: { id } }) => {
+                                    let num = id.split("-")[1];
+                                    document.getElementById(`long-${num}`).style.maxHeight === '100%' ? document.getElementById(`long-${num}`).style.maxHeight = '300px' : document.getElementById(`long-${num}`).style.maxHeight = '100%';
+                                    document.getElementById(`readmore-${num}`).style.display === 'none' ? document.getElementById(`readmore-${num}`).style.display = 'block' : document.getElementById(`readmore-${num}`).style.display = 'none';
+                                    document.getElementById(`expand-${num}`).style.display === 'block' ? document.getElementById(`expand-${num}`).style.display = 'none' : document.getElementById(`expand-${num}`).style.display = 'block';
+                                    document.getElementById(`collapse-${num}`).style.display === 'block' ? document.getElementById(`collapse-${num}`).style.display = 'none' : document.getElementById(`collapse-${num}`).style.display = 'block';
+                                }}>
+                                Show More
+                            </button>
+                            <button
+                                id={`collapse-${i}`}
+                                className="read"
+                                title="Collapse the Post"
+                                style={{ display: 'none' }}
+                                onClick={({ target: { id } }) => {
+                                    let num = id.split("-")[1];
+                                    document.getElementById(`long-${num}`).style.maxHeight === '100%' ? document.getElementById(`long-${num}`).style.maxHeight = '300px' : document.getElementById(`long-${num}`).style.maxHeight = '100%';
+                                    document.getElementById(`readmore-${num}`).style.display === 'none' ? document.getElementById(`readmore-${num}`).style.display = 'block' : document.getElementById(`readmore-${num}`).style.display = 'none';
+                                    document.getElementById(`expand-${num}`).style.display === 'block' ? document.getElementById(`expand-${num}`).style.display = 'none' : document.getElementById(`expand-${num}`).style.display = 'block';
+                                    document.getElementById(`collapse-${num}`).style.display === 'block' ? document.getElementById(`collapse-${num}`).style.display = 'none' : document.getElementById(`collapse-${num}`).style.display = 'block';
+                                }}>
+                                Show Less
+                            </button>
+                            {parse(decode(data.selftext_html))}
+                        </div>
+                        ] ;
                     break;
                 } else if (!domain.startsWith("self")) {
                     switch (domain) {
@@ -327,16 +314,14 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                             ];
                             break;
                         case 'v.redd.it':
-                            if (data.media) {
-                                output = [
-                                    titleLink,
-                                    <div className="media">
-                                        <ReactPlayer controls='true' width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
-                                    </div>
-                                ];
-                            } else {
-                                output = [titleLink];
-                            }
+                            output = data.media ?
+                            [
+                                titleLink,
+                                <div className="media">
+                                    <ReactPlayer controls='true' width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
+                                </div>
+                            ] :
+                            [titleLink];
                             break;
                         case 'youtube.com':
                         case 'youtu.be':
@@ -361,13 +346,13 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                             ];
                             break;
                         default:
-                            data.thumbnail === 'default' || data.thumbnail === "" ?
-                                output = [
+                            output = data.thumbnail === 'default' || data.thumbnail === "" ?
+                                [
                                     <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
                                         {title}
                                     </a>
                                 ] :
-                                output = [
+                                [
                                     <a className="title link" href={url} target="_blank" rel="noreferrer">
                                         {title}
                                     </a>,

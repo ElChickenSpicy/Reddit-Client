@@ -75,31 +75,28 @@ export const Navbar = ({ clearSearch, fetchPosts, fetchTop, highlightActive, nav
                 <ul>
                     {navItems.map(item => {
                         let find = subredditsAbout.filter(el => el.display_name === item);
-                        if (find.length > 0) {
-                            let { display_name, icon_img, title } = find[0];
-                            let src = icon_img !== "" && icon_img !== null ? icon_img : defaultImg;
-                            title = title !== "" && title !== null ? title : { display_name };
-                            return (
-                                <Link to="/" key={display_name}>
-                                    <li
-                                        id="nav-item"
-                                        title={title}
-                                        style={highlightActive[0] === display_name ? { backgroundColor: 'rgba(211, 211, 211, 0.212)' } : { backgroundColor: 'white' }}
-                                        onClick={() => {
-                                            fetchPosts({
-                                                query: `r/${display_name}.json`,
-                                                active: display_name
-                                            })
-                                        }}
-                                    >
-                                        <img src={src} alt={display_name} />
-                                            r/{display_name}
-                                    </li>
-                                </Link>
-                            );
-                        } else {
-                            return null;
-                        }
+                        if (find.length <= 0) return null;
+                        let { display_name, icon_img, title } = find[0];
+                        let src = icon_img !== "" && icon_img !== null ? icon_img : defaultImg;
+                        title = title !== "" && title !== null ? title : { display_name };
+                        return (
+                            <Link to="/" key={display_name}>
+                                <li
+                                    id="nav-item"
+                                    title={title}
+                                    style={highlightActive[0] === display_name ? { backgroundColor: 'rgba(211, 211, 211, 0.212)' } : { backgroundColor: 'white' }}
+                                    onClick={() => {
+                                        fetchPosts({
+                                            query: `r/${display_name}.json`,
+                                            active: display_name
+                                        })
+                                    }}
+                                >
+                                    <img src={src} alt={display_name} />
+                                        r/{display_name}
+                                </li>
+                            </Link>
+                        );
                     })}
                 </ul>
             </section>
