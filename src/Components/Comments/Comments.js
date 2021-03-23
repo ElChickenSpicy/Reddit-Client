@@ -136,8 +136,8 @@ export class Comments extends React.Component {
         return (
             <div id="posts">
                 {/* The Post */}
-                {this.state.post.map(post => {
-                    return this.props.displayPost(post);
+                {this.state.post.map((post, i) => {
+                    return <div key={'Post-' + i} className="post-divider">{this.props.displayPost(post)}</div>;
                 })}
 
                 {/* Comment Navigation Options */}

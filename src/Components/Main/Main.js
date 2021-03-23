@@ -1,3 +1,4 @@
+import { useRef, useCallback } from 'react';
 import { Switch, Route, Link } from "react-router-dom";
 import { Comments } from '../Comments/Comments';
 import { decode } from 'html-entities';
@@ -6,9 +7,33 @@ import dayjs from 'dayjs';
 import defaultImg from '../../Icons/popular.webp';
 //For embedding content
 import TweetEmbed from 'react-tweet-embed'
-import ReactPlayer from 'react-player/lazy'; 
+import ReactPlayer from 'react-player/lazy';
 
-export const Main = ({ about, fetchPosts, posts, saveScrollPosition, setScrollPosition, updatePost }) => {
+export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts, hasMore, increaseDisplay, loading, posts, saveScrollPosition, setScrollPosition, updatePost }) => {
+
+    const observer = useRef();
+    const lastPostElement = useCallback(node => {
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                console.log('Visible');
+                console.log(activeSubreddit);
+                if ((displayNumber + 5) >= posts.length) {
+                    fetchPosts({
+                        query: `r/${activeSubreddit}.json?after=${after}`, 
+                        active: activeSubreddit, 
+                        view: 'hot',
+                        displayNum: displayNumber + 10, 
+                        more: true
+                    });
+                } else {
+                    increaseDisplay(10);
+                }
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [loading, hasMore, activeSubreddit]);
 
     const displayPost = (post, i) => {
         const { data: { all_awardings, author, author_flair_richtext, created_utc, num_comments, permalink, subreddit, subreddit_id, ups } } = post;
@@ -16,26 +41,20 @@ export const Main = ({ about, fetchPosts, posts, saveScrollPosition, setScrollPo
         //Does Author have a flair?
         let flair = author_flair_richtext ? author_flair_richtext.length > 0 ? author_flair_richtext[0].u ?
             <img src={author_flair_richtext[0].u} alt="Author's flair" title={author_flair_richtext[0].a} />
-            : ''
-            : ''
-            : '';
+            : '' : '' : '';
 
         //Retrieve image src and title for the subreddit's info
         const icon = about.filter(el => el.name === subreddit_id);
         let src = icon[0] ? icon[0].icon_img !== "" && icon[0].icon_img !== null ? icon[0].icon_img : defaultImg : defaultImg;
         let title = icon[0] ? icon[0].title !== "" && icon[0].title !== null ? icon[0].title : { subreddit } : { subreddit };
 
-        //Save JSX returned from the formatPost function
+        //Returned JSX
         const postOutput = formatPost(post, i);
 
         return (
-            <div className="post-divider">
+            <>
                 <div className="sub-image">
-                    <img
-                        src={src}
-                        alt={subreddit}
-                        title={title}
-                    />
+                    <img src={src} alt={subreddit} title={title} />
                 </div>
                 <article className="reddit-post" key={i}>
                     <Link to="/">
@@ -50,7 +69,6 @@ export const Main = ({ about, fetchPosts, posts, saveScrollPosition, setScrollPo
                                 }}
                             >
                                 <h3 title={title}>r/{subreddit}</h3>
-
                                 {all_awardings.length > 0 ?
                                     <div className="awards-container">
                                         {all_awardings.map(({ icon_url, name, description, count }) => {
@@ -107,17 +125,15 @@ export const Main = ({ about, fetchPosts, posts, saveScrollPosition, setScrollPo
                         <span id="posted-by">Posted by: {flair}<span id="retro">{author}</span> ~ {dayjs(dayjs.unix(created_utc)).fromNow()}</span>
                     </div>
                 </article>
-            </div>
+            </>
         );
     }
 
     //Based on post type, display it in a certain way
     const formatPost = (post, i) => {
-
         let output;
         let flex = 'column';
         let ac = 'flex-start';
-
         let { data, data: { domain, selftext, title, url } } = post;
         title = decode(title);
 
@@ -372,12 +388,7 @@ export const Main = ({ about, fetchPosts, posts, saveScrollPosition, setScrollPo
                 break;
         }
         return (
-            <div
-                key={url}
-                className="post-flex-item content"
-                id={url}
-                style={{ flexDirection: flex }}
-            >
+            <div key={url} className="post-flex-item content" id={url} style={{ flexDirection: flex }}>
                 {output}
             </div>
         );
@@ -391,7 +402,11 @@ export const Main = ({ about, fetchPosts, posts, saveScrollPosition, setScrollPo
                 <Route path="/" exact>
                     <div id="posts">
                         {posts.map((post, i) => {
-                            return displayPost(post, i)
+                            if (posts.length === i + 1) {
+                                return <div ref={lastPostElement} key={'Post-' + i} className="post-divider">{displayPost(post, i)}</div>
+                            } else {
+                                return <div key={'Post-' + i} className="post-divider">{displayPost(post, i)}</div>
+                            }
                         })}
                     </div>
                 </Route>

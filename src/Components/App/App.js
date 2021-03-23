@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import './App.css';
 import { Link } from "react-router-dom";
 import { Navbar } from '../Navbar/Navbar';
@@ -22,7 +22,8 @@ export class App extends React.Component {
       scrollPosition: [],
       after: '',
       displayNumber: 10,
-      loading: true
+      loading: true,
+      hasMore: true
     };
     this.addSubreddit = this.addSubreddit.bind(this);
     this.checkData = this.checkData.bind(this);
@@ -33,6 +34,7 @@ export class App extends React.Component {
     this.fetchTop = this.fetchTop.bind(this);
     this.getSubreddit = this.getSubreddit.bind(this);
     this.highlightActive = this.highlightActive.bind(this);
+    this.increaseDisplay = this.increaseDisplay.bind(this);
     this.makeRequest = this.makeRequest.bind(this);
     this.removeSubreddit = this.removeSubreddit.bind(this);
     this.saveScrollPosition = this.saveScrollPosition.bind(this);
@@ -58,11 +60,9 @@ export class App extends React.Component {
 
   //Fetch Reddit posts
   async fetchPosts(obj) {
-
+    console.log(obj);
     const view = obj.view || 'hot'
     const more = obj.more || false
-    const displayNum = obj.displayNum || 10
-
     const jsonResponse = await this.makeRequest(obj.query);
     const subPosts = jsonResponse.data.children.slice(0, 25);
 
@@ -71,7 +71,8 @@ export class App extends React.Component {
       activeSubreddit: obj.active,
       view: view,
       after: jsonResponse.data.after,
-      displayNumber: displayNum
+      displayNumber: more === false ? 10 : obj.displayNum,
+      hasMore: jsonResponse.data.after === null ? false : true
     });
 
     this.checkData(more);
@@ -321,6 +322,12 @@ export class App extends React.Component {
     document.getElementById(str).value = "";
   }
 
+  increaseDisplay(i) {
+    this.setState(prevState => ({
+      displayNumber: prevState.displayNumber + i
+    }));
+  }
+
   componentDidMount() {
     this.fetchPosts({
       query: 'r/popular.json', 
@@ -346,31 +353,18 @@ export class App extends React.Component {
         />
         <Main
           about={this.state.subredditsAbout}
+          activeSubreddit={this.state.activeSubreddit}
+          after={this.state.after}
+          displayNumber={this.state.displayNumber}
+          hasMore={this.state.hasMore}
           fetchPosts={this.fetchPosts}
+          increaseDisplay={this.increaseDisplay}
+          loading={this.state.loading}
           posts={this.state.posts.slice(0, this.state.displayNumber)}
           saveScrollPosition={this.saveScrollPosition}
           setScrollPosition={this.setScrollPosition}
           updatePost={this.updatePost}
         />
-        <button 
-          id="trial" 
-          onClick={() => {
-            this.setState(prevState => ({
-              displayNumber: prevState.displayNumber + 10
-            }));
-            if ((this.state.displayNumber + 10) >= this.state.posts.length) {
-              this.fetchPosts({
-                query: `r/${this.state.activeSubreddit}.json?after=${this.state.after}`, 
-                active: this.state.activeSubreddit, 
-                view: 'hot', 
-                more: true,
-                displayNum: this.state.displayNumber
-              });
-            }
-          }}
-        >
-          Click Me
-        </button>
         <Options
           activeSubreddit={this.state.activeSubreddit}
           addSubreddit={this.addSubreddit}
