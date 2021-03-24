@@ -28,7 +28,7 @@ export const Options = ({ activeSubreddit, addSubreddit, clearSearch, fetchAbout
                         </div>
                         <div className="subs-BG"></div>
                     </div>
-                    <ul>
+                    <ul className="SSul">
                         {top.map(({ data: { display_name, icon_img, title } }) => {
                             const src = icon_img || defaultImg;
                             title = title || display_name;

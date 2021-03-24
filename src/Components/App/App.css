@@ -561,12 +561,10 @@ i span {
   justify-content: flex-start;
   align-items: center;
   flex: 1;
-  flex-flow: column wrap;
   width: 100%;
   margin-top: 20px;
   border-radius: 6px;
   margin-bottom: 20px;
-  overflow-y: auto;
   background-color: white;
 }
 
@@ -586,6 +584,14 @@ i span {
   box-sizing: border-box;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
+}
+
+.SSul {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow-y: auto;
 }
 
 .subs-BG {

@@ -9,7 +9,9 @@ import defaultImg from '../../Icons/popular.webp';
 import TweetEmbed from 'react-tweet-embed'
 import ReactPlayer from 'react-player/lazy';
 
-export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts, hasMore, increaseDisplay, loading, posts, saveScrollPosition, setScrollPosition, updatePost }) => {
+export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts, hasMore, increaseDisplay, loading, posts, saveScrollPosition, setScrollPosition, updatePost, view }) => {
+
+    let postsToDisplay = posts.slice(0, displayNumber);
 
     const observer = useRef();
     const lastPostElement = useCallback(node => {
@@ -17,18 +19,18 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting && hasMore) {
-                if ((displayNumber + 5) < posts.length) return increaseDisplay(10);
+                if ((displayNumber + 10) <= posts.length) return increaseDisplay(10);
                 fetchPosts({
                     query: `r/${activeSubreddit}.json?after=${after}`, 
                     active: activeSubreddit, 
-                    view: 'hot',
+                    view,
                     displayNum: displayNumber + 10, 
                     more: true
                 });
             }
         });
         if (node) observer.current.observe(node);
-    }, [loading, hasMore, activeSubreddit]);
+    }, [loading, hasMore, activeSubreddit, view, displayNumber]);
 
     const displayPost = (post, i) => {
         const { data: { all_awardings, author, author_flair_richtext, created_utc, num_comments, permalink, subreddit, subreddit_id, ups } } = post;
@@ -152,7 +154,7 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                         [
                             titleLink,
                             <div className="media">
-                                <ReactPlayer controls='true' width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                                <ReactPlayer controls width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
                             </div>
                         ] ;
                         break;
@@ -162,7 +164,7 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                         [
                             titleLink,
                             <div className="media">
-                                <ReactPlayer controls='true' width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                                <ReactPlayer controls width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
                             </div>
                         ] :
                         [
@@ -177,7 +179,7 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                         output = [
                             titleLink,
                             <div className="media">
-                                <ReactPlayer controls='true' width="1040px" height="590px" url={url} />
+                                <ReactPlayer controls width="1040px" height="590px" url={url} />
                             </div>
                         ];
                         break;
@@ -219,7 +221,7 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                 output = [
                     titleLink,
                     <div className="media">
-                        <ReactPlayer controls='true' width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
+                        <ReactPlayer controls width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
                     </div>
                 ];
                 break;
@@ -233,7 +235,7 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                         output = [
                             titleLink,
                             <div className="media">
-                                <ReactPlayer controls='true' width="1040px" height="590px" url={url} />
+                                <ReactPlayer controls width="1040px" height="590px" url={url} />
                             </div>
                         ];
                         break;
@@ -249,7 +251,7 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                         output = [
                             titleLink,
                             <div className="media">
-                                <ReactPlayer controls='true' width="1040px" height="590px" url={url} />
+                                <ReactPlayer controls width="1040px" height="590px" url={url} />
                             </div>
                         ];
                 }
@@ -316,7 +318,7 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                             [
                                 titleLink,
                                 <div className="media">
-                                    <ReactPlayer controls='true' width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
+                                    <ReactPlayer controls width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
                                 </div>
                             ] :
                             [titleLink];
@@ -331,7 +333,7 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                             output = [
                                 titleLink,
                                 <div className="media">
-                                    <ReactPlayer controls='true' width="1040px" height="590px" url={url} />
+                                    <ReactPlayer controls width="1040px" height="590px" url={url} />
                                 </div>
                             ];
                             break;
@@ -384,8 +386,8 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
             <Switch>
                 <Route path="/" exact>
                     <div id="posts">
-                        {posts.map((post, i) => {
-                            if (posts.length === i + 1) {
+                        {postsToDisplay.map((post, i) => {
+                            if (postsToDisplay.length === i + 1) {
                                 return <div ref={lastPostElement} key={'Post-' + i} className="post-divider">{displayPost(post, i)}</div>
                             } else {
                                 return <div key={'Post-' + i} className="post-divider">{displayPost(post, i)}</div>
@@ -395,8 +397,8 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                 </Route>
                 <Route path="/Comments/:id" render={routeProps =>
                     <Comments
-                        rp={routeProps}
                         displayPost={displayPost}
+                        rp={routeProps}
                         setScrollPosition={setScrollPosition}
                         updatePost={updatePost}
                     />

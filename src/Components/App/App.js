@@ -58,21 +58,17 @@ export class App extends React.Component {
     }
   }
 
-  //Fetch Reddit posts
   async fetchPosts(obj) {
-    console.log(obj);
     const view = obj.view || 'hot'
     const more = obj.more || false
-    const jsonResponse = await this.makeRequest(obj.query);
-    const subPosts = jsonResponse.data.children.slice(0, 25);
-
+    const { data, data: { children: subPosts }} = await this.makeRequest(obj.query);
     this.setState({
-      posts: more ? [...this.state.posts, ...subPosts] : subPosts,
+      posts: more === false ? subPosts : [...this.state.posts, ...subPosts],
       activeSubreddit: obj.active,
-      view,
-      after: jsonResponse.data.after,
-      displayNumber: more ? obj.displayNum : 10,
-      hasMore: jsonResponse.data.after === null ? false : true
+      view: view,
+      after: data.after,
+      displayNumber: more === false ? 10 : obj.displayNum,
+      hasMore: data.after === null ? false : true
     });
 
     this.checkData(more);
@@ -100,7 +96,8 @@ export class App extends React.Component {
       let exists = this.state.subredditsAbout.filter(el => el.display_name === sub);
       if (exists.length === 0) {
         const jsonResponse = await this.makeRequest(`r/${sub}/about/.json`);
-        const subreddit = jsonResponse.data;
+        const subreddit = jsonResponse?.data ?? 'Not Found';
+        if (subreddit === 'Not Found') return;
         this.setState({ subredditsAbout: [...this.state.subredditsAbout, subreddit] }); 
       }
     });
@@ -108,8 +105,7 @@ export class App extends React.Component {
 
   //Return the about data of the given subreddit
   async fetchAbout(post) {
-    const jsonResponse = await this.makeRequest(`r/${post}/about/.json`);
-    const subreddit = jsonResponse.data;
+    const { data: subreddit } = await this.makeRequest(`r/${post}/about/.json`);
 
     //Add element if empty, otherwise check if it exists
     if (this.state.subredditsAbout.length <= 0) {
@@ -126,19 +122,17 @@ export class App extends React.Component {
 
   //Fetch the top 10 subreddits
   async fetchTop() {
-    const jsonResponse = await this.makeRequest('subreddits/.json');
-    let topSubs = jsonResponse.data.children.slice(0, 11);
+    const { data: { children: topSubs }} = await this.makeRequest('subreddits/.json');
 
-    //Remove the 1st element, as it is r/Home (bug on Reddit's side)
+    //Remove the 1st element, as its r/Home (bug on Reddit's side)
     topSubs.shift();
-    this.setState({ top: topSubs, searchTerm: 'Top Subreddits' });
+    this.setState({ top: topSubs.slice(0, 11), searchTerm: 'Top Subreddits' });
   }
 
   //Search subreddits with a query
   async searchSubs(query, str) {
-    const jsonResponse = await this.makeRequest(query);
-    const searchPosts = jsonResponse.data.children.slice(0, 8);
-    this.setState({ top: searchPosts, searchTerm: `${str}...` });
+    const { data: { children: searchPosts }} = await this.makeRequest(query);
+    this.setState({ top: searchPosts.slice(0, 8), searchTerm: `${str}...` });
   }
 
   //Alert if search r/all by new
@@ -251,7 +245,7 @@ export class App extends React.Component {
         <div className="active-subreddit">
           <h3>Current Subreddit</h3>
           <div className="add-remove">
-            {included ?
+            {included === true ?
               <i className="far fa-minus-square" title="Remove this subreddit from your Navigation Bar" style={{ order: '1' }} onClick={() => this.removeSubreddit(display_name)}></i> :
               <i className="far fa-plus-square" title="Add this subreddit to your Navigation Bar" style={{ order: '1' }} onClick={() => this.addSubreddit(display_name)}></i>
             }
@@ -266,18 +260,10 @@ export class App extends React.Component {
     );
   }
 
-  //Highlight active subreddit in Nav bar
   highlightActive() {
-    let selected = [];
-    this.state.nav.forEach(item => {
-      if (this.state.activeSubreddit === item) {
-        selected.push(item);
-      }
-    })
-    return selected;
+    return this.state.nav.filter(item => item === this.state.activeSubreddit) 
   }
 
-  //Add to Nav bar
   addSubreddit(sub) {
     let newNav = this.state.nav;
     const included = newNav.includes(sub);
@@ -288,7 +274,6 @@ export class App extends React.Component {
     this.setState({ nav: newNav });
   }
 
-  //Remove from Nav bar
   removeSubreddit(sub) {
     let newNav = this.state.nav;
     newNav = newNav.filter(nav => nav !== sub);
@@ -356,10 +341,11 @@ export class App extends React.Component {
           fetchPosts={this.fetchPosts}
           increaseDisplay={this.increaseDisplay}
           loading={this.state.loading}
-          posts={this.state.posts.slice(0, this.state.displayNumber)}
+          posts={this.state.posts}
           saveScrollPosition={this.saveScrollPosition}
           setScrollPosition={this.setScrollPosition}
           updatePost={this.updatePost}
+          view={this.state.view}
         />
         <Options
           activeSubreddit={this.state.activeSubreddit}
