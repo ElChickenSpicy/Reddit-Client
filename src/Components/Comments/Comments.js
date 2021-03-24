@@ -84,8 +84,8 @@ export class Comments extends React.Component {
                 <h2
                     className="username"
                     onClick={() => { this.toggleFirstHidden(comment) }}
-                    style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
-                    title={is_submitter === true ? 'This user is the Original Poster' : ''}>
+                    style={is_submitter ? { color: "dodgerblue" } : { color: "black" }}
+                    title={is_submitter ? 'This user is the Original Poster' : ''}>
                     u/{author}
                     <span id="comment-time">
                         ~ {dayjs(dayjs.unix(created_utc)).fromNow()}
@@ -195,26 +195,26 @@ export class Comments extends React.Component {
                                     replies.data.children.slice(0, replies.data.children.length - 1).map(reply => {
 
                                         //Object destructuring
-                                        const { kind: r_kind, data: { author: r_author, collapsed: r_collapsed, id: r_id, is_submitter: r_is_submitter, replies: r_replies} } = reply;
+                                        const { kind, data: { author, collapsed, id, is_submitter, replies } } = reply;
                                         return (
                                             //Check that type isn't 'more', and collapsed status
-                                            r_kind === 'more' ? '' :
-                                            r_collapsed === false ?
-                                                <div className="first-reply-layer" key={r_id}>
+                                            kind === 'more' ? '' :
+                                            collapsed === false ?
+                                                <div className="first-reply-layer" key={id}>
                                                     {/* Pass each reply to JSX generator */}
                                                     {this.getCommentJSX(reply).map(el => el)}
 
                                                     {/* Are there any replies? */}
-                                                    {!r_replies.data ? '' :
-                                                    r_replies.data.children.length <= 1 ? '' :
-                                                    r_replies.data.children.slice(0, r_replies.data.children.length - 1).map(secondLayer => {
+                                                    {!replies.data ? '' :
+                                                    replies.data.children.length <= 1 ? '' :
+                                                    replies.data.children.slice(0, replies.data.children.length - 1).map(secondLayer => {
 
                                                         //Object destructuring
-                                                        const { kind: s_kind, id: s_id } = secondLayer;
+                                                        const { kind, id } = secondLayer;
                                                         return (
                                                             //Ensure the reply kind is not 'more'
-                                                            s_kind === 'more' ? '' :
-                                                                <div className="second-reply-layer" key={s_id}>
+                                                            kind === 'more' ? '' :
+                                                                <div className="second-reply-layer" key={id}>
                                                                     {/* Pass each reply to JSX generator */}
                                                                     {this.getCommentJSX(secondLayer)}
                                                                 </div>
@@ -222,12 +222,12 @@ export class Comments extends React.Component {
                                                     })}
                                                 </div> :
                                                 //If the collapsed property is set to true, hide the reply and its children
-                                                <div className="first-reply-layer" key={r_id} onClick={() => { this.toggleSecondHidden(comment, reply) }}>
+                                                <div className="first-reply-layer" key={id} onClick={() => { this.toggleSecondHidden(comment, reply) }}>
                                                     <h2
                                                     className="username"
-                                                    style={r_is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
-                                                    title={r_is_submitter === true ? 'This user is the Original Poster' : ''}>
-                                                        u/{r_author}
+                                                    style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
+                                                    title={is_submitter === true ? 'This user is the Original Poster' : ''}>
+                                                        u/{author}
                                                     </h2>
                                                     <p>...</p>
                                                 </div>

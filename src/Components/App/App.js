@@ -67,11 +67,11 @@ export class App extends React.Component {
     const subPosts = jsonResponse.data.children.slice(0, 25);
 
     this.setState({
-      posts: more === false ? subPosts : [...this.state.posts, ...subPosts],
+      posts: more ? [...this.state.posts, ...subPosts] : subPosts,
       activeSubreddit: obj.active,
-      view: view,
+      view,
       after: jsonResponse.data.after,
-      displayNumber: more === false ? 10 : obj.displayNum,
+      displayNumber: more ? obj.displayNum : 10,
       hasMore: jsonResponse.data.after === null ? false : true
     });
 
@@ -251,7 +251,7 @@ export class App extends React.Component {
         <div className="active-subreddit">
           <h3>Current Subreddit</h3>
           <div className="add-remove">
-            {included === true ?
+            {included ?
               <i className="far fa-minus-square" title="Remove this subreddit from your Navigation Bar" style={{ order: '1' }} onClick={() => this.removeSubreddit(display_name)}></i> :
               <i className="far fa-plus-square" title="Add this subreddit to your Navigation Bar" style={{ order: '1' }} onClick={() => this.addSubreddit(display_name)}></i>
             }

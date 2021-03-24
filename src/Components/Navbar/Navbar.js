@@ -77,8 +77,8 @@ export const Navbar = ({ clearSearch, fetchPosts, fetchTop, highlightActive, nav
                         let find = subredditsAbout.filter(el => el.display_name === item);
                         if (find.length <= 0) return null;
                         let { display_name, icon_img, title } = find[0];
-                        let src = icon_img !== "" && icon_img !== null ? icon_img : defaultImg;
-                        title = title !== "" && title !== null ? title : { display_name };
+                        let src = icon_img || defaultImg;
+                        title = title || display_name;
                         return (
                             <Link to="/" key={display_name}>
                                 <li

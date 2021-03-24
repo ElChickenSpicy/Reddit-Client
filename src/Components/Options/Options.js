@@ -30,8 +30,8 @@ export const Options = ({ activeSubreddit, addSubreddit, clearSearch, fetchAbout
                     </div>
                     <ul>
                         {top.map(({ data: { display_name, icon_img, title } }) => {
-                            const src = icon_img === "" || icon_img === null ? defaultImg : icon_img;
-                            title = title === "" || title === null ? { display_name } : title;
+                            const src = icon_img || defaultImg;
+                            title = title || display_name;
                             return (
                                 <div className="returnedLI" key={display_name}>
                                     <div className="add-to-nav">

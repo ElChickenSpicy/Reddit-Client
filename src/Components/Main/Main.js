@@ -39,10 +39,8 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
 
         //Retrieve image src and title for the subreddit's info
         const icon = about.filter(el => el.name === subreddit_id);
-        let src = icon?.[0]?.icon_img;
-        src = [undefined, "", null].includes(src) ? defaultImg : src;
-        let title = icon?.[0]?.title;
-        title = [undefined, "", null].includes(title) ? subreddit : title;
+        let src = icon?.[0]?.icon_img || defaultImg;
+        let title = icon?.[0]?.title || subreddit;
 
         //Returned JSX
         const postOutput = formatPost(post, i);
