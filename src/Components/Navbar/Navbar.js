@@ -4,11 +4,9 @@ import defaultImg from '../../Icons/popular.webp';
 import retroSearch from '../../Icons/retro-Search.png';
 import heart from '../../Icons/heart.webp';
 
-export const Navbar = ({ clearSearch, fetchPosts, fetchTop, highlightActive, navItems, subredditsAbout }) => {
-
-    const name ='Retro';
+export const Navbar = ({ clearSearch, fetchPosts, fetchTopSubreddits, highlightActive, navItems, subredditsAbout }) => {
+    const name = 'Retro';
     const colors = ['#ff2941', '#fe18d3', '#4206f1', '#74ee15', '#4deeea'];
-
     return (
         <nav>
             <section className="branding">
@@ -40,7 +38,7 @@ export const Navbar = ({ clearSearch, fetchPosts, fetchTop, highlightActive, nav
                             query: 'r/popular.json',
                             active: 'popular'
                         });
-                        fetchTop();
+                        fetchTopSubreddits();
                     }}
                 >
                     <img

@@ -81,16 +81,6 @@ a:link, a:visited {
 }
 
 @font-face {
-  font-family: 'Circular Std Medium Italic';
-  src: local('Circular Std Medium Italic'), local('Circular-Std-Medium-Italic'),
-      url('../../Fonts/CircularStd-MediumItalic.woff2') format('woff2'),
-      url('../../Fonts/CircularStd-MediumItalic.woff') format('woff'),
-      url('../../Fonts/CircularStd-MediumItalic.ttf') format('truetype');
-  font-weight: 500;
-  font-style: italic;
-}
-
-@font-face {
   font-family: 'Circular Std Book';
   src: local('Circular Std Book'), local('Circular-Std-Book'),
       url('../../Fonts/CircularStd-Book.woff2') format('woff2'),
@@ -121,16 +111,6 @@ a:link, a:visited {
 }
 
 @font-face {
-  font-family: 'Circular Std Bold Italic';
-  src: local('Circular Std Bold Italic'), local('Circular-Std-Bold-Italic'),
-      url('../../Fonts/CircularStd-BoldItalic.woff2') format('woff2'),
-      url('../../Fonts/CircularStd-BoldItalic.woff') format('woff'),
-      url('../../Fonts/CircularStd-BoldItalic.ttf') format('truetype');
-  font-weight: 700;
-  font-style: italic;
-}
-
-@font-face {
   font-family: 'Circular Std Black';
   src: local('Circular Std Black'), local('Circular-Std-Black'),
       url('../../Fonts/CircularStd-Black.woff2') format('woff2'),
@@ -138,16 +118,6 @@ a:link, a:visited {
       url('../../Fonts/CircularStd-Black.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
-}
-
-@font-face {
-  font-family: 'Circular Std Black Italic';
-  src: local('Circular Std Black Italic'), local('Circular-Std-Black-Italic'),
-      url('../../Fonts/CircularStd-BlackItalic.woff2') format('woff2'),
-      url('../../Fonts/CircularStd-BlackItalic.woff') format('woff'),
-      url('../../Fonts/CircularStd-BlackItalic.ttf') format('truetype');
-  font-weight: 900;
-  font-style: italic;
 }
 
 @font-face {
@@ -179,16 +149,6 @@ a:link, a:visited {
   background-image: url('../../Icons/2.webp');
   background-size: 27%;
   background-repeat: repeat;
-}
-
-#trial {
-  position: fixed;
-  bottom: 0px;
-  height: 40px;
-  width: 80px;
-  color: red;
-  border: 4px solid blue;
-  cursor: pointer;
 }
 
 .loading {

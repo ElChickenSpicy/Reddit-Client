@@ -21,10 +21,10 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
             if (entries[0].isIntersecting && hasMore) {
                 if ((displayNumber + 10) <= posts.length) return increaseDisplay(10);
                 fetchPosts({
-                    query: `r/${activeSubreddit}.json?after=${after}`, 
-                    active: activeSubreddit, 
+                    query: `r/${activeSubreddit}.json?after=${after}`,
+                    active: activeSubreddit,
                     view,
-                    displayNum: displayNumber + 10, 
+                    displayNum: displayNumber + 10,
                     more: true
                 });
             }
@@ -43,9 +43,6 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
         const icon = about.filter(el => el.name === subreddit_id);
         let src = icon?.[0]?.icon_img || defaultImg;
         let title = icon?.[0]?.title || subreddit;
-
-        //Returned JSX
-        const postOutput = formatPost(post, i);
         return (
             <>
                 <div className="sub-image">
@@ -54,15 +51,7 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                 <article className="reddit-post" key={i}>
                     <Link to="/">
                         <div className="post-flex-item sub">
-                            <div
-                                className="subreddit-data"
-                                onClick={() => {
-                                    fetchPosts({
-                                        query: `r/${subreddit}.json`,
-                                        active: subreddit
-                                    })
-                                }}
-                            >
+                            <div className="subreddit-data" onClick={() => fetchPosts({ query: `r/${subreddit}.json`, active: subreddit })}>
                                 <h3 title={title}>r/{subreddit}</h3>
                                 {all_awardings.length > 0 ?
                                     <div className="awards-container">
@@ -74,7 +63,7 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                             </div>
                         </div>
                     </Link>
-                    {postOutput}
+                    {formatPost(post, i)}
                     <div className="post-flex-item options">
                         <div className="voting-buttons">
                             <div className="upvote">
@@ -124,7 +113,6 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
         );
     }
 
-    //Based on post type, display it in a certain way
     const formatPost = (post, i) => {
         let output;
         let flex = 'column';
@@ -138,41 +126,40 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                 {title}
             </a>;
 
-        //Switch post_hint property
         switch (data.post_hint) {
             //Link
             case 'link':
                 switch (domain) {
                     case 'gfycat.com':
-                        output = data.media_embed.content ? 
-                        [
-                            titleLink,
-                            <div className="media">
-                                {parse(decode(data.media_embed.content))}
-                            </div>
-                        ] :
-                        [
-                            titleLink,
-                            <div className="media">
-                                <ReactPlayer controls width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
-                            </div>
-                        ] ;
+                        output = data.media_embed.content ?
+                            [
+                                titleLink,
+                                <div className="media">
+                                    {parse(decode(data.media_embed.content))}
+                                </div>
+                            ] :
+                            [
+                                titleLink,
+                                <div className="media">
+                                    <ReactPlayer controls width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                                </div>
+                            ];
                         break;
                     case 'i.imgur.com':
                     case 'imgur.com':
                         output = data.preview.reddit_video_preview ?
-                        [
-                            titleLink,
-                            <div className="media">
-                                <ReactPlayer controls width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
-                            </div>
-                        ] :
-                        [
-                            titleLink,
-                            <div className="media">
-                                <img className="thumbnail" src={data.thumbnail} alt={title} />
-                            </div>
-                        ] ;
+                            [
+                                titleLink,
+                                <div className="media">
+                                    <ReactPlayer controls width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                                </div>
+                            ] :
+                            [
+                                titleLink,
+                                <div className="media">
+                                    <img className="thumbnail" src={data.thumbnail} alt={title} />
+                                </div>
+                            ];
                         break;
                     case 'vimeo':
                     case 'streamable.com':
@@ -185,17 +172,17 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                         break;
                     default:
                         output = data.thumbnail === 'default' ?
-                        [
-                            <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
-                                {title}
-                            </a>
-                        ] :
-                        [
-                            titleLink,
-                            <div className="media">
-                                <img className="thumbnail" src={data.thumbnail} alt={title} />
-                            </div>
-                        ] ;
+                            [
+                                <a className="title link oneliner" href={url} target="_blank" rel="noreferrer">
+                                    {title}
+                                </a>
+                            ] :
+                            [
+                                titleLink,
+                                <div className="media">
+                                    <img className="thumbnail" src={data.thumbnail} alt={title} />
+                                </div>
+                            ];
                 }
                 break;
             //Image
@@ -260,47 +247,47 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
             case undefined:
                 if (selftext !== "") {
                     output = data.selftext.length < 2500 ?
-                    [
-                        titleLink,
-                        <div className="text" >
-                            {parse(decode(data.selftext_html))}
-                        </div>
-                    ] :
-                    [
-                        titleLink,
-                        <div id={`long-${i}`} className="long">
-                            <div id={`readmore-${i}`} className="readmore"></div>
-                            <button
-                                id={`expand-${i}`}
-                                className="read"
-                                title="Expand the Post"
-                                style={{ display: 'block' }}
-                                onClick={({ target: { id } }) => {
-                                    let num = id.split("-")[1];
-                                    document.getElementById(`long-${num}`).style.maxHeight === '100%' ? document.getElementById(`long-${num}`).style.maxHeight = '300px' : document.getElementById(`long-${num}`).style.maxHeight = '100%';
-                                    document.getElementById(`readmore-${num}`).style.display === 'none' ? document.getElementById(`readmore-${num}`).style.display = 'block' : document.getElementById(`readmore-${num}`).style.display = 'none';
-                                    document.getElementById(`expand-${num}`).style.display === 'block' ? document.getElementById(`expand-${num}`).style.display = 'none' : document.getElementById(`expand-${num}`).style.display = 'block';
-                                    document.getElementById(`collapse-${num}`).style.display === 'block' ? document.getElementById(`collapse-${num}`).style.display = 'none' : document.getElementById(`collapse-${num}`).style.display = 'block';
-                                }}>
-                                Show More
+                        [
+                            titleLink,
+                            <div className="text" >
+                                {parse(decode(data.selftext_html))}
+                            </div>
+                        ] :
+                        [
+                            titleLink,
+                            <div id={`long-${i}`} className="long">
+                                <div id={`readmore-${i}`} className="readmore"></div>
+                                <button
+                                    id={`expand-${i}`}
+                                    className="read"
+                                    title="Expand the Post"
+                                    style={{ display: 'block' }}
+                                    onClick={({ target: { id } }) => {
+                                        let num = id.split("-")[1];
+                                        document.getElementById(`long-${num}`).style.maxHeight === '100%' ? document.getElementById(`long-${num}`).style.maxHeight = '300px' : document.getElementById(`long-${num}`).style.maxHeight = '100%';
+                                        document.getElementById(`readmore-${num}`).style.display === 'none' ? document.getElementById(`readmore-${num}`).style.display = 'block' : document.getElementById(`readmore-${num}`).style.display = 'none';
+                                        document.getElementById(`expand-${num}`).style.display === 'block' ? document.getElementById(`expand-${num}`).style.display = 'none' : document.getElementById(`expand-${num}`).style.display = 'block';
+                                        document.getElementById(`collapse-${num}`).style.display === 'block' ? document.getElementById(`collapse-${num}`).style.display = 'none' : document.getElementById(`collapse-${num}`).style.display = 'block';
+                                    }}>
+                                    Show More
                             </button>
-                            <button
-                                id={`collapse-${i}`}
-                                className="read"
-                                title="Collapse the Post"
-                                style={{ display: 'none' }}
-                                onClick={({ target: { id } }) => {
-                                    let num = id.split("-")[1];
-                                    document.getElementById(`long-${num}`).style.maxHeight === '100%' ? document.getElementById(`long-${num}`).style.maxHeight = '300px' : document.getElementById(`long-${num}`).style.maxHeight = '100%';
-                                    document.getElementById(`readmore-${num}`).style.display === 'none' ? document.getElementById(`readmore-${num}`).style.display = 'block' : document.getElementById(`readmore-${num}`).style.display = 'none';
-                                    document.getElementById(`expand-${num}`).style.display === 'block' ? document.getElementById(`expand-${num}`).style.display = 'none' : document.getElementById(`expand-${num}`).style.display = 'block';
-                                    document.getElementById(`collapse-${num}`).style.display === 'block' ? document.getElementById(`collapse-${num}`).style.display = 'none' : document.getElementById(`collapse-${num}`).style.display = 'block';
-                                }}>
-                                Show Less
+                                <button
+                                    id={`collapse-${i}`}
+                                    className="read"
+                                    title="Collapse the Post"
+                                    style={{ display: 'none' }}
+                                    onClick={({ target: { id } }) => {
+                                        let num = id.split("-")[1];
+                                        document.getElementById(`long-${num}`).style.maxHeight === '100%' ? document.getElementById(`long-${num}`).style.maxHeight = '300px' : document.getElementById(`long-${num}`).style.maxHeight = '100%';
+                                        document.getElementById(`readmore-${num}`).style.display === 'none' ? document.getElementById(`readmore-${num}`).style.display = 'block' : document.getElementById(`readmore-${num}`).style.display = 'none';
+                                        document.getElementById(`expand-${num}`).style.display === 'block' ? document.getElementById(`expand-${num}`).style.display = 'none' : document.getElementById(`expand-${num}`).style.display = 'block';
+                                        document.getElementById(`collapse-${num}`).style.display === 'block' ? document.getElementById(`collapse-${num}`).style.display = 'none' : document.getElementById(`collapse-${num}`).style.display = 'block';
+                                    }}>
+                                    Show Less
                             </button>
-                            {parse(decode(data.selftext_html))}
-                        </div>
-                        ] ;
+                                {parse(decode(data.selftext_html))}
+                            </div>
+                        ];
                     break;
                 } else if (!domain.startsWith("self")) {
                     switch (domain) {
@@ -315,13 +302,13 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                             break;
                         case 'v.redd.it':
                             output = data.media ?
-                            [
-                                titleLink,
-                                <div className="media">
-                                    <ReactPlayer controls width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
-                                </div>
-                            ] :
-                            [titleLink];
+                                [
+                                    titleLink,
+                                    <div className="media">
+                                        <ReactPlayer controls width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
+                                    </div>
+                                ] :
+                                [titleLink];
                             break;
                         case 'youtube.com':
                         case 'youtu.be':

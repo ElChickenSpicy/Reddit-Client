@@ -26,13 +26,13 @@ export class App extends React.Component {
       hasMore: true
     };
     this.addSubreddit = this.addSubreddit.bind(this);
-    this.checkData = this.checkData.bind(this);
+    this.checkDataExists = this.checkDataExists.bind(this);
     this.clearSearch = this.clearSearch.bind(this);
-    this.fetchAbout = this.fetchAbout.bind(this);
-    this.fetchNavSubs = this.fetchNavSubs.bind(this);
+    this.fetchAboutData = this.fetchAboutData.bind(this);
+    this.fetchNavbarSubs = this.fetchNavbarSubs.bind(this);
     this.fetchPosts = this.fetchPosts.bind(this);
-    this.fetchTop = this.fetchTop.bind(this);
-    this.getSubreddit = this.getSubreddit.bind(this);
+    this.fetchTopSubreddits = this.fetchTopSubreddits.bind(this);
+    this.getCurrentSubreddit = this.getCurrentSubreddit.bind(this);
     this.highlightActive = this.highlightActive.bind(this);
     this.increaseDisplay = this.increaseDisplay.bind(this);
     this.makeRequest = this.makeRequest.bind(this);
@@ -71,16 +71,16 @@ export class App extends React.Component {
       hasMore: data.after === null ? false : true
     });
 
-    this.checkData(more);
+    this.checkDataExists(more);
   }
 
-  checkData(more) {
+  checkDataExists(more) {
     this.state.posts.forEach(({ data: { subreddit, subreddit_id } }) => {
       let exists = this.state.subredditsAbout.filter(({ name }) => {
         return name === subreddit_id;
       });
       if (exists.length === 0) {
-        this.fetchAbout(subreddit);
+        this.fetchAboutData(subreddit);
       }
     });
 
@@ -90,7 +90,7 @@ export class App extends React.Component {
   }
 
   //Fecth the subreddit data of each sub in Nav
-  fetchNavSubs(arr) {
+  fetchNavbarSubs(arr) {
     arr.forEach(async sub => {
       //If already captured, don't make request
       let exists = this.state.subredditsAbout.filter(el => el.display_name === sub);
@@ -104,7 +104,7 @@ export class App extends React.Component {
   }
 
   //Return the about data of the given subreddit
-  async fetchAbout(post) {
+  async fetchAboutData(post) {
     const { data: subreddit } = await this.makeRequest(`r/${post}/about/.json`);
 
     //Add element if empty, otherwise check if it exists
@@ -121,7 +121,7 @@ export class App extends React.Component {
   }
 
   //Fetch the top 10 subreddits
-  async fetchTop() {
+  async fetchTopSubreddits() {
     const { data: { children: topSubs }} = await this.makeRequest('subreddits/.json');
 
     //Remove the 1st element, as its r/Home (bug on Reddit's side)
@@ -157,7 +157,7 @@ export class App extends React.Component {
   }
 
   //Data and JSX for the Top right menu (current position view)
-  getSubreddit(name) {
+  getCurrentSubreddit(name) {
     //Resusable JSX element
     const view =
       <div className="change-view">
@@ -238,14 +238,12 @@ export class App extends React.Component {
     //Get subreddit data and display
     const active = this.state.subredditsAbout.filter(el => name === el.display_name);
     const { accounts_active, display_name, public_description, subscribers } = active[0];
-    //Is the subreddit included in the Navbar?
-    let included = this.state.nav.includes(display_name);
     return (
       <section className="current-view">
         <div className="active-subreddit">
           <h3>Current Subreddit</h3>
           <div className="add-remove">
-            {included === true ?
+            {this.state.nav.includes(display_name) ?
               <i className="far fa-minus-square" title="Remove this subreddit from your Navigation Bar" style={{ order: '1' }} onClick={() => this.removeSubreddit(display_name)}></i> :
               <i className="far fa-plus-square" title="Add this subreddit to your Navigation Bar" style={{ order: '1' }} onClick={() => this.addSubreddit(display_name)}></i>
             }
@@ -261,23 +259,17 @@ export class App extends React.Component {
   }
 
   highlightActive() {
-    return this.state.nav.filter(item => item === this.state.activeSubreddit) 
+    return this.state.nav.filter(item => item === this.state.activeSubreddit);
   }
 
   addSubreddit(sub) {
-    let newNav = this.state.nav;
-    const included = newNav.includes(sub);
-    if (included === false) {
-      this.fetchAbout(sub);
-    }
-    newNav.push(sub);
-    this.setState({ nav: newNav });
+    const included = this.state.nav.includes(sub);
+    if (included === false) this.fetchAboutData(sub);
+    this.setState(prevState => ({ nav: [...prevState.nav, sub] }));
   }
 
   removeSubreddit(sub) {
-    let newNav = this.state.nav;
-    newNav = newNav.filter(nav => nav !== sub);
-    this.setState({ nav: newNav });
+    this.setState(prevState => ({ nav: prevState.nav.filter(item => item !== sub) }));
   }
 
   //Update each post with the latest data
@@ -314,8 +306,8 @@ export class App extends React.Component {
       query: 'r/popular.json', 
       active: 'popular'
     })
-    this.fetchTop();
-    this.fetchNavSubs(this.state.nav);
+    this.fetchTopSubreddits();
+    this.fetchNavbarSubs(this.state.nav);
     this.highlightActive();
   }
 
@@ -327,7 +319,7 @@ export class App extends React.Component {
         <Navbar
           clearSearch={this.clearSearch}
           fetchPosts={this.fetchPosts}
-          fetchTop={this.fetchTop}
+          fetchTopSubreddits={this.fetchTopSubreddits}
           highlightActive={this.highlightActive()}
           navItems={this.state.nav}
           subredditsAbout={this.state.subredditsAbout}
@@ -351,10 +343,10 @@ export class App extends React.Component {
           activeSubreddit={this.state.activeSubreddit}
           addSubreddit={this.addSubreddit}
           clearSearch={this.clearSearch}
-          fetchAbout={this.fetchAbout}
+          fetchAboutData={this.fetchAboutData}
           fetchPosts={this.fetchPosts}
-          fetchTop={this.fetchTop}
-          getSubreddit={this.getSubreddit}
+          fetchTopSubreddits={this.fetchTopSubreddits}
+          getCurrentSubreddit={this.getCurrentSubreddit}
           nav={this.state.nav}
           searchSubs={this.searchSubs}
           searchTerm={this.state.searchTerm}

@@ -10,7 +10,6 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
     const [comments, setComments] = useState([]);
     const [sort, setSort] = useState('?sort=confidence');
 
-    //Fetch the comments of a post
     async function commentsFetch(view = '?sort=confidence') {
         let str = rp.location.pathname;
         str = str.substring(9, str.length)
@@ -21,25 +20,20 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
         setComments(jsonResponse[1].data.children);
         setSort(view);
 
-        //Update post with updated data
         updatePost(jsonResponse[0].data.children[0]);
     }
 
-    //Toggle the collapsed value of a comment
     function toggleFirstHidden(toggle) {
         toggle.data.collapsed = !toggle.data.collapsed;
         setComments(comments.map(c => c.data.id === toggle.data.id ? toggle : c));
     }
 
-    //Toggle the collapsed property of a reply
     function toggleSecondHidden(comment, reply) {
         let replyIndex = comment.data.replies.data.children.indexOf(reply);
         comment.data.replies.data.children[replyIndex].data.collapsed = !comment.data.replies.data.children[replyIndex].data.collapsed;
-
         setComments(comments.map(c => c.data.id === comment.data.id ? comment : c));
     }
 
-    //Check if the author has a flair
     function flairExists(kind, flair) {
         let commentFlair =
             flair === undefined ? '' :
@@ -52,13 +46,10 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
         return commentFlair;
     }
 
-    //Generate JSX for comment items
     function getCommentJSX(comment) {
-        //Object destructuring
         const { kind, data: { author, author_flair_richtext, body_html, created_utc, id, is_submitter, ups } } = comment;
         //Does Author have a flair?                       
         let commentFlair = flairExists(kind, author_flair_richtext);
-
         return [
             <div className="author">
                 {commentFlair}
@@ -119,7 +110,6 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
             {post.map((post, i) => {
                 return <div key={'Post-' + i} className="post-divider">{displayPost(post)}</div>;
             })}
-
             {/* Comment Navigation Options */}
             <div className="comment-navigation">
                 <Link to="/" onClick={() => setTimeout(() => setScrollPosition(), 0)}>
@@ -156,48 +146,38 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                     </div>
                 </div>
             </div>
-
             {/* Comments Section */}
             <section className="comments-container">
                 {comments.map(comment => {
                     const { kind, data: { author, collapsed, id, replies, is_submitter } } = comment;
                     return (
-                        //Check that type isn't 'more', and collapsed status
                         kind === 'more' ? '' :
                             collapsed === false ?
                                 <div className="comment-item" key={id}>
-                                    {/* Pass each comment to JSX generator */}
                                     {getCommentJSX(comment).map(el => el)}
-
                                     {/* Are there any replies? */}
                                     {!replies.data ? '' :
                                         replies.data.children.length <= 1 ? '' :
                                             replies.data.children.slice(0, replies.data.children.length - 1).map(reply => {
                                                 const { kind, data: { author, collapsed, id, is_submitter, replies } } = reply;
                                                 return (
-                                                    //Check that type isn't 'more', and collapsed status
                                                     kind === 'more' ? '' :
                                                         collapsed === false ?
                                                             <div className="first-reply-layer" key={id}>
-                                                                {/* Pass each reply to JSX generator */}
                                                                 {getCommentJSX(reply).map(el => el)}
-
                                                                 {/* Are there any replies? */}
                                                                 {!replies.data ? '' :
                                                                     replies.data.children.length <= 1 ? '' :
                                                                         replies.data.children.slice(0, replies.data.children.length - 1).map(secondLayer => {
                                                                             const { kind, id } = secondLayer;
                                                                             return (
-                                                                                //Ensure the reply kind is not 'more'
                                                                                 kind === 'more' ? '' :
                                                                                     <div className="second-reply-layer" key={id}>
-                                                                                        {/* Pass each reply to JSX generator */}
                                                                                         {getCommentJSX(secondLayer)}
                                                                                     </div>
                                                                             );
                                                                         })}
                                                             </div> :
-                                                            //If the collapsed property is set to true, hide the reply and its children
                                                             <div className="first-reply-layer" key={id} onClick={() => toggleSecondHidden(comment, reply)}>
                                                                 <h2
                                                                     className="username"
@@ -210,7 +190,6 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                                                 );
                                             })}
                                 </div> :
-                                //If the collapsed property is set to true, hide the comment and its children
                                 <div className="comment-item" key={id}>
                                     <h2
                                         className="username"
