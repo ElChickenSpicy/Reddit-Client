@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import defaultImg from '../../Icons/popular.webp';
-import retroSearch from '../../Icons/retro-Search.png';
 import { Searchbar } from "../Searchbar/Searchbar";
 
 export const Options = ({ activeSubreddit, addSubreddit, clearSearch, fetchAboutData, fetchPosts, fetchTopSubreddits, getCurrentSubreddit, nav, searchSubreddits, searchTerm, top }) => {

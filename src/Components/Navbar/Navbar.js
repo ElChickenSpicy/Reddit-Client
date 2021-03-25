@@ -1,7 +1,6 @@
 import { Link, useHistory } from "react-router-dom";
 import icon from '../../Icons/black.webp';
 import defaultImg from '../../Icons/popular.webp';
-import retroSearch from '../../Icons/retro-Search.png';
 import heart from '../../Icons/heart.webp';
 import { Searchbar } from "../Searchbar/Searchbar";
 

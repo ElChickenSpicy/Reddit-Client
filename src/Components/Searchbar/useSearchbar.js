@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 
-export function useSearchbar(method, query) {
-
+export function UseSearchbar(method, query) {
     useEffect(() => {
         if (method && query) method(query);
     }, [method, query]);

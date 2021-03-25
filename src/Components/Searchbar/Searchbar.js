@@ -1,19 +1,14 @@
 import React, { useState } from 'react';
 import retroSearch from '../../Icons/retro-Search.png';
-import { useSearchbar } from './useSearchbar';
+import { UseSearchbar } from './useSearchbar';
 
 export const Searchbar = ({ subs, method }) => {
     const [query, setQuery] = useState()
-    let form = '';
-    let input = 'searchbar';
-    let icon = '';
-    if (subs) {
-        form = "SSform";
-        input = "SSinput";
-        icon = "SSicon"
-    }
+    let ids = subs ? ["SSform", "SSinput", "SSicon"] : ['', 'searchbar', ''];
+    const [form, input, icon] = ids;
+    let timer;
 
-    useSearchbar(method, query);
+    UseSearchbar(method, query);
     function handleSearch({target: { value }}) {
         let temp = subs ? [`subreddits/search.json?q=${encodeURI(value)}`, value] : { query: `search.json?q=${encodeURI(value)}`, active: `Search Results: ${value}` };
         setQuery(temp);
@@ -22,12 +17,15 @@ export const Searchbar = ({ subs, method }) => {
     return (
         <div className="form" id={form} autocomplete="off">
             <input
-                type="text"
+                type="search"
                 id={input}
                 placeholder="Search Reddit..."
                 autocomplete="false"
                 name="hidden"
-                onChange={handleSearch} 
+                onKeyUp={(e) => {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => handleSearch(e), 500)
+                }}
             />
             <div className="search-container">
                 <img className="search-icon" id={icon} src={retroSearch} alt="Searchbar Icon" />
