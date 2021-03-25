@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import icon from '../../Icons/black.webp';
 import defaultImg from '../../Icons/popular.webp';
 import retroSearch from '../../Icons/retro-Search.png';
@@ -7,6 +7,8 @@ import heart from '../../Icons/heart.webp';
 export const Navbar = ({ clearSearch, fetchPosts, fetchTopSubreddits, highlightActive, navItems, subredditsAbout }) => {
     const name = 'Retro';
     const colors = ['#ff2941', '#fe18d3', '#4206f1', '#74ee15', '#4deeea'];
+    let history = useHistory();
+
     return (
         <nav>
             <section className="branding">
@@ -21,9 +23,8 @@ export const Navbar = ({ clearSearch, fetchPosts, fetchTopSubreddits, highlightA
                                     active: `Search Results: ${value}`
                                 });
                                 clearSearch('searchbar');
-                            }
-                        }}
-                    />
+                                history.push('/')
+                            }}} />
                     <div className="search-container">
                         <img className="search-icon" src={retroSearch} alt="Searchbar Icon" />
                     </div>
@@ -39,8 +40,7 @@ export const Navbar = ({ clearSearch, fetchPosts, fetchTopSubreddits, highlightA
                             active: 'popular'
                         });
                         fetchTopSubreddits();
-                    }}
-                >
+                    }} >
                     <img
                         id="I"
                         src={icon}
@@ -88,10 +88,9 @@ export const Navbar = ({ clearSearch, fetchPosts, fetchTopSubreddits, highlightA
                                             query: `r/${display_name}.json`,
                                             active: display_name
                                         })
-                                    }}
-                                >
+                                    }} >
                                     <img src={src} alt={display_name} />
-                                        r/{display_name}
+                                    r/{display_name}
                                 </li>
                             </Link>
                         );

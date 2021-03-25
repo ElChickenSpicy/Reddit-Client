@@ -38,7 +38,7 @@ export class App extends React.Component {
     this.makeRequest = this.makeRequest.bind(this);
     this.removeSubreddit = this.removeSubreddit.bind(this);
     this.saveScrollPosition = this.saveScrollPosition.bind(this);
-    this.searchSubs = this.searchSubs.bind(this);
+    this.searchSubreddits = this.searchSubreddits.bind(this);
     this.setScrollPosition = this.setScrollPosition.bind(this);
     this.submit = this.submit.bind(this);
     this.updatePost = this.updatePost.bind(this);
@@ -89,7 +89,6 @@ export class App extends React.Component {
     }
   }
 
-  //Fecth the subreddit data of each sub in Nav
   fetchNavbarSubs(arr) {
     arr.forEach(async sub => {
       //If already captured, don't make request
@@ -103,10 +102,8 @@ export class App extends React.Component {
     });
   }
 
-  //Return the about data of the given subreddit
   async fetchAboutData(post) {
     const { data: subreddit } = await this.makeRequest(`r/${post}/about/.json`);
-
     //Add element if empty, otherwise check if it exists
     if (this.state.subredditsAbout.length <= 0) {
       return this.setState({ subredditsAbout: [subreddit] });
@@ -120,17 +117,14 @@ export class App extends React.Component {
     }
   }
 
-  //Fetch the top 10 subreddits
   async fetchTopSubreddits() {
     const { data: { children: topSubs }} = await this.makeRequest('subreddits/.json');
-
     //Remove the 1st element, as its r/Home (bug on Reddit's side)
     topSubs.shift();
     this.setState({ top: topSubs.slice(0, 11), searchTerm: 'Top Subreddits' });
   }
 
-  //Search subreddits with a query
-  async searchSubs(query, str) {
+  async searchSubreddits(query, str) {
     const { data: { children: searchPosts }} = await this.makeRequest(query);
     this.setState({ top: searchPosts.slice(0, 8), searchTerm: `${str}...` });
   }
@@ -156,7 +150,6 @@ export class App extends React.Component {
     });
   }
 
-  //Data and JSX for the Top right menu (current position view)
   getCurrentSubreddit(name) {
     //Resusable JSX element
     const view =
@@ -315,7 +308,6 @@ export class App extends React.Component {
     return (
       <div className="top-container">
         <div className="top-bg"></div>
-        <div className="loading">{this.state.loading && 'Loading...'}</div>
         <Navbar
           clearSearch={this.clearSearch}
           fetchPosts={this.fetchPosts}
@@ -348,7 +340,7 @@ export class App extends React.Component {
           fetchTopSubreddits={this.fetchTopSubreddits}
           getCurrentSubreddit={this.getCurrentSubreddit}
           nav={this.state.nav}
-          searchSubs={this.searchSubs}
+          searchSubreddits={this.searchSubreddits}
           searchTerm={this.state.searchTerm}
           top={this.state.top}
         />

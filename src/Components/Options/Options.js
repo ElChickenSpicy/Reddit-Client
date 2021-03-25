@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import defaultImg from '../../Icons/popular.webp';
 import retroSearch from '../../Icons/retro-Search.png';
 
-export const Options = ({ activeSubreddit, addSubreddit, clearSearch, fetchAboutData, fetchPosts, fetchTopSubreddits, getCurrentSubreddit, nav, searchSubs, searchTerm, top }) => {
+export const Options = ({ activeSubreddit, addSubreddit, clearSearch, fetchAboutData, fetchPosts, fetchTopSubreddits, getCurrentSubreddit, nav, searchSubreddits, searchTerm, top }) => {
     return (
         <header className="main-header">
             {getCurrentSubreddit(activeSubreddit)}
@@ -14,7 +14,7 @@ export const Options = ({ activeSubreddit, addSubreddit, clearSearch, fetchAbout
                             placeholder="Search Reddit..."
                             onKeyUp={({ key, target: { value } }) => {
                                 if (key === "Enter") {
-                                    searchSubs(`subreddits/search.json?q=${encodeURI(value)}`, value);
+                                    searchSubreddits(`subreddits/search.json?q=${encodeURI(value)}`, value);
                                     clearSearch('SSsearchbar');
                                 }
                             }}
