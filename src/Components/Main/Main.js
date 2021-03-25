@@ -49,20 +49,18 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                     <img src={src} alt={subreddit} title={title} />
                 </div>
                 <article className="reddit-post" key={i}>
-                    <Link to="/">
-                        <div className="post-flex-item sub">
-                            <div className="subreddit-data" onClick={() => fetchPosts({ query: `r/${subreddit}.json`, active: subreddit })}>
-                                <h3 title={title}>r/{subreddit}</h3>
-                                {all_awardings.length > 0 ?
-                                    <div className="awards-container">
-                                        {all_awardings.map(({ icon_url, name, description, count }) => {
-                                            return <div className="award" key={name}><img src={icon_url} alt={name} title={`${name}\n${description}`} />x{count}</div>
-                                        })}
-                                    </div>
-                                    : ''}
-                            </div>
+                    <div className="post-flex-item sub">
+                        <div className="subreddit-data">
+                            <Link to="/"><h3 title={title} onClick={() => fetchPosts({ query: `r/${subreddit}.json`, active: subreddit })}>r/{subreddit}</h3></Link>
+                            {all_awardings.length > 0 ?
+                                <div className="awards-container">
+                                    {all_awardings.map(({ icon_url, name, description, count }) => {
+                                        return <div className="award" key={name}><img src={icon_url} alt={name} title={`${name}\n${description}`} />x{count}</div>
+                                    })}
+                                </div>
+                                : ''}
                         </div>
-                    </Link>
+                    </div>
                     {formatPost(post, i)}
                     <div className="post-flex-item options">
                         <div className="voting-buttons">
@@ -371,20 +369,20 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
     return (
         <main>
             {loading &&
-            <div class="preloader-1">
-                <div className="loading">Loading</div>
-                <div id="loading-container">
-                    <span class="line line-1"></span>
-                    <span class="line line-2"></span>
-                    <span class="line line-3"></span>
-                    <span class="line line-4"></span>
-                    <span class="line line-5"></span>
-                    <span class="line line-6"></span>
-                    <span class="line line-7"></span>
-                    <span class="line line-8"></span>
-                    <span class="line line-9"></span>
-                </div>
-            </div>}
+                <div class="preloader-1">
+                    <div className="loading">Loading</div>
+                    <div id="loading-container">
+                        <span class="line line-1"></span>
+                        <span class="line line-2"></span>
+                        <span class="line line-3"></span>
+                        <span class="line line-4"></span>
+                        <span class="line line-5"></span>
+                        <span class="line line-6"></span>
+                        <span class="line line-7"></span>
+                        <span class="line line-8"></span>
+                        <span class="line line-9"></span>
+                    </div>
+                </div>}
             <Switch>
                 <Route path="/" exact>
                     <div id="posts">

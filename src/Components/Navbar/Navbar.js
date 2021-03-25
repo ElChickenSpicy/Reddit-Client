@@ -3,6 +3,7 @@ import icon from '../../Icons/black.webp';
 import defaultImg from '../../Icons/popular.webp';
 import retroSearch from '../../Icons/retro-Search.png';
 import heart from '../../Icons/heart.webp';
+import { Searchbar } from "../Searchbar/Searchbar";
 
 export const Navbar = ({ clearSearch, fetchPosts, fetchTopSubreddits, highlightActive, navItems, subredditsAbout }) => {
     const name = 'Retro';
@@ -12,25 +13,7 @@ export const Navbar = ({ clearSearch, fetchPosts, fetchTopSubreddits, highlightA
     return (
         <nav>
             <section className="branding">
-                <div className="form">
-                    <input
-                        id="searchbar"
-                        placeholder="Search Reddit..."
-                        onKeyUp={({ key, target: { value } }) => {
-                            if (key === "Enter") {
-                                fetchPosts({
-                                    query: `search.json?q=${encodeURI(value)}`,
-                                    active: `Search Results: ${value}`
-                                });
-                                clearSearch('searchbar');
-                                history.push('/')
-                            }}} />
-                    <div className="search-container">
-                        <img className="search-icon" src={retroSearch} alt="Searchbar Icon" />
-                    </div>
-                </div>
-
-                {/* Clicking the icon or text will return user to home screen and r/popular posts */}
+                <Searchbar subs={false} method={fetchPosts} />
                 <Link
                     to="/"
                     className="first40"

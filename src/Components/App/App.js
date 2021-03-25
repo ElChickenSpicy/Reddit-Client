@@ -124,7 +124,7 @@ export class App extends React.Component {
     this.setState({ top: topSubs.slice(0, 11), searchTerm: 'Top Subreddits' });
   }
 
-  async searchSubreddits(query, str) {
+  async searchSubreddits([query, str]) {
     const { data: { children: searchPosts }} = await this.makeRequest(query);
     this.setState({ top: searchPosts.slice(0, 8), searchTerm: `${str}...` });
   }

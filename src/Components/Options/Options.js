@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import defaultImg from '../../Icons/popular.webp';
 import retroSearch from '../../Icons/retro-Search.png';
+import { Searchbar } from "../Searchbar/Searchbar";
 
 export const Options = ({ activeSubreddit, addSubreddit, clearSearch, fetchAboutData, fetchPosts, fetchTopSubreddits, getCurrentSubreddit, nav, searchSubreddits, searchTerm, top }) => {
     return (
@@ -8,21 +9,7 @@ export const Options = ({ activeSubreddit, addSubreddit, clearSearch, fetchAbout
             {getCurrentSubreddit(activeSubreddit)}
             <section className="suggestions">
                 <div className="top-title">
-                    <div id="SSform" className="form">
-                        <input
-                            id="SSsearchbar"
-                            placeholder="Search Reddit..."
-                            onKeyUp={({ key, target: { value } }) => {
-                                if (key === "Enter") {
-                                    searchSubreddits(`subreddits/search.json?q=${encodeURI(value)}`, value);
-                                    clearSearch('SSsearchbar');
-                                }
-                            }}
-                        />
-                        <div id="SScontainer" className="search-container">
-                            <img id="SSicon" className="search-icon" src={retroSearch} alt="Searchbar Icon" />
-                        </div>
-                    </div>
+                    <Searchbar subs={true} method={searchSubreddits} />
                     <div className="top-header">
                         <h2>{searchTerm}</h2>
                     </div>

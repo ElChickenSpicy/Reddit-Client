@@ -266,26 +266,27 @@ nav {
   transition-duration: 1s;
 }
 
-input{
+input {
   box-sizing: border-box;
   display: flex;
   align-items: center;  
   opacity: 0;
   width: 100%;
   height: 40px;
-  border-radius: 50px;
   border: none;
   outline: none;
   font-family: 'Press Start 2P';
   font-size: 10px;
+  padding-right: 50px;
   transition-duration: 0.5s;
+  border: 3px solid black;
 }
+
 .search-container {
   position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(156, 156, 156);
   border-radius: 50%;
   height: 50px;
   width: 50px;
@@ -301,12 +302,13 @@ input{
 
 .form:hover{
   flex: 1;
+  height: 124px;
 }
 
 .form:hover input{
  opacity: 1;
- margin-right: 25px;
  padding-left: 15px;
+ margin-right: 10px;
  background-color: rgb(236, 236, 236);
 }
 
@@ -658,15 +660,9 @@ i span {
   margin-right: 6px;
 }
 
-#SSsearchbar { 
+#SSinput { 
   margin-right: 13px; 
-  height: 34px;
-}
-
-#SScontainer {
-  height: 36px;
-  width: 36px;
-  background-color: rgb(224, 224, 224, 0);
+  height: 30px;
 }
 
 #SSicon {
@@ -674,7 +670,11 @@ i span {
   width: 22px;
 }
 
-#SSform:hover #SSsearchbar{
+#SSform:hover {
+  height: 80px;
+}
+
+#SSform:hover #SSinput{
  opacity: 1;
  margin-right: 15px;
  background-color: white;
@@ -682,10 +682,6 @@ i span {
 
 #SSform:hover ~ .top-header {
   width: 0%;
-}
-
-#SSform:hover #SScontainer {
-  background-color: rgb(167, 167, 167);
 }
 
 .returnedLI {
