@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useHistory } from "react-router-dom";
 import retroSearch from '../../Icons/retro-Search.png';
 import { UseSearchbar } from './useSearchbar';
 
 export const Searchbar = ({ subs, method }) => {
-    const [query, setQuery] = useState()
+    const [query, setQuery] = useState();
     let ids = subs ? ["SSform", "SSinput", "SSicon"] : ['', 'searchbar', ''];
     const [form, input, icon] = ids;
     let timer;
+    let history = useHistory();
 
     UseSearchbar(method, query);
     function handleSearch({target: { value }}) {
         let temp = subs ? [`subreddits/search.json?q=${encodeURI(value)}`, value] : { query: `search.json?q=${encodeURI(value)}`, active: `Search Results: ${value}` };
         setQuery(temp);
+        history.push('/');
     }
 
     return (
@@ -24,7 +27,7 @@ export const Searchbar = ({ subs, method }) => {
                 name="hidden"
                 onKeyUp={(e) => {
                     clearTimeout(timer);
-                    timer = setTimeout(() => handleSearch(e), 500)
+                    timer = setTimeout(() => handleSearch(e), 500);
                 }}
             />
             <div className="search-container">
