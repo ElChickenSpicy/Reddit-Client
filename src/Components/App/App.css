@@ -1079,6 +1079,7 @@ main #posts {
 .author {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .author img {
@@ -1099,11 +1100,33 @@ main #posts {
 }
 
 .username {
-  margin-bottom: 10px;
   font-weight: 700;
   cursor: pointer;
   font-family: 'Circular Std Book';
   font-size: 12.5px;
+}
+
+.awards-container-comment {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-left: 20px;
+}
+
+.awards-container-comment img {
+  height: 16px;
+  width: 16px;
+  margin: 2px 1px;
+}
+
+.award-comment {
+  display: flex;
+  align-items: center;
+  color: rgb(146, 146, 146);
+  font-weight: 400;
+  font-size: 10px;
+  margin-right: 9px;
 }
 
 #posted-by {

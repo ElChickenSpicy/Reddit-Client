@@ -14,7 +14,7 @@ export const Searchbar = ({ subs, method }) => {
     function handleSearch({target: { value }}) {
         let temp = subs ? [`subreddits/search.json?q=${encodeURI(value)}`, value] : { query: `search.json?q=${encodeURI(value)}`, active: `Search Results: ${value}` };
         setQuery(temp);
-        history.push('/');
+        if (!subs) history.push('/');
     }
 
     return (

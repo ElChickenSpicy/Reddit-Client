@@ -47,7 +47,7 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
     }
 
     function getCommentJSX(comment) {
-        const { kind, data: { author, author_flair_richtext, body_html, created_utc, id, is_submitter, ups } } = comment;
+        const { kind, data: { all_awardings, author, author_flair_richtext, body_html, created_utc, id, is_submitter, ups } } = comment;
         //Does Author have a flair?                       
         let commentFlair = flairExists(kind, author_flair_richtext);
         return [
@@ -63,6 +63,13 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                         ~ {dayjs(dayjs.unix(created_utc)).fromNow()}
                     </span>
                 </h2>
+                {all_awardings.length > 0 ?
+                    <div className="awards-container-comment">
+                        {all_awardings.map(({ icon_url, name, description, count }) => {
+                            return <div className="award-comment" key={name}><img src={icon_url} alt={name} title={`${name}\n${description}`} />x{count}</div>
+                        })}
+                    </div>
+                : ''}
             </div>,
             <p>{parse(decode(body_html))}</p>,
             <div className="comment-info">

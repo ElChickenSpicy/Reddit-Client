@@ -125,8 +125,10 @@ export class App extends React.Component {
   }
 
   async searchSubreddits([query, str]) {
-    const { data: { children: searchPosts }} = await this.makeRequest(query);
-    this.setState({ top: searchPosts.slice(0, 8), searchTerm: `${str}...` });
+    if (query && str) {
+      const { data: { children: searchPosts }} = await this.makeRequest(query);
+      this.setState({ top: searchPosts.slice(0, 8), searchTerm: `${str}...` });
+    }
   }
 
   //Alert if search r/all by new
