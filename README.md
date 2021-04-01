@@ -3,7 +3,7 @@
 
 
 ## Status
-Project is: _In Progress._ Aim to deploy by the end of March 2021.
+Project is: _In Progress._ Aim to deploy by the end of April 2021.
 
 
 ## Table of contents
