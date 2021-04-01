@@ -9,8 +9,10 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
     const [post, setPost] = useState([]);
     const [comments, setComments] = useState([]);
     const [sort, setSort] = useState('?sort=confidence');
+    const [loading, setLoading] = useState(true);
 
     async function commentsFetch(view = '?sort=confidence') {
+        setLoading(true);
         let str = rp.location.pathname;
         str = str.substring(9, str.length)
         const response = await fetch(`https://www.reddit.com${str}.json${view}`);
@@ -19,6 +21,7 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
         setPost(jsonResponse[0].data.children);
         setComments(jsonResponse[1].data.children);
         setSort(view);
+        setLoading(false);
 
         updatePost(jsonResponse[0].data.children[0]);
     }
@@ -46,11 +49,11 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
         return commentFlair;
     }
 
-    function getCommentJSX(comment) {
-        const { kind, data: { all_awardings, author, author_flair_richtext, body_html, created_utc, id, is_submitter, ups } } = comment;
+    function getCommentHead(comment) {
+        const { kind, data: { all_awardings, author, author_flair_richtext, created_utc, is_submitter } } = comment;
         //Does Author have a flair?                       
         let commentFlair = flairExists(kind, author_flair_richtext);
-        return [
+        return (
             <div className="author">
                 {commentFlair}
                 <h2
@@ -69,9 +72,17 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                             return <div className="award-comment" key={name}><img src={icon_url} alt={name} title={`${name}\n${description}`} />x{count}</div>
                         })}
                     </div>
-                : ''}
-            </div>,
-            <p>{parse(decode(body_html))}</p>,
+                    : ''}
+            </div>
+        );
+    }
+
+    function getCommentBody(body) {
+        return <p>{parse(decode(body))}</p>;
+    }
+
+    function getCommentTail(id, ups) {
+        return (
             <div className="comment-info">
                 <i
                     id={'u-' + id}
@@ -101,7 +112,22 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                 </i>
                 <span id={'v-' + id} className="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
             </div>
-        ];
+        );
+    }
+
+    function getCommentJSX(comment) {
+        const { data: { body_html, id, ups } } = comment;
+        const head = getCommentHead(comment);
+        const body = getCommentBody(body_html);
+        const tail = getCommentTail(id, ups);
+        return [head, body, tail];
+    }
+
+    //Returns Array of Replies if validation is met
+    function checkReplies(replies) {
+        if (replies?.data?.children?.length > 1) {
+            return replies.data.children.slice(0, replies.data.children.length - 1);
+        }
     }
 
     useEffect(() => {
@@ -113,11 +139,30 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
     dayjs.extend(relativeTime)
     return (
         <div id="posts">
+
+            {/* Loading... */}
+            {loading &&
+                <div class="preloader-1">
+                    <div className="loading">Loading</div>
+                    <div id="loading-container">
+                        <span class="line line-1"></span>
+                        <span class="line line-2"></span>
+                        <span class="line line-3"></span>
+                        <span class="line line-4"></span>
+                        <span class="line line-5"></span>
+                        <span class="line line-6"></span>
+                        <span class="line line-7"></span>
+                        <span class="line line-8"></span>
+                        <span class="line line-9"></span>
+                    </div>
+                </div>}
+
             {/* The Post */}
             {post.map((post, i) => {
                 return <div key={'Post-' + i} className="post-divider">{displayPost(post)}</div>;
             })}
-            {/* Comment Navigation Options */}
+
+            {/* Comment Sort Options */}
             <div className="comment-navigation">
                 <Link to="/" onClick={() => setTimeout(() => setScrollPosition(), 0)}>
                     <i class="fas fa-chevron-left" title="Go Back"></i>
@@ -127,7 +172,9 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                     <div id="current-sort">
                         {sort === '?sort=confidence' ? 'HOT' : sort === '?sort=top' ? 'TOP' : sort === '?sort=new' ? 'NEW' : ''}
                         <i class="fas fa-sort-down"></i>
+
                         <div className="sort-menu">
+                            {/* option HOT */}
                             <button title="Sort Comments by Hot" onClick={() => commentsFetch('?sort=confidence')}>
                                 <i
                                     className="fas fa-fire-alt sort"
@@ -135,6 +182,7 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                                     <span>Hot</span>
                                 </i>
                             </button>
+                            {/* option TOP */}
                             <button title="Sort Comments by Top" onClick={() => commentsFetch('?sort=top')}>
                                 <i
                                     className="fas fa-medal sort"
@@ -142,6 +190,7 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                                     <span>Top</span>
                                 </i>
                             </button>
+                            {/* option NEW */}
                             <button title="Sort Comments by New" onClick={() => commentsFetch('?sort=new')}>
                                 <i
                                     className="fas fa-certificate sort"
@@ -150,9 +199,11 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                                 </i>
                             </button>
                         </div>
+
                     </div>
                 </div>
             </div>
+
             {/* Comments Section */}
             <section className="comments-container">
                 {comments.map(comment => {
@@ -160,42 +211,40 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                     return (
                         kind === 'more' ? '' :
                             collapsed === false ?
-                                <div className="comment-item" key={id}>
+                                <div className="comment-item" key={id} >
                                     {getCommentJSX(comment).map(el => el)}
+
                                     {/* Are there any replies? */}
-                                    {!replies.data ? '' :
-                                        replies.data.children.length <= 1 ? '' :
-                                            replies.data.children.slice(0, replies.data.children.length - 1).map(reply => {
-                                                const { kind, data: { author, collapsed, id, is_submitter, replies } } = reply;
-                                                return (
-                                                    kind === 'more' ? '' :
-                                                        collapsed === false ?
-                                                            <div className="first-reply-layer" key={id}>
-                                                                {getCommentJSX(reply).map(el => el)}
-                                                                {/* Are there any replies? */}
-                                                                {!replies.data ? '' :
-                                                                    replies.data.children.length <= 1 ? '' :
-                                                                        replies.data.children.slice(0, replies.data.children.length - 1).map(secondLayer => {
-                                                                            const { kind, id } = secondLayer;
-                                                                            return (
-                                                                                kind === 'more' ? '' :
-                                                                                    <div className="second-reply-layer" key={id}>
-                                                                                        {getCommentJSX(secondLayer)}
-                                                                                    </div>
-                                                                            );
-                                                                        })}
-                                                            </div> :
-                                                            <div className="first-reply-layer" key={id} onClick={() => toggleSecondHidden(comment, reply)}>
-                                                                <h2
-                                                                    className="username"
-                                                                    style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
-                                                                    title={is_submitter === true ? 'This user is the Original Poster' : ''}>
-                                                                    u/{author}
-                                                                </h2>
-                                                                <p>...</p>
-                                                            </div>
-                                                );
-                                            })}
+                                    {!checkReplies(replies) ? '' : checkReplies(replies).map(reply => {
+                                        const { kind, data: { author, collapsed, id, is_submitter, replies } } = reply;
+                                        return (
+                                            kind === 'more' ? '' :
+                                                collapsed === false ?
+                                                    <div className="first-reply-layer" key={id}>
+                                                        {getCommentJSX(reply).map(el => el)}
+
+                                                        {/* Are there any replies? */}
+                                                        {!checkReplies(replies) ? '' : checkReplies(replies).map(secondLayer => {
+                                                            const { kind, id } = secondLayer;
+                                                            return (
+                                                                kind === 'more' ? '' :
+                                                                    <div className="second-reply-layer" key={id}>
+                                                                        {getCommentJSX(secondLayer)}
+                                                                    </div>
+                                                            );
+                                                        })}
+                                                    </div> :
+                                                    <div className="first-reply-layer" key={id} onClick={() => toggleSecondHidden(comment, reply)}>
+                                                        <h2
+                                                            className="username"
+                                                            style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
+                                                            title={is_submitter === true ? 'This user is the Original Poster' : ''}>
+                                                            u/{author}
+                                                        </h2>
+                                                        <p>...</p>
+                                                    </div>
+                                        );
+                                    })}
                                 </div> :
                                 <div className="comment-item" key={id}>
                                     <h2
