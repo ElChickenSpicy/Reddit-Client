@@ -178,7 +178,7 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                             <button title="Sort Comments by Hot" onClick={() => commentsFetch('?sort=confidence')}>
                                 <i
                                     className="fas fa-fire-alt sort"
-                                    style={sort === '?sort=confidence' ? { color: 'dodgerblue' } : { color: 'rgb(190, 190, 190)' }}>
+                                    style={sort === '?sort=confidence' ? { color: 'dodgerblue' } : { color: 'rgb(160, 160, 160)' }}>
                                     <span>Hot</span>
                                 </i>
                             </button>
@@ -186,7 +186,7 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                             <button title="Sort Comments by Top" onClick={() => commentsFetch('?sort=top')}>
                                 <i
                                     className="fas fa-medal sort"
-                                    style={sort === '?sort=top' ? { color: 'dodgerblue' } : { color: 'rgb(190, 190, 190)' }}>
+                                    style={sort === '?sort=top' ? { color: 'dodgerblue' } : { color: 'rgb(160, 160, 160)' }}>
                                     <span>Top</span>
                                 </i>
                             </button>
@@ -194,7 +194,7 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                             <button title="Sort Comments by New" onClick={() => commentsFetch('?sort=new')}>
                                 <i
                                     className="fas fa-certificate sort"
-                                    style={sort === '?sort=new' ? { color: 'dodgerblue' } : { color: 'rgb(190, 190, 190)' }}>
+                                    style={sort === '?sort=new' ? { color: 'dodgerblue' } : { color: 'rgb(160, 160, 160)' }}>
                                     <span>New</span>
                                 </i>
                             </button>

@@ -47,6 +47,8 @@ export class App extends React.Component {
   async makeRequest(query) {
     try {
       this.setState({ loading: true });
+      console.log(`https://www.reddit.com/${query}`);
+      
       const response = await fetch(`https://www.reddit.com/${query}`);
       if (response.ok) {
         const jsonResponse = await response.json();

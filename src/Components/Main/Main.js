@@ -21,12 +21,12 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
             if (entries[0].isIntersecting && hasMore) {
                 if ((displayNumber + 10) <= posts.length) return increaseDisplay(10);
                 fetchPosts({
-                    query: `r/${activeSubreddit}.json?after=${after}`,
+                    query: `r/${activeSubreddit}/${view}/.json?after=${after}`,
                     active: activeSubreddit,
                     view,
                     displayNum: displayNumber + 10,
                     more: true
-                });
+                }); 
             }
         });
         if (node) observer.current.observe(node);
