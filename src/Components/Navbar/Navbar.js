@@ -1,13 +1,12 @@
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import icon from '../../Icons/black.webp';
 import defaultImg from '../../Icons/popular.webp';
 import heart from '../../Icons/heart.webp';
 import { Searchbar } from "../Searchbar/Searchbar";
 
-export const Navbar = ({ clearSearch, fetchPosts, fetchTopSubreddits, highlightActive, navItems, subredditsAbout }) => {
+export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navItems, subredditsAbout }) => {
     const name = 'Retro';
     const colors = ['#ff2941', '#fe18d3', '#4206f1', '#74ee15', '#4deeea'];
-    let history = useHistory();
 
     return (
         <nav>

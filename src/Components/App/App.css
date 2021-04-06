@@ -156,7 +156,7 @@ a:link, a:visited {
   top: 50%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
-  width: 61%;
+  width: 62.5%;
   height: 100%;
   z-index: 100;
   display: flex;
@@ -239,7 +239,7 @@ nav {
   position: fixed;
   left: 0%;
   background-color: white;
-  box-shadow: 0 0 2rem 0 rgb(41 48 66 / 10%);
+  box-shadow: 0 0 2rem 0 rgb(41 48 66 / 25%);
 }
 
 .branding {
@@ -420,26 +420,25 @@ ul {
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  width: 19%;
-  height: 98%;
+  width: 18.5%;
+  height: 100%;
   position: fixed;
-  right: 1%;
-  padding: 10px 0px;
+  right: 0;
+  padding: 0px 0px;
 }
 
 .current-view {
-  box-shadow: 0 0 2rem 0 rgb(41 48 66 / 10%);
+  box-shadow: 0 0 2rem 0 rgb(41 48 66 / 25%);
   width: 100%;
-  border-radius: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background-color: rgb(41, 41, 41);
+  background-color: white;
 }
 
 .active-subreddit {
-  width: 96%;
+  width: 100%;
   padding-top: 20px;
   padding-bottom: 10px;
   display: flex;
@@ -453,20 +452,20 @@ ul {
   width: 100%;
   margin-top: 5px;
   margin-bottom: 6px;
-  padding: 5px 10px 11px 15px;
+  padding: 5px 10px 11px 20px;
   font-family: 'Circular Std Black', sans-serif;
   font-size: 16px;
   color: rgb(134, 134, 134);
-  border-bottom: 1px solid rgb(80, 80, 80);
+  border-bottom: 2px solid rgb(209, 209, 209);
 }
 
 .active-subreddit h4 {
   margin-top: 5px;
-  padding: 8px 10px 8px 15px;
+  padding: 8px 10px 8px 20px;
   font-family: 'Circular Std Book', sans-serif;
   font-size: 12px;
   font-weight: 400;
-  color: white;
+  color: black;
 }
 
 .subscribers {
@@ -477,7 +476,7 @@ ul {
 }
 
 .accounts {
-  color: lightgreen;
+  color: rgb(103, 221, 103);
   font-size: 17px;
   font-family: 'Circular Std', sans-serif;
   padding-right: 2px;
@@ -489,12 +488,12 @@ ul {
 }
 
 .active-subreddit h1 {
-  padding: 8px 11px 8px 16px;
+  padding: 8px 11px 8px 21px;
   margin-bottom: 5px;
   font-family: 'Circular Std Bold', sans-serif;
   font-size: 19px;
   font-weight: 600;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .fa-plus-square {
@@ -532,20 +531,20 @@ ul {
   word-wrap: break-word;
   font-family: 'IBM Plex Sans';
   font-weight: 300;
-  padding: 4px 12px 8px 15px;
+  padding: 4px 12px 8px 20px;
   font-size: 14px;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .change-view {
-  width: 96%;
+  width: 100%;
   padding-top: 18px;
   margin-bottom: 25px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  border-top: 2px solid rgb(80, 80, 80);
+  border-top: 2px solid rgb(209, 209, 209);
 }
 
 .change {
@@ -566,17 +565,17 @@ ul {
 
 .fa-fire-alt {
   font-size: 30px;
-  color: white;
+  color: rgb(161, 161, 161);
 }
 
 .fa-medal {
   font-size: 30px;
-  color: white;
+  color: rgb(160, 160, 160);
 }
 
 .fa-certificate {
   font-size: 30px;
-  color: white;
+  color: rgb(136, 136, 136);
 }
 
 i span {
@@ -586,16 +585,12 @@ i span {
 }
 
 .suggestions {
-  box-shadow: 0 0 2rem 0 rgb(41 48 66 / 10%);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   flex: 1;
   width: 100%;
-  margin-top: 20px;
-  border-radius: 6px;
-  margin-bottom: 20px;
   background-color: white;
 }
 
@@ -605,16 +600,15 @@ i span {
 
 .top-title {
   width: 100%;
-  background-color: rgb(224, 224, 224);
+  background-color: rgb(255, 255, 255);
   z-index: 9;
-  height: 40px;
+  height: 46px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   flex-direction: row-reverse;
   box-sizing: border-box;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  border-bottom: 2px solid rgb(209, 209, 209);
 }
 
 .SSul {
@@ -628,13 +622,9 @@ i span {
 .subs-BG {
   width: 100%;
   height: 40px;
-  position: absolute;
   background-image: url('../../Icons/retro-circles.webp');
   background-size: 60%;
-  z-index: -1;
-  opacity: 0.18;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  opacity: 0.78;
 }
 
 .top-header {
@@ -712,8 +702,8 @@ main {
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  right: 2.4%;
-  width: 61%;
+  right: 1.6%;
+  width: 62.5%;
   height: fit-content;
   min-height: 100%;
   margin-bottom: 25px;
@@ -729,13 +719,19 @@ main #posts {
 /* Post Containers */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 .post-divider {
-  box-shadow: 0 0 1.5rem 0 rgb(41 48 66 / 40%);
+  box-shadow:
+  0 1.9px 2px rgba(0, 0, 0, 0.02),
+  0 4.5px 4.7px rgba(0, 0, 0, 0.028),
+  0 8.5px 8.9px rgba(0, 0, 0, 0.035),
+  0 15.2px 15.9px rgba(0, 0, 0, 0.042),
+  0 28.4px 29.7px rgba(0, 0, 0, 0.05),
+  0 68px 71px rgba(0, 0, 0, 0.07);
   background-color: white;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  margin-top: 18px;
+  margin-top: 20px;
   border-radius: 6px;
 }
 

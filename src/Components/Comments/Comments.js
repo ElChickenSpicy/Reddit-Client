@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from "react-router-dom";
 import { decode } from 'html-entities';
 import parse from 'html-react-parser';
@@ -10,13 +10,39 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
     const [comments, setComments] = useState([]);
     const [sort, setSort] = useState('?sort=confidence');
     const [loading, setLoading] = useState(true);
+    const [more, setMore] = useState([]);
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //https://api.reddit.com/api/morechildren/.json?api_type=json   &link_id = t3_mky4bq   &children = gtjiwhs , gtk3400 , gtje4g2 , etc.
+
+    const observer = useRef();
+    const lastCommentElement = useCallback(node => {
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) {
+
+                console.log('Visible');
+                node.style.display = 'none';
+
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [loading, sort, post]);
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async function commentsFetch(view = '?sort=confidence') {
         setLoading(true);
         let str = rp.location.pathname;
         str = str.substring(9, str.length)
         const response = await fetch(`https://www.reddit.com${str}.json${view}`);
+        console.log(`https://www.reddit.com${str}.json${view}`);
         const jsonResponse = await response.json();
+        console.log(jsonResponse);
 
         setPost(jsonResponse[0].data.children);
         setComments(jsonResponse[1].data.children);
@@ -209,53 +235,58 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
                 {comments.map(comment => {
                     const { kind, data: { author, collapsed, id, replies, is_submitter } } = comment;
                     return (
-                        kind === 'more' ? '' :
-                            collapsed === false ?
-                                <div className="comment-item" key={id} >
-                                    {getCommentJSX(comment).map(el => el)}
+                        collapsed === false ?
+                            <div
+                                className="comment-item"
+                                key={id}
+                                ref={kind === 'more' ? lastCommentElement : undefined}>
+                                {getCommentJSX(comment).map(el => el)}
 
-                                    {/* Are there any replies? */}
-                                    {!checkReplies(replies) ? '' : checkReplies(replies).map(reply => {
-                                        const { kind, data: { author, collapsed, id, is_submitter, replies } } = reply;
-                                        return (
-                                            kind === 'more' ? '' :
-                                                collapsed === false ?
-                                                    <div className="first-reply-layer" key={id}>
-                                                        {getCommentJSX(reply).map(el => el)}
+                                {/* Are there any replies? */}
+                                {!checkReplies(replies) ? '' : checkReplies(replies).map(reply => {
+                                    const { kind, data: { author, collapsed, id, is_submitter, replies } } = reply;
+                                    return (
+                                        kind === 'more' ? '' :
+                                            collapsed === false ?
+                                                <div className="first-reply-layer" key={id}>
+                                                    {getCommentJSX(reply).map(el => el)}
 
-                                                        {/* Are there any replies? */}
-                                                        {!checkReplies(replies) ? '' : checkReplies(replies).map(secondLayer => {
-                                                            const { kind, id } = secondLayer;
-                                                            return (
-                                                                kind === 'more' ? '' :
-                                                                    <div className="second-reply-layer" key={id}>
-                                                                        {getCommentJSX(secondLayer)}
-                                                                    </div>
-                                                            );
-                                                        })}
-                                                    </div> :
-                                                    <div className="first-reply-layer" key={id} onClick={() => toggleSecondHidden(comment, reply)}>
-                                                        <h2
-                                                            className="username"
-                                                            style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
-                                                            title={is_submitter === true ? 'This user is the Original Poster' : ''}>
-                                                            u/{author}
-                                                        </h2>
-                                                        <p>...</p>
-                                                    </div>
-                                        );
-                                    })}
-                                </div> :
-                                <div className="comment-item" key={id}>
-                                    <h2
-                                        className="username"
-                                        style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
-                                        title={is_submitter === true ? 'This user is the Original Poster' : ''}
-                                        onClick={() => toggleFirstHidden(comment)}>
-                                        u/{author}
-                                    </h2>
-                                    <p>...</p>
-                                </div>
+                                                    {/* Are there any replies? */}
+                                                    {!checkReplies(replies) ? '' : checkReplies(replies).map(secondLayer => {
+                                                        const { kind, id } = secondLayer;
+                                                        return (
+                                                            kind === 'more' ? '' :
+                                                                <div className="second-reply-layer" key={id}>
+                                                                    {getCommentJSX(secondLayer)}
+                                                                </div>
+                                                        );
+                                                    })}
+                                                </div> :
+                                                <div className="first-reply-layer" key={id} onClick={() => toggleSecondHidden(comment, reply)}>
+                                                    <h2
+                                                        className="username"
+                                                        style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
+                                                        title={is_submitter === true ? 'This user is the Original Poster' : ''}>
+                                                        u/{author}
+                                                    </h2>
+                                                    <p>...</p>
+                                                </div>
+                                    );
+                                })}
+                            </div> :
+                            <div
+                                className="comment-item"
+                                key={id}
+                                ref={kind === 'more' ? lastCommentElement : undefined}>
+                                <h2
+                                    className="username"
+                                    style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
+                                    title={is_submitter === true ? 'This user is the Original Poster' : ''}
+                                    onClick={() => toggleFirstHidden(comment)}>
+                                    u/{author}
+                                </h2>
+                                <p>...</p>
+                            </div>
                     );
                 })}
             </section>

@@ -169,7 +169,7 @@ export class App extends React.Component {
             })}
           >
             <i className="fas fa-fire-alt"
-              style={this.state.view === "hot" ? { color: 'lightcoral' } : { color: 'white' }}>
+              style={this.state.view === "hot" ? { color: 'lightcoral' } : { color: 'lightgray' }}>
               <span>Hot</span>
             </i>
           </div>
@@ -185,7 +185,7 @@ export class App extends React.Component {
             })}
           >
             <i className="fas fa-medal"
-              style={this.state.view === "top" ? { color: 'lightgreen' } : { color: 'white' }}>
+              style={this.state.view === "top" ? { color: 'lightgreen' } : { color: 'lightgray' }}>
               <span>Top</span>
             </i>
           </div>
@@ -202,7 +202,7 @@ export class App extends React.Component {
             })}}
           >
             <i className="fas fa-certificate"
-              style={this.state.view === "new" ? { color: 'lightskyblue' } : { color: 'white' }}>
+              style={this.state.view === "new" ? { color: 'lightskyblue' } : { color: 'lightgray' }}>
               <span>New</span>
             </i>
           </div>

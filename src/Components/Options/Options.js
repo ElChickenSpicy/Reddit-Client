@@ -2,17 +2,17 @@ import { Link } from "react-router-dom";
 import defaultImg from '../../Icons/popular.webp';
 import { Searchbar } from "../Searchbar/Searchbar";
 
-export const Options = ({ activeSubreddit, addSubreddit, clearSearch, fetchAboutData, fetchPosts, fetchTopSubreddits, getCurrentSubreddit, nav, searchSubreddits, searchTerm, top }) => {
+export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPosts, fetchTopSubreddits, getCurrentSubreddit, nav, searchSubreddits, searchTerm, top }) => {
     return (
         <header className="main-header">
             {getCurrentSubreddit(activeSubreddit)}
             <section className="suggestions">
+            <div className="subs-BG"></div>
                 <div className="top-title">
                     <Searchbar subs={true} method={searchSubreddits} />
                     <div className="top-header">
                         <h2>{searchTerm}</h2>
                     </div>
-                    <div className="subs-BG"></div>
                 </div>
                 <ul className="SSul">
                     {top.map(({ data: { display_name, icon_img, title } }) => {
