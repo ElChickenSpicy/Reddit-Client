@@ -12,44 +12,65 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
     const [loading, setLoading] = useState(true);
     const [more, setMore] = useState([]);
 
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //https://api.reddit.com/api/morechildren/.json?api_type=json   &link_id = t3_mky4bq   &children = gtjiwhs , gtk3400 , gtje4g2 , etc.
-
     const observer = useRef();
     const lastCommentElement = useCallback(node => {
         if (loading) return;
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting) {
-
-                console.log('Visible');
                 node.style.display = 'none';
-
+                getMoreComments();
             }
         });
         if (node) observer.current.observe(node);
     }, [loading, sort, post]);
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async function commentsFetch(view = '?sort=confidence') {
         setLoading(true);
         let str = rp.location.pathname;
         str = str.substring(9, str.length)
         const response = await fetch(`https://www.reddit.com${str}.json${view}`);
-        console.log(`https://www.reddit.com${str}.json${view}`);
         const jsonResponse = await response.json();
-        console.log(jsonResponse);
 
         setPost(jsonResponse[0].data.children);
         setComments(jsonResponse[1].data.children);
         setSort(view);
+        let moreComments = jsonResponse[1].data.children.filter(comment => comment.kind === 'more');
+        if (moreComments.length >= 1) setMore(moreComments[0].data.children);
         setLoading(false);
 
         updatePost(jsonResponse[0].data.children[0]);
+    }
+
+    async function getMoreComments() {
+        if (more.length <= 0) return;
+
+        setLoading(true);
+        let queryString = "";
+        more.slice(0, 100).forEach(id => {
+            queryString += id + ",";
+        });
+
+        const response = await fetch(`https://api.reddit.com/api/morechildren/.json?api_type=json&link_id=${post[0].data.name}&children=${queryString.slice(0, -1)}`);
+        const jsonResponse = await response.json();
+        const newComments = jsonResponse.json.data.things;
+        let checkForMore = newComments[newComments.length - 1];
+        if (checkForMore.kind !== 'more') {
+            newComments.push({
+                kind: 'more',
+                data: {
+                    id: more.length
+                }
+            });
+        }
+
+        setComments([...comments, ...newComments]);
+        if (more.length > 100) {
+            setMore(more.splice(100, more.length));
+        } else {
+            setMore([]);
+        }
+        setLoading(false);
     }
 
     function toggleFirstHidden(toggle) {
@@ -232,61 +253,62 @@ export const Comments = ({ displayPost, rp, setScrollPosition, updatePost }) => 
 
             {/* Comments Section */}
             <section className="comments-container">
-                {comments.map(comment => {
+                {comments.map((comment, i) => {
                     const { kind, data: { author, collapsed, id, replies, is_submitter } } = comment;
                     return (
-                        collapsed === false ?
-                            <div
-                                className="comment-item"
-                                key={id}
-                                ref={kind === 'more' ? lastCommentElement : undefined}>
-                                {getCommentJSX(comment).map(el => el)}
+                        kind === 'more' && i < comments.length - 1 ? '' :
+                            collapsed === false ?
+                                <div
+                                    className="comment-item"
+                                    key={id}
+                                    ref={kind === 'more' ? lastCommentElement : undefined}>
+                                    {getCommentJSX(comment).map(el => el)}
 
-                                {/* Are there any replies? */}
-                                {!checkReplies(replies) ? '' : checkReplies(replies).map(reply => {
-                                    const { kind, data: { author, collapsed, id, is_submitter, replies } } = reply;
-                                    return (
-                                        kind === 'more' ? '' :
-                                            collapsed === false ?
-                                                <div className="first-reply-layer" key={id}>
-                                                    {getCommentJSX(reply).map(el => el)}
+                                    {/* Are there any replies? */}
+                                    {!checkReplies(replies) ? '' : checkReplies(replies).map(reply => {
+                                        const { kind, data: { author, collapsed, id, is_submitter, replies } } = reply;
+                                        return (
+                                            kind === 'more' ? '' :
+                                                collapsed === false ?
+                                                    <div className="first-reply-layer" key={id}>
+                                                        {getCommentJSX(reply).map(el => el)}
 
-                                                    {/* Are there any replies? */}
-                                                    {!checkReplies(replies) ? '' : checkReplies(replies).map(secondLayer => {
-                                                        const { kind, id } = secondLayer;
-                                                        return (
-                                                            kind === 'more' ? '' :
-                                                                <div className="second-reply-layer" key={id}>
-                                                                    {getCommentJSX(secondLayer)}
-                                                                </div>
-                                                        );
-                                                    })}
-                                                </div> :
-                                                <div className="first-reply-layer" key={id} onClick={() => toggleSecondHidden(comment, reply)}>
-                                                    <h2
-                                                        className="username"
-                                                        style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
-                                                        title={is_submitter === true ? 'This user is the Original Poster' : ''}>
-                                                        u/{author}
-                                                    </h2>
-                                                    <p>...</p>
-                                                </div>
-                                    );
-                                })}
-                            </div> :
-                            <div
-                                className="comment-item"
-                                key={id}
-                                ref={kind === 'more' ? lastCommentElement : undefined}>
-                                <h2
-                                    className="username"
-                                    style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
-                                    title={is_submitter === true ? 'This user is the Original Poster' : ''}
-                                    onClick={() => toggleFirstHidden(comment)}>
-                                    u/{author}
-                                </h2>
-                                <p>...</p>
-                            </div>
+                                                        {/* Are there any replies? */}
+                                                        {!checkReplies(replies) ? '' : checkReplies(replies).map(secondLayer => {
+                                                            const { kind, id } = secondLayer;
+                                                            return (
+                                                                kind === 'more' ? '' :
+                                                                    <div className="second-reply-layer" key={id}>
+                                                                        {getCommentJSX(secondLayer)}
+                                                                    </div>
+                                                            );
+                                                        })}
+                                                    </div> :
+                                                    <div className="first-reply-layer" key={id} onClick={() => toggleSecondHidden(comment, reply)}>
+                                                        <h2
+                                                            className="username"
+                                                            style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
+                                                            title={is_submitter === true ? 'This user is the Original Poster' : ''}>
+                                                            u/{author}
+                                                        </h2>
+                                                        <p>...</p>
+                                                    </div>
+                                        );
+                                    })}
+                                </div> :
+                                <div
+                                    className="comment-item"
+                                    key={id}
+                                    ref={kind === 'more' ? lastCommentElement : undefined}>
+                                    <h2
+                                        className="username"
+                                        style={is_submitter === true ? { color: "dodgerblue" } : { color: "black" }}
+                                        title={is_submitter === true ? 'This user is the Original Poster' : ''}
+                                        onClick={() => toggleFirstHidden(comment)}>
+                                        u/{author}
+                                    </h2>
+                                    <p>...</p>
+                                </div>
                     );
                 })}
             </section>
