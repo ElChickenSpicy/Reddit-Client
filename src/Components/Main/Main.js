@@ -138,8 +138,8 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                             ] :
                             [
                                 titleLink,
-                                <div className="media">
-                                    <ReactPlayer controls width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                                <div className="player-wrapper">
+                                    <ReactPlayer className='react-player' controls width='100%' height='100%' url={data.preview.reddit_video_preview.fallback_url} />
                                 </div>
                             ];
                         break;
@@ -148,8 +148,8 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                         output = data.preview.reddit_video_preview ?
                             [
                                 titleLink,
-                                <div className="media">
-                                    <ReactPlayer controls width="1040px" height="590px" url={data.preview.reddit_video_preview.fallback_url} />
+                                <div className="player-wrapper">
+                                    <ReactPlayer className='react-player' controls width='100%' height='100%' url={data.preview.reddit_video_preview.fallback_url} />
                                 </div>
                             ] :
                             [
@@ -163,8 +163,8 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                     case 'streamable.com':
                         output = [
                             titleLink,
-                            <div className="media">
-                                <ReactPlayer controls width="1040px" height="590px" url={url} />
+                            <div className="player-wrapper">
+                                <ReactPlayer className='react-player' controls width='100%' height='100%' url={url} />
                             </div>
                         ];
                         break;
@@ -205,8 +205,8 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
             case 'hosted:video':
                 output = [
                     titleLink,
-                    <div className="media">
-                        <ReactPlayer controls width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
+                    <div className="player-wrapper">
+                        <ReactPlayer className='react-player' controls width='100%' height='100%' url={data.secure_media.reddit_video.fallback_url} />
                     </div>
                 ];
                 break;
@@ -219,8 +219,8 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                     case 'streamable.com':
                         output = [
                             titleLink,
-                            <div className="media">
-                                <ReactPlayer controls width="1040px" height="590px" url={url} />
+                            <div className="player-wrapper">
+                                <ReactPlayer className='react-player' controls width='100%' height='100%' url={url} />
                             </div>
                         ];
                         break;
@@ -235,8 +235,8 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                     default:
                         output = [
                             titleLink,
-                            <div className="media">
-                                <ReactPlayer controls width="1040px" height="590px" url={url} />
+                            <div className="player-wrapper">
+                                <ReactPlayer className='react-player' controls width='100%' height='100%' url={url} />
                             </div>
                         ];
                 }
@@ -302,8 +302,8 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                             output = data.media ?
                                 [
                                     titleLink,
-                                    <div className="media">
-                                        <ReactPlayer controls width="1040px" height="590px" url={data.secure_media.reddit_video.fallback_url} />
+                                    <div className="player-wrapper">
+                                        <ReactPlayer className='react-player' controls width='100%' height='100%' url={data.secure_media.reddit_video.fallback_url} />
                                     </div>
                                 ] :
                                 [titleLink];
@@ -317,8 +317,8 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                         case 'streamwo.com':
                             output = [
                                 titleLink,
-                                <div className="media">
-                                    <ReactPlayer controls width="1040px" height="590px" url={url} />
+                                <div className="player-wrapper">
+                                    <ReactPlayer className='react-player' controls width='100%' height='100%' url={url} />
                                 </div>
                             ];
                             break;
