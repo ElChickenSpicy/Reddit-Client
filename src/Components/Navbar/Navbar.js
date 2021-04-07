@@ -9,6 +9,7 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navIte
     const colors = ['#ff2941', '#fe18d3', '#4206f1', '#74ee15', '#4deeea'];
 
     return (
+        <div className="pseudoNav">
         <nav>
             <section className="branding">
                 <Searchbar subs={false} method={fetchPosts} />
@@ -79,5 +80,6 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navIte
                 </ul>
             </section>
         </nav>
+        </div>
     );
 };

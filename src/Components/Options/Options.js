@@ -4,6 +4,7 @@ import { Searchbar } from "../Searchbar/Searchbar";
 
 export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPosts, fetchTopSubreddits, getCurrentSubreddit, nav, searchSubreddits, searchTerm, top }) => {
     return (
+        <div className="pseudoMainHeader">
         <header className="main-header">
             {getCurrentSubreddit(activeSubreddit)}
             <section className="suggestions">
@@ -51,5 +52,6 @@ export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPo
                 </ul>
             </section>
         </header>
+        </div>
     );
 };

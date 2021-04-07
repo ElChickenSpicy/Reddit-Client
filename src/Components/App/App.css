@@ -229,12 +229,16 @@ a:link, a:visited {
 
 /* Container of left-hand side and its children */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+.pseudoNav {
+  width: 300px;
+}
+
 nav {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-evenly;
-  width: 15%;
+  width: 300px;
   height: 100%;
   position: fixed;
   left: 0%;
@@ -415,12 +419,16 @@ ul {
 
 /* Container on right-hand side and its children*/
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+.pseudoMainHeader {
+  width: 370px;
+}
+
 .main-header {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  width: 18.5%;
+  width: 370px;
   height: 100%;
   position: fixed;
   right: 0;
@@ -702,15 +710,14 @@ main {
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  right: 1.6%;
-  width: 62.5%;
+  flex: 1;
   height: fit-content;
   min-height: 100%;
   margin-bottom: 25px;
 }
 
 main #posts {
-  width: 100%;
+  width: 95%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -749,7 +756,6 @@ main #posts {
   align-items: stretch;
   width: 100%;
   height: fit-content;
-  border-radius: 6px;
 }
 
 .post-flex-item {
@@ -816,7 +822,6 @@ main #posts {
   background-color: white;
   flex-direction: column;
   justify-content: center;
-  padding-right: 20px;
 }
 
 .title {
@@ -1320,51 +1325,4 @@ main #posts {
 
 .sort span {
   padding-left: 4px;
-}
-
-/* Brand and Searchbar get different lines at this screen width */
-@media only screen
-and (max-width : 1250px) {
-
-  .nav {
-    width: 24%;
-  }
-
-  .main {
-    width: 72%;
-  }
-
-  .branding {
-    height: 120px;
-    flex-direction: column-reverse;
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-  .first40 {
-    width: 100%;
-  }
-
-  .form:hover ~ .first40 {
-    display: flex;
-  }
-
-  .form {
-    margin-left: 0px;
-    margin-right: auto;
-    margin-bottom: 10px;
-  }
-
-  ul li {
-    font-size: 12px;
-  }
-  
-  ul li img {
-    height: 30px;
-    width: 30px;
-  }
-}
-
-/* Smartphones/Tablets (portrait) ----------- */
-@media only screen
-and (max-width : 768px) {
 }
