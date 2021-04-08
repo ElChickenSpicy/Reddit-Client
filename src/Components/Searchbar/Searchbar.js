@@ -11,19 +11,19 @@ export const Searchbar = ({ subs, method }) => {
     let history = useHistory();
 
     UseSearchbar(method, query);
-    function handleSearch({target: { value }}) {
+    function handleSearch({ target: { value } }) {
         let temp = subs ? [`subreddits/search.json?q=${encodeURI(value)}`, value] : { query: `search.json?q=${encodeURI(value)}`, active: `Search Results: ${value}` };
         setQuery(temp);
         if (!subs) history.push('/');
     }
 
     return (
-        <div className="form" id={form} autocomplete="off">
+        <div className="form" id={form} autoComplete="off">
             <input
                 type="search"
                 id={input}
                 placeholder="Search Reddit..."
-                autocomplete="false"
+                autoComplete="off"
                 name="hidden"
                 onKeyUp={(e) => {
                     clearTimeout(timer);

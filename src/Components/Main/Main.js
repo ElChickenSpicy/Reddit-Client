@@ -26,7 +26,7 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                     view,
                     displayNum: displayNumber + 10,
                     more: true
-                }); 
+                });
             }
         });
         if (node) observer.current.observe(node);

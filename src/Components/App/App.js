@@ -14,7 +14,7 @@ export class App extends React.Component {
     this.state = {
       posts: [],
       activeSubreddit: 'popular',
-      nav: [ 'soccer', 'Art', 'ProgrammerHumor', 'AskReddit', 'dataisbeautiful', 'TwoXChromosomes', 'food', 'pics', 'lgbt' ],
+      nav: ['soccer', 'Art', 'ProgrammerHumor', 'AskReddit', 'dataisbeautiful', 'TwoXChromosomes', 'food', 'pics', 'lgbt'],
       top: [],
       searchTerm: '',
       subredditsAbout: [],
@@ -48,14 +48,14 @@ export class App extends React.Component {
     try {
       this.setState({ loading: true });
       console.log(`https://www.reddit.com/${query}`);
-      
+
       const response = await fetch(`https://www.reddit.com/${query}`);
       if (response.ok) {
         const jsonResponse = await response.json();
         this.setState({ loading: false })
         return jsonResponse;
       }
-    } catch(err) {
+    } catch (err) {
       alert(err);
     }
   }
@@ -63,7 +63,7 @@ export class App extends React.Component {
   async fetchPosts(obj) {
     const view = obj.view || 'hot'
     const more = obj.more || false
-    const { data, data: { children: subPosts }} = await this.makeRequest(obj.query);
+    const { data, data: { children: subPosts } } = await this.makeRequest(obj.query);
     this.setState({
       posts: more === false ? subPosts : [...this.state.posts, ...subPosts],
       activeSubreddit: obj.active,
@@ -99,7 +99,7 @@ export class App extends React.Component {
         const jsonResponse = await this.makeRequest(`r/${sub}/about/.json`);
         const subreddit = jsonResponse?.data ?? 'Not Found';
         if (subreddit === 'Not Found') return;
-        this.setState({ subredditsAbout: [...this.state.subredditsAbout, subreddit] }); 
+        this.setState({ subredditsAbout: [...this.state.subredditsAbout, subreddit] });
       }
     });
   }
@@ -120,7 +120,7 @@ export class App extends React.Component {
   }
 
   async fetchTopSubreddits() {
-    const { data: { children: topSubs }} = await this.makeRequest('subreddits/.json');
+    const { data: { children: topSubs } } = await this.makeRequest('subreddits/.json');
     //Remove the 1st element, as its r/Home (bug on Reddit's side)
     topSubs.shift();
     this.setState({ top: topSubs.slice(0, 11), searchTerm: 'Top Subreddits' });
@@ -128,7 +128,7 @@ export class App extends React.Component {
 
   async searchSubreddits([query, str]) {
     if (query && str) {
-      const { data: { children: searchPosts }} = await this.makeRequest(query);
+      const { data: { children: searchPosts } } = await this.makeRequest(query);
       this.setState({ top: searchPosts.slice(0, 8), searchTerm: `${str}...` });
     }
   }
@@ -142,8 +142,8 @@ export class App extends React.Component {
         {
           label: 'Continue',
           onClick: () => this.fetchPosts({
-            query: `r/${this.state.activeSubreddit}/new/.json`, 
-            active: this.state.activeSubreddit, 
+            query: `r/${this.state.activeSubreddit}/new/.json`,
+            active: this.state.activeSubreddit,
             view: 'new'
           })
         },
@@ -163,8 +163,8 @@ export class App extends React.Component {
             className="change hot"
             title="View the Hottest posts"
             onClick={() => this.fetchPosts({
-              query: `r/${this.state.activeSubreddit}/hot/.json`, 
-              active: this.state.activeSubreddit, 
+              query: `r/${this.state.activeSubreddit}/hot/.json`,
+              active: this.state.activeSubreddit,
               view: 'hot'
             })}
           >
@@ -179,8 +179,8 @@ export class App extends React.Component {
             className="change top"
             title="View the Top posts of all time"
             onClick={() => this.fetchPosts({
-              query: `r/${this.state.activeSubreddit}/top/.json?t=all`, 
-              active: this.state.activeSubreddit, 
+              query: `r/${this.state.activeSubreddit}/top/.json?t=all`,
+              active: this.state.activeSubreddit,
               view: 'top'
             })}
           >
@@ -196,10 +196,11 @@ export class App extends React.Component {
             title="View the Newest posts"
             onClick={() => {
               name === 'popular' ? this.submit() : this.fetchPosts({
-                query: `r/${this.state.activeSubreddit}/new/.json`, 
-                active: this.state.activeSubreddit, 
+                query: `r/${this.state.activeSubreddit}/new/.json`,
+                active: this.state.activeSubreddit,
                 view: 'new'
-            })}}
+              })
+            }}
           >
             <i className="fas fa-certificate"
               style={this.state.view === "new" ? { color: 'lightskyblue' } : { color: 'lightgray' }}>
@@ -219,7 +220,7 @@ export class App extends React.Component {
           {view}
         </section>
       );
-    } 
+    }
     if (name.startsWith('Search Results: ')) {
       return (
         <section className="current-view">
@@ -300,7 +301,7 @@ export class App extends React.Component {
 
   componentDidMount() {
     this.fetchPosts({
-      query: 'r/popular.json', 
+      query: 'r/popular.json',
       active: 'popular'
     })
     this.fetchTopSubreddits();
