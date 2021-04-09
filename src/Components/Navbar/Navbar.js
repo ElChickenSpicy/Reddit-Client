@@ -25,27 +25,31 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navIte
 
     function showNav() {
         document.getElementById('collapsed-nav').style.display = 'none';
+        document.getElementById('pseudo-collapsed-nav').style.display = 'none';
         document.getElementById('pseudoNav').style.display = 'inline';
         document.getElementById('nav').style.display = 'inline';
     }
 
     function hideMain() {
         document.getElementById('collapsed-main-header').style.display = 'inline';
+        document.getElementById('pseudo-collapsed-main-header').style.display = 'inline';
         document.getElementById('main-header').style.display = 'none';
         document.getElementById('pseudoMainHeader').style.display = 'none';
     }
 
     return (
         <>
-            <div
-                id="collapsed-nav"
-                onClick={() => {
-                    hideMain();
-                    showNav();
-                }}>
+            <div id="pseudo-collapsed-nav">
+                <div
+                    id="collapsed-nav"
+                    onClick={() => {
+                        hideMain();
+                        showNav();
+                    }}>
+                </div>
             </div>
-            <div id="pseudoNav">
 
+            <div id="pseudoNav">
                 <nav id="nav">
                     <section className="branding">
                         <Searchbar subs={false} method={fetchPosts} />

@@ -243,15 +243,20 @@ a:link, a:visited {
   box-shadow: 0 0 2rem 0 rgb(41 48 66 / 25%);
 }
 
+#pseudo-collapsed-nav {
+  width: 40px;
+}
+
 #collapsed-nav {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   width: 40px;
-  height: 100vh;
+  height: 100%;
   display: none;
-  /* position: fixed; */
+  position: fixed;
+  left: 0px;
   padding: 0px 0px;
   background-color: white;
   z-index: 100;
@@ -443,15 +448,20 @@ ul {
   padding: 0px 0px;
 }
 
+#pseudo-collapsed-main-header {
+  width: 40px;
+}
+
 #collapsed-main-header {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   width: 40px;
-  height: 100vh;
+  height: 100%;
   display: none;
-  /* position: fixed; */
+  position: fixed;
+  right: 0px;
   padding: 0px 0px;
   background-color: white;
   z-index: 100;
@@ -1409,6 +1419,11 @@ main #posts {
 }
 
 @media screen and (max-width: 1250px) {
+  /* Uniform width for Twitter content */
+  [id^="twitter-widget"] {
+    width: 300px !important;
+  }
+
   #pseudoMainHeader, #main-header {
     width: 290px;
   }
@@ -1419,6 +1434,7 @@ main #posts {
 
   .branding {
     padding-left: 6px;
+    height: 120px;
   }
 
   .name {
@@ -1674,5 +1690,154 @@ main #posts {
 @media screen and (max-width: 1150px) {
   .image {
     max-height: 500px;
+  }
+
+  #pseudoMainHeader, #main-header, #pseudo-collapsed-nav {
+    display: none;
+  }
+  
+  #pseudo-collapsed-main-header, #collapsed-main-header {
+    display: inline;
+  } 
+}
+
+@media screen and (max-width: 1050px) {
+  /* Uniform width for Twitter content */
+  [id^="twitter-widget"] {
+    width: 250px !important;
+  }
+
+  /* Uniform width for Gfycat content */
+  [class^='embedly-embed'] {
+    max-width: 550px !important;
+  }
+
+  .branding {
+    height: 110px;
+  }
+
+  .name {
+    font-size: 2.35em;
+    margin-top: 5px;
+  }
+
+  .first40 img {
+    width: 1.9em;
+  }
+
+  .decorative {
+    height: 30px;
+  }
+
+  .subreddit-title {
+    height: 40px;
+    padding-left: 20px;
+    padding-bottom: 8px;
+  }
+  
+  .icon {
+    height: 19px;
+    margin-right: 16px;
+  }
+  
+  h2 {
+    font-size: 14px;
+    padding-bottom: 3px;
+  }
+
+  #nav-item {
+    font-size: 13px;
+    padding: 4px 15px;
+  }
+  
+  #nav-item img {
+    margin-right: 10px;
+    height: 28px;
+  }
+
+  #pseudoMainHeader, #main-header {
+    width: 275px;
+  }
+
+  .active-subreddit {
+    padding-top: 10px;
+  }
+
+  .active-subreddit h4 {
+    padding: 6px 10px 4px 10px;
+  }
+
+  .subs-BG {
+    height: 30px;
+  }
+
+  .image {
+    max-height: 410px;
+  }
+}
+
+@media screen and (max-width: 950px) {
+  /* Uniform width for Gfycat content */
+  [class^='embedly-embed'] {
+    max-width: 450px !important;
+  }
+
+  .image {
+    max-height: 350px;
+  }
+
+  .branding {
+    height: 100px;
+  }
+
+  .name {
+    font-size: 2.3em;
+    margin-top: 5px;
+  }
+
+  .first40 img {
+    width: 1.8em;
+  }
+
+  .subreddit-title {
+    height: 36px;
+    padding-top: 2px;
+    padding-bottom: 6px;
+  }
+  
+  .icon {
+    height: 18px;
+  }
+  
+  h2 {
+    font-size: 13px;
+  }
+
+  #pseudoMainHeader, #main-header {
+    width: 260px;
+  }
+
+  #pseudo-collapsed-main-header, #collapsed-main-header, #pseudo-collapsed-nav, #collapsed-nav {
+    width: 32px;
+  }
+
+  .fa-fire-alt {
+    font-size: 22px;
+  }
+  
+  .fa-medal {
+    font-size: 22px;
+  }
+  
+  .fa-certificate {
+    font-size: 22px;
+  }
+
+  .subscribers {
+    font-size: 13px;
+  }
+
+  .accounts {
+    font-size: 13px;
   }
 }

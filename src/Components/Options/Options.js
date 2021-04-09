@@ -19,27 +19,31 @@ export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPo
 
     function showMain() {
         document.getElementById('collapsed-main-header').style.display = 'none';
+        document.getElementById('pseudo-collapsed-main-header').style.display = 'none';
         document.getElementById('main-header').style.display = 'inline';
         document.getElementById('pseudoMainHeader').style.display = 'inline';
     }
 
     function hideNav() {
         document.getElementById('collapsed-nav').style.display = 'inline';
+        document.getElementById('pseudo-collapsed-nav').style.display = 'inline';
         document.getElementById('pseudoNav').style.display = 'none';
         document.getElementById('nav').style.display = 'none';
     }
 
     return (
         <>
-            <div
-                id="collapsed-main-header"
-                onClick={() => {
-                    showMain();
-                    hideNav();
-                }}>
+            <div id="pseudo-collapsed-main-header">
+                <div
+                    id="collapsed-main-header"
+                    onClick={() => {
+                        showMain();
+                        hideNav();
+                    }}>
+                </div>
             </div>
-            <div id="pseudoMainHeader">
 
+            <div id="pseudoMainHeader">
                 <header id="main-header">
                     {getCurrentSubreddit(activeSubreddit)}
                     <section className="suggestions">
