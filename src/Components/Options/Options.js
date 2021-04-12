@@ -1,17 +1,32 @@
 import { Link } from "react-router-dom";
 import defaultImg from '../../Icons/popular.webp';
+import burger from '../../Icons/burger.webp';
 import { Searchbar } from "../Searchbar/Searchbar";
 
 export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPosts, fetchTopSubreddits, getCurrentSubreddit, nav, searchSubreddits, searchTerm, top }) => {
 
     if (matchMedia) {
-        const mq = window.matchMedia("(min-width: 1150px)");
-        mq.addEventListener("change", () => {
-            WidthChange(mq);
+        const mqTablet = window.matchMedia("(min-width: 1150px)");
+        mqTablet.addEventListener("change", () => {
+            tabletChange(mqTablet);
+        });
+
+        const mqPhone = window.matchMedia("(max-width: 800px)");
+        mqPhone.addEventListener("change", () => {
+            phoneChange(mqPhone);
         });
     }
 
-    function WidthChange(mq) {
+    function phoneChange(mq) {
+        if (mq.matches) {
+            document.getElementById('collapsed-main-header').style.display = 'none';
+            document.getElementById('pseudo-collapsed-main-header').style.display = 'none';
+            document.getElementById('main-header').style.display = 'none';
+            document.getElementById('pseudoMainHeader').style.display = 'none';
+        }
+    }
+
+    function tabletChange(mq) {
         if (mq.matches) {
             showMain();
         }
@@ -25,7 +40,7 @@ export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPo
     }
 
     function hideNav() {
-        document.getElementById('collapsed-nav').style.display = 'inline';
+        document.getElementById('collapsed-nav').style.display = 'flex';
         document.getElementById('pseudo-collapsed-nav').style.display = 'inline';
         document.getElementById('pseudoNav').style.display = 'none';
         document.getElementById('nav').style.display = 'none';
@@ -39,7 +54,9 @@ export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPo
                     onClick={() => {
                         showMain();
                         hideNav();
-                    }}>
+                    }}
+                >
+                    <img src={burger} title="Toggle Menu" alt="Menu Icon" />
                 </div>
             </div>
 

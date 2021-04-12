@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import icon from '../../Icons/black.webp';
 import defaultImg from '../../Icons/popular.webp';
+import burger from '../../Icons/burger.webp';
 import heart from '../../Icons/heart.webp';
+import home from '../../Icons/home.webp';
+import earth from '../../Icons/earth.webp';
 import { Searchbar } from "../Searchbar/Searchbar";
 
 export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navItems, subredditsAbout }) => {
@@ -9,13 +12,33 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navIte
     const colors = ['#ff2941', '#fe18d3', '#4206f1', '#74ee15', '#4deeea'];
 
     if (matchMedia) {
-        const mq = window.matchMedia("(min-width: 1150px)");
-        mq.addEventListener("change", () => {
-            WidthChange(mq);
+        const mqTablet = window.matchMedia("(min-width: 1150px)");
+        mqTablet.addEventListener("change", () => {
+            tabletChange(mqTablet);
+        });
+
+        const mqPhone = window.matchMedia("(max-width: 800px)");
+        mqPhone.addEventListener("change", () => {
+            phoneChange(mqPhone);
         });
     }
 
-    function WidthChange(mq) {
+    function phoneChange(mq) {
+        if (mq.matches) {
+            document.getElementById('collapsed-nav').style.display = 'none';
+            document.getElementById('pseudo-collapsed-nav').style.display = 'none';
+            document.getElementById('pseudoNav').style.display = 'none';
+            document.getElementById('nav').style.display = 'none';
+
+            document.getElementById('mobile-navigation').style.display = 'flex';
+        } else {
+            showNav();
+            hideMain();
+            document.getElementById('mobile-navigation').style.display = 'none';
+        }
+    }
+
+    function tabletChange(mq) {
         if (mq.matches) {
             showNav();
         } else {
@@ -31,7 +54,7 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navIte
     }
 
     function hideMain() {
-        document.getElementById('collapsed-main-header').style.display = 'inline';
+        document.getElementById('collapsed-main-header').style.display = 'flex';
         document.getElementById('pseudo-collapsed-main-header').style.display = 'inline';
         document.getElementById('main-header').style.display = 'none';
         document.getElementById('pseudoMainHeader').style.display = 'none';
@@ -45,7 +68,9 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navIte
                     onClick={() => {
                         hideMain();
                         showNav();
-                    }}>
+                    }}
+                >
+                    <img src={burger} title="Toggle Menu" alt="Menu Icon" />
                 </div>
             </div>
 
@@ -120,6 +145,12 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navIte
                         </ul>
                     </section>
                 </nav>
+            </div>
+
+            <div id="mobile-navigation">
+                <div className="mobile-nav-item"><img src={home} title="Home" alt="Home icon" /></div>
+                <div className="mobile-nav-item"><img src={heart} title="My Subreddits" alt="Heart icon" /></div>
+                <div className="mobile-nav-item"><img src={earth} title="Top Subreddits" alt="Earth icon" /></div>
             </div>
         </>
     );

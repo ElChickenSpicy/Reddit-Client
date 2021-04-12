@@ -194,7 +194,13 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                             alt={title}
                             onLoad={({ target: { offsetHeight: h, offsetWidth: w } }) => {
                                 flex = h > w ? 'row' : 'column';
-                                ac = h > w ? 'center' : 'flex-start';
+                                ac = h > w ? 'center' : 'center';
+                                if (matchMedia) {
+                                    if (window.matchMedia("(max-width: 800px)").matches) {
+                                        flex = 'column';
+                                        ac = 'flex-start';
+                                    }  
+                                }
                                 document.getElementById(url).style.flexDirection = flex;
                                 document.getElementById('media' + url).style.justifyContent = ac;
                             }} />

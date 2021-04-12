@@ -226,6 +226,31 @@ a:link, a:visited {
 
 /* Container of left-hand side and its children */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+#mobile-navigation {
+  display: none;
+  justify-content: center;
+  height: 56px;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  z-index: 1000;
+  background-color: white;
+  box-shadow:  5px -5px 22px #cccccc,
+             -5px 5px 22px #f4f4f4;
+}
+
+.mobile-nav-item {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-nav-item img {
+  width: 26px;
+}
+
 #pseudoNav {
   width: 300px;
 }
@@ -245,13 +270,13 @@ a:link, a:visited {
 
 #pseudo-collapsed-nav {
   width: 40px;
+  display: none;
 }
 
 #collapsed-nav {
-  display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   width: 40px;
   height: 100%;
   display: none;
@@ -260,6 +285,11 @@ a:link, a:visited {
   padding: 0px 0px;
   background-color: white;
   z-index: 100;
+  cursor: pointer;
+}
+
+#collapsed-nav img {
+  width: 20px;
 }
 
 .branding {
@@ -273,6 +303,7 @@ a:link, a:visited {
   justify-content: flex-end;
   padding-left: 12px;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .form {
@@ -450,13 +481,13 @@ ul {
 
 #pseudo-collapsed-main-header {
   width: 40px;
+  display: none;
 }
 
 #collapsed-main-header {
-  display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   width: 40px;
   height: 100%;
   display: none;
@@ -465,6 +496,11 @@ ul {
   padding: 0px 0px;
   background-color: white;
   z-index: 100;
+  cursor: pointer;
+}
+
+#collapsed-main-header img {
+  width: 20px;
 }
 
 .current-view {
@@ -1774,12 +1810,30 @@ main #posts {
   .image {
     max-height: 410px;
   }
+
+  .options {
+    font-size: 10px;
+  }
+  
 }
 
 @media screen and (max-width: 950px) {
   /* Uniform width for Gfycat content */
   [class^='embedly-embed'] {
     max-width: 450px !important;
+  }
+
+  #pseudoNav, #nav {
+    width: 205px;
+  }
+
+  #nav-item {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  input {
+    padding-right: 40px;
   }
 
   .image {
@@ -1840,4 +1894,62 @@ main #posts {
   .accounts {
     font-size: 13px;
   }
+
+  .bi-heart, .bi-x-circle, .bi-chat-left, .bi-heart-fill, .bi-x-circle-fill, .bi-chat-left-fill {
+    font-size: 18px;
+  }
+  
+  #num-comments {
+    padding-top: 5px;
+  }
+
+  .sort {
+    font-size: 16px;
+  }
+  
+}
+
+@media screen and (max-width: 890px) {
+  .awards-container img {
+    height: 14px;
+    width: 14px;
+  }
+
+  .title {
+    font-size: 13px;
+  }
+
+  .media {
+    margin-right: 6px;
+  }
+
+  .text, .long {
+    font-size: 12px;
+  }
+
+}
+
+
+@media screen and (max-width: 800px) {
+  #pseudoNav, #nav, #pseudo-collapsed-nav, #collapsed-nav, #collapsed-main-header, #pseudo-collapsed-main-header, #main-header, #pseudoMainHeader {
+    display: none;
+  }
+
+  #mobile-navigation {
+    display: flex;
+  }
+
+  main #posts {
+    width: 98%;
+  }
+
+  .image {
+    max-height: 750px;
+    max-width: 99%;
+  }
+
+  .media {
+    margin-right: 0px;
+  }
+
 }
