@@ -47,7 +47,7 @@ The aim of this project is to create a better Reddit browsing experience for the
 ![Desktop View](https://github.com/ElChickenSpicy/Reddit-Client/blob/master/src/Wireframes/Desktop.PNG)
 <br><br>
 - Tablet <br>
-![Tablet View](https://github.com/ElChickenSpicy/Reddit-Client/blob/master/src/Wireframes/Desktop.PNG)
+![Tablet View](https://github.com/ElChickenSpicy/Reddit-Client/blob/master/src/Wireframes/Tablet.PNG)
 <br><br>
 - Phone <br>
-![Phone View](https://github.com/ElChickenSpicy/Reddit-Client/blob/master/src/Wireframes/Desktop.PNG)
+![Phone View](https://github.com/ElChickenSpicy/Reddit-Client/blob/master/src/Wireframes/Phone.PNG)
