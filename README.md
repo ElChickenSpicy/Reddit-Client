@@ -43,4 +43,4 @@ The aim of this project is to create a better Reddit browsing experience for the
 
 
 ## The view so far
-<img src="https://github.com/ElChickenSpicy/Reddit-Client/blob/master/src/Wireframes/view08032021.PNG">
+

@@ -270,7 +270,7 @@ a:link, a:visited {
 }
 
 .mobile-nav-item img {
-  width: 26px;
+  height: 26px;
   cursor: pointer;
 }
 
@@ -1976,5 +1976,4 @@ main #posts {
   .fa-plus-square, .fa-minus-square {
     padding-top: 1px;
   }
-  
 }

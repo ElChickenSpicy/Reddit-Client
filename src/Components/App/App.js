@@ -37,6 +37,7 @@ export class App extends React.Component {
     this.increaseDisplay = this.increaseDisplay.bind(this);
     this.makeRequest = this.makeRequest.bind(this);
     this.removeSubreddit = this.removeSubreddit.bind(this);
+    this.resetLikes = this.resetLikes.bind(this);
     this.saveScrollPosition = this.saveScrollPosition.bind(this);
     this.searchSubreddits = this.searchSubreddits.bind(this);
     this.setScrollPosition = this.setScrollPosition.bind(this);
@@ -74,6 +75,7 @@ export class App extends React.Component {
     });
 
     this.checkDataExists(more);
+    this.resetLikes();
   }
 
   checkDataExists(more) {
@@ -268,6 +270,12 @@ export class App extends React.Component {
 
   removeSubreddit(sub) {
     this.setState(prevState => ({ nav: prevState.nav.filter(item => item !== sub) }));
+  }
+
+  resetLikes() {
+    [...document.getElementsByClassName('bi')].forEach(el => {
+      el.style.color = '';
+    })
   }
 
   //Update each post with the latest data
