@@ -148,7 +148,19 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navIte
             </div>
 
             <div id="mobile-navigation">
-                <div className="mobile-nav-item"><img src={home} title="Home" alt="Home icon" /></div>
+                <Link
+                    to="/"
+                    className="mobile-nav-item"
+                    onClick={() => {
+                        fetchPosts({
+                            query: 'r/popular.json',
+                            active: 'popular'
+                        });
+                        fetchTopSubreddits();
+                    }}
+                >
+                    <img src={home} title="Home" alt="Home icon" />
+                </Link>
                 <div className="mobile-nav-item"><img src={heart} title="My Subreddits" alt="Heart icon" /></div>
                 <div className="mobile-nav-item"><img src={earth} title="Top Subreddits" alt="Earth icon" /></div>
             </div>

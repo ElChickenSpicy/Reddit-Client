@@ -194,7 +194,7 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                             alt={title}
                             onLoad={({ target: { offsetHeight: h, offsetWidth: w } }) => {
                                 flex = h > w ? 'row' : 'column';
-                                ac = h > w ? 'center' : 'center';
+                                ac = h > w ? 'center' : 'flex-start';
                                 if (matchMedia) {
                                     if (window.matchMedia("(max-width: 800px)").matches) {
                                         flex = 'column';

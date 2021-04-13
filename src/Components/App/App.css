@@ -226,6 +226,28 @@ a:link, a:visited {
 
 /* Container of left-hand side and its children */
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+#mobile-header {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  height: 70px;
+  background-color: white;
+  z-index: 1000;
+  box-shadow: -5px 5px 22px #cccccc,
+               5px -5px 22px #f4f4f4;
+}
+
+.mobile-divider {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 1;
+}
+
 #mobile-navigation {
   display: none;
   justify-content: center;
@@ -235,7 +257,7 @@ a:link, a:visited {
   width: 100%;
   z-index: 1000;
   background-color: white;
-  box-shadow:  5px -5px 22px #cccccc,
+  box-shadow: 5px -5px 22px #cccccc,
              -5px 5px 22px #f4f4f4;
 }
 
@@ -249,6 +271,7 @@ a:link, a:visited {
 
 .mobile-nav-item img {
   width: 26px;
+  cursor: pointer;
 }
 
 #pseudoNav {
@@ -573,7 +596,7 @@ ul {
 
 .fa-plus-square {
   color: lightskyblue;
-  padding-bottom: 4px;
+  padding-bottom: 5px;
   font-size: 14px;
 }
 
@@ -588,7 +611,7 @@ ul {
 
 .fa-minus-square {
   color: lightcoral;
-  padding-bottom: 4px;
+  padding-bottom: 5px;
   font-size: 14px;
 }
 
@@ -1526,11 +1549,7 @@ main #posts {
     font-size: 11px;
   }
 
-  .subscribers {
-    font-size: 15px;
-  }
-  
-  .accounts {
+  .subscribers, .accounts {
     font-size: 15px;
   }
 
@@ -1544,12 +1563,7 @@ main #posts {
     font-size: 12px;
   }
 
-  .fa-plus-square {
-    padding-bottom: 0px;
-    font-size: 12px;
-  }
-  
-  .fa-minus-square {
+  .fa-plus-square, .fa-minus-square {
     padding-bottom: 0px;
     font-size: 12px;
   }
@@ -1558,16 +1572,8 @@ main #posts {
     padding-top: 12px;
     margin-bottom: 15px;
   }
-
-  .fa-fire-alt {
-    font-size: 24px;
-  }
   
-  .fa-medal {
-    font-size: 24px;
-  }
-  
-  .fa-certificate {
+  .fa-fire-alt, .fa-medal, .fa-certificate {
     font-size: 24px;
   }
   
@@ -1875,23 +1881,11 @@ main #posts {
     width: 32px;
   }
 
-  .fa-fire-alt {
-    font-size: 22px;
-  }
-  
-  .fa-medal {
-    font-size: 22px;
-  }
-  
-  .fa-certificate {
+  .fa-fire-alt, .fa-medal, .fa-certificate {
     font-size: 22px;
   }
 
-  .subscribers {
-    font-size: 13px;
-  }
-
-  .accounts {
+  .subscribers, .accounts {
     font-size: 13px;
   }
 
@@ -1906,7 +1900,6 @@ main #posts {
   .sort {
     font-size: 16px;
   }
-  
 }
 
 @media screen and (max-width: 890px) {
@@ -1926,7 +1919,6 @@ main #posts {
   .text, .long {
     font-size: 12px;
   }
-
 }
 
 
@@ -1935,7 +1927,7 @@ main #posts {
     display: none;
   }
 
-  #mobile-navigation {
+  #mobile-navigation, #mobile-header {
     display: flex;
   }
 
@@ -1952,4 +1944,37 @@ main #posts {
     margin-right: 0px;
   }
 
+  .preloader-1 {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
+
+  #mobile-header {
+    display: flex; 
+  }
+
+  main {
+    margin-top: 70px;
+  }
+
+  .current-view {
+    flex-direction: row;
+    width: 100%;
+    box-shadow: none;
+  }
+
+  .active-subreddit p, h3, h4 {
+    display: none;
+  }
+
+  .change-view {
+    border-top: 0px;
+    padding-right: 20px;
+  }
+
+  .fa-plus-square, .fa-minus-square {
+    padding-top: 1px;
+  }
+  
 }

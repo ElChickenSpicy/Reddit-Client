@@ -109,6 +109,13 @@ export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPo
                     </section>
                 </header>
             </div>
+
+            <div id="mobile-header">
+                <div className="mobile-divider">
+                    {getCurrentSubreddit(activeSubreddit)}
+                </div>
+                <Searchbar subs={false} method={fetchPosts} />
+            </div>
         </>
     );
 };
