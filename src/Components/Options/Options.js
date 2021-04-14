@@ -3,7 +3,7 @@ import defaultImg from '../../Icons/popular.webp';
 import burger from '../../Icons/burger.webp';
 import { Searchbar } from "../Searchbar/Searchbar";
 
-export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPosts, fetchTopSubreddits, getCurrentSubreddit, nav, searchSubreddits, searchTerm, top }) => {
+export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPosts, fetchTopSubreddits, hideElement, getCurrentSubreddit, nav, searchSubreddits, searchTerm, showElement, top }) => {
 
     if (matchMedia) {
         const mqTablet = window.matchMedia("(min-width: 1150px)");
@@ -19,10 +19,7 @@ export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPo
 
     function phoneChange(mq) {
         if (mq.matches) {
-            document.getElementById('collapsed-main-header').style.display = 'none';
-            document.getElementById('pseudo-collapsed-main-header').style.display = 'none';
-            document.getElementById('main-header').style.display = 'none';
-            document.getElementById('pseudoMainHeader').style.display = 'none';
+            hideElement(['collapsed-main-header', 'pseudo-collapsed-main-header', 'main-header', 'pseudoMainHeader']);
         }
     }
 
@@ -33,17 +30,13 @@ export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPo
     }
 
     function showMain() {
-        document.getElementById('collapsed-main-header').style.display = 'none';
-        document.getElementById('pseudo-collapsed-main-header').style.display = 'none';
-        document.getElementById('main-header').style.display = 'inline';
-        document.getElementById('pseudoMainHeader').style.display = 'inline';
+        hideElement(['collapsed-main-header', 'pseudo-collapsed-main-header']);
+        showElement(['main-header', 'pseudoMainHeader']);
     }
 
     function hideNav() {
-        document.getElementById('collapsed-nav').style.display = 'flex';
-        document.getElementById('pseudo-collapsed-nav').style.display = 'inline';
-        document.getElementById('pseudoNav').style.display = 'none';
-        document.getElementById('nav').style.display = 'none';
+        showElement(['collapsed-nav', 'pseudo-collapsed-nav']);
+        hideElement(['pseudoNav', 'nav']);
     }
 
     return (
@@ -97,6 +90,13 @@ export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPo
                                                     });
                                                     fetchAboutData(display_name);
                                                     fetchTopSubreddits();
+                                                    if (matchMedia) {
+                                                        if (window.matchMedia("(max-width: 800px)").matches) {
+                                                            document.querySelector('main').style.display = 'flex';
+                                                            showElement(['mobile-header']);
+                                                            hideElement(['pseudoMainHeader', 'main-header']);
+                                                        }
+                                                    }
                                                 }}>
                                                 <img src={src} alt={display_name} />
                                                 r/{display_name}
@@ -111,10 +111,10 @@ export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPo
             </div>
 
             <div id="mobile-header">
+                <Searchbar subs={false} method={fetchPosts} />
                 <div className="mobile-divider">
                     {getCurrentSubreddit(activeSubreddit)}
                 </div>
-                <Searchbar subs={false} method={fetchPosts} />
             </div>
         </>
     );

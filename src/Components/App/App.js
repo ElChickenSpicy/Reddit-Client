@@ -33,6 +33,7 @@ export class App extends React.Component {
     this.fetchPosts = this.fetchPosts.bind(this);
     this.fetchTopSubreddits = this.fetchTopSubreddits.bind(this);
     this.getCurrentSubreddit = this.getCurrentSubreddit.bind(this);
+    this.hideElement = this.hideElement.bind(this);
     this.highlightActive = this.highlightActive.bind(this);
     this.increaseDisplay = this.increaseDisplay.bind(this);
     this.makeRequest = this.makeRequest.bind(this);
@@ -41,6 +42,7 @@ export class App extends React.Component {
     this.saveScrollPosition = this.saveScrollPosition.bind(this);
     this.searchSubreddits = this.searchSubreddits.bind(this);
     this.setScrollPosition = this.setScrollPosition.bind(this);
+    this.showElement = this.showElement.bind(this);
     this.submit = this.submit.bind(this);
     this.updatePost = this.updatePost.bind(this);
   }
@@ -307,6 +309,14 @@ export class App extends React.Component {
     }));
   }
 
+  hideElement(arr) {
+    arr.forEach(el => document.getElementById(el).style.display = 'none');
+  }
+
+  showElement(arr) {
+    arr.forEach(el => document.getElementById(el).style.display = 'flex');
+  }
+
   componentDidMount() {
     this.fetchPosts({
       query: 'r/popular.json',
@@ -322,11 +332,12 @@ export class App extends React.Component {
       <div className="top-container">
         <div className="top-bg"></div>
         <Navbar
-          clearSearch={this.clearSearch}
           fetchPosts={this.fetchPosts}
           fetchTopSubreddits={this.fetchTopSubreddits}
+          hideElement={this.hideElement}
           highlightActive={this.highlightActive()}
           navItems={this.state.nav}
+          showElement={this.showElement}
           subredditsAbout={this.state.subredditsAbout}
         />
         <Main
@@ -351,10 +362,12 @@ export class App extends React.Component {
           fetchAboutData={this.fetchAboutData}
           fetchPosts={this.fetchPosts}
           fetchTopSubreddits={this.fetchTopSubreddits}
+          hideElement = {this.hideElement}
           getCurrentSubreddit={this.getCurrentSubreddit}
           nav={this.state.nav}
           searchSubreddits={this.searchSubreddits}
           searchTerm={this.state.searchTerm}
+          showElement={this.showElement}
           top={this.state.top}
         />
       </div>

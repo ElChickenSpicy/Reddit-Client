@@ -63,48 +63,50 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                     </div>
                     {formatPost(post, i)}
                     <div className="post-flex-item options">
-                        <div className="voting-buttons">
-                            <div className="upvote">
-                                <i
-                                    id={'h-' + i}
-                                    className="bi bi-heart"
-                                    title="Upvote"
-                                    onClick={({ target: { id } }) => {
-                                        let fill = document.getElementById('hFill-' + id.split("-")[1]);
-                                        let xfill = document.getElementById('xFill-' + id.split("-")[1]);
-                                        fill.style.color === '' ? fill.style.color = 'gold' : fill.style.color = '';
-                                        xfill.style.color = '';
-                                    }}
-                                >
-                                </i>
-                                <i id={'hFill-' + i} className="bi bi-heart-fill"></i>
+                        <div className="clickable-options">
+                            <div className="voting-buttons">
+                                <div className="upvote">
+                                    <i
+                                        id={'h-' + i}
+                                        className="bi bi-heart"
+                                        title="Upvote"
+                                        onClick={({ target: { id } }) => {
+                                            let fill = document.getElementById('hFill-' + id.split("-")[1]);
+                                            let xfill = document.getElementById('xFill-' + id.split("-")[1]);
+                                            fill.style.color === '' ? fill.style.color = 'gold' : fill.style.color = '';
+                                            xfill.style.color = '';
+                                        }}
+                                    >
+                                    </i>
+                                    <i id={'hFill-' + i} className="bi bi-heart-fill"></i>
+                                </div>
+                                <div className="downvote">
+                                    <i
+                                        id={'x-' + i}
+                                        class="bi bi-x-circle"
+                                        title="Downvote"
+                                        onClick={({ target: { id } }) => {
+                                            let fill = document.getElementById('xFill-' + id.split("-")[1]);
+                                            let hfill = document.getElementById('hFill-' + id.split("-")[1]);
+                                            fill.style.color === '' ? fill.style.color = 'lightcoral' : fill.style.color = '';
+                                            hfill.style.color = '';
+                                        }}
+                                    >
+                                    </i>
+                                    <i id={'xFill-' + i} class="bi bi-x-circle-fill"></i>
+                                </div>
+                                <span className="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
                             </div>
-                            <div className="downvote">
-                                <i
-                                    id={'x-' + i}
-                                    class="bi bi-x-circle"
-                                    title="Downvote"
-                                    onClick={({ target: { id } }) => {
-                                        let fill = document.getElementById('xFill-' + id.split("-")[1]);
-                                        let hfill = document.getElementById('hFill-' + id.split("-")[1]);
-                                        fill.style.color === '' ? fill.style.color = 'lightcoral' : fill.style.color = '';
-                                        hfill.style.color = '';
-                                    }}
-                                >
-                                </i>
-                                <i id={'xFill-' + i} class="bi bi-x-circle-fill"></i>
-                            </div>
-                            <span className="votes">{ups > 999 ? `${(ups / 1000).toFixed(1)}k` : ups}</span>
+                            <Link
+                                to={`/Comments${[permalink]}`} id="comments" onClick={() => saveScrollPosition()}>
+                                <div className="comment-icons">
+                                    <i className="bi bi-chat-left" title="Comments"></i>
+                                    <i className="bi bi-chat-left-fill" title="Comments"></i>
+                                </div>
+                                <span id="num-comments">{num_comments > 999 ? `${(num_comments / 1000).toFixed(1)}k Comments` : `${num_comments} Comments`}</span>
+                            </Link>
                         </div>
-                        <Link
-                            to={`/Comments${[permalink]}`} id="comments" onClick={() => saveScrollPosition()}>
-                            <div className="comment-icons">
-                                <i className="bi bi-chat-left" title="Comments"></i>
-                                <i className="bi bi-chat-left-fill" title="Comments"></i>
-                            </div>
-                            <span id="num-comments">{num_comments > 999 ? `${(num_comments / 1000).toFixed(1)}k Comments` : `${num_comments} Comments`}</span>
-                        </Link>
-                        <span id="posted-by">Posted by: {flair}<span id="retro">{author}</span> ~ {dayjs(dayjs.unix(created_utc)).fromNow()}</span>
+                        <span id="posted-by">Posted by {flair}<span id="retro">{author}</span> ~ {dayjs(dayjs.unix(created_utc)).fromNow()}</span>
                     </div>
                 </article>
             </>
@@ -199,9 +201,9 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                                     if (window.matchMedia("(max-width: 800px)").matches) {
                                         flex = 'column';
                                         ac = 'flex-start';
-                                    }  
+                                    }
                                 }
-                                document.getElementById(url).style.flexDirection = flex;
+                                document.getElementById('media' + url).style.flexDirection = flex;
                                 document.getElementById('media' + url).style.justifyContent = ac;
                             }} />
                     </div>
@@ -297,6 +299,12 @@ export const Main = ({ about, activeSubreddit, after, displayNumber, fetchPosts,
                     switch (domain) {
                         case 'twitter.com':
                             flex = 'row';
+                            if (matchMedia) {
+                                if (window.matchMedia("(max-width: 500px)").matches) {
+                                    flex = 'column';
+                                    ac = 'flex-start';
+                                }
+                            }
                             output = [
                                 titleLink,
                                 <div className="media">

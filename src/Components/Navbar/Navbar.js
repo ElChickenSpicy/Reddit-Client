@@ -5,9 +5,10 @@ import burger from '../../Icons/burger.webp';
 import heart from '../../Icons/heart.webp';
 import home from '../../Icons/home.webp';
 import earth from '../../Icons/earth.webp';
+import pacman from '../../Icons/pacman.webp';
 import { Searchbar } from "../Searchbar/Searchbar";
 
-export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navItems, subredditsAbout }) => {
+export const Navbar = ({ fetchPosts, fetchTopSubreddits, hideElement, highlightActive, navItems, showElement, subredditsAbout }) => {
     const name = 'Retro';
     const colors = ['#ff2941', '#fe18d3', '#4206f1', '#74ee15', '#4deeea'];
 
@@ -25,16 +26,13 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navIte
 
     function phoneChange(mq) {
         if (mq.matches) {
-            document.getElementById('collapsed-nav').style.display = 'none';
-            document.getElementById('pseudo-collapsed-nav').style.display = 'none';
-            document.getElementById('pseudoNav').style.display = 'none';
-            document.getElementById('nav').style.display = 'none';
-
-            document.getElementById('mobile-navigation').style.display = 'flex';
+            hideElement(['collapsed-nav', 'pseudo-collapsed-nav', 'pseudoNav', 'nav']);
+            showElement(['mobile-navigation', 'mobile-header']);
         } else {
             showNav();
             hideMain();
-            document.getElementById('mobile-navigation').style.display = 'none';
+            hideElement(['mobile-navigation', 'mobile-header']);
+            document.querySelector('main').style.display = 'flex';
         }
     }
 
@@ -47,17 +45,14 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navIte
     }
 
     function showNav() {
-        document.getElementById('collapsed-nav').style.display = 'none';
-        document.getElementById('pseudo-collapsed-nav').style.display = 'none';
-        document.getElementById('pseudoNav').style.display = 'inline';
-        document.getElementById('nav').style.display = 'inline';
+        hideElement(['collapsed-nav', 'pseudo-collapsed-nav']);
+        showElement(['pseudoNav', 'nav']);
     }
 
     function hideMain() {
-        document.getElementById('collapsed-main-header').style.display = 'flex';
-        document.getElementById('pseudo-collapsed-main-header').style.display = 'inline';
-        document.getElementById('main-header').style.display = 'none';
-        document.getElementById('pseudoMainHeader').style.display = 'none';
+        showElement(['collapsed-main-header', 'pseudo-collapsed-main-header']);
+        hideElement(['main-header', 'pseudoMainHeader']);
+
     }
 
     return (
@@ -134,7 +129,14 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navIte
                                                 fetchPosts({
                                                     query: `r/${display_name}.json`,
                                                     active: display_name
-                                                })
+                                                });
+                                                if (matchMedia) {
+                                                    if (window.matchMedia("(max-width: 800px)").matches) {
+                                                        showElement(['mobile-header']);
+                                                        document.querySelector('main').style.display = 'flex';
+                                                        hideElement(['pseudoNav', 'nav'])
+                                                    }
+                                                }
                                             }} >
                                             <img src={src} alt={display_name} />
                                     r/{display_name}
@@ -152,17 +154,49 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, highlightActive, navIte
                     to="/"
                     className="mobile-nav-item"
                     onClick={() => {
+                        showElement(['mobile-header']);
+                        document.querySelector('main').style.display = 'flex';
+                        hideElement(['pseudoNav', 'nav', 'pseudoMainHeader', 'main-header']);
+                    }}
+                >
+                    <img src={pacman} title="Current" alt="" />
+                </Link>
+                <Link
+                    to="/"
+                    className="mobile-nav-item"
+                    onClick={() => {
                         fetchPosts({
                             query: 'r/popular.json',
                             active: 'popular'
                         });
                         fetchTopSubreddits();
+                        showElement(['mobile-header']);
+                        document.querySelector('main').style.display = 'flex';
+                        hideElement(['pseudoNav', 'nav', 'pseudoMainHeader', 'main-header']);
                     }}
                 >
                     <img src={home} title="Home" alt="Home icon" />
                 </Link>
-                <div className="mobile-nav-item"><img src={heart} title="My Subreddits" alt="Heart icon" /></div>
-                <div className="mobile-nav-item"><img src={earth} title="Top Subreddits" alt="Earth icon" /></div>
+                <Link
+                    to='/'
+                    className="mobile-nav-item"
+                    onClick={() => {
+                        document.querySelector('main').style.display = 'none';
+                        showElement(['pseudoNav', 'nav']);
+                        hideElement(['mobile-header', 'pseudoMainHeader', 'main-header']);
+                    }}>
+                    <img src={heart} title="My Subreddits" alt="Heart icon" />
+                </Link>
+                <Link
+                    to='/'
+                    className="mobile-nav-item"
+                    onClick={() => {
+                        document.querySelector('main').style.display = 'none';
+                        showElement(['pseudoMainHeader', 'main-header'])
+                        hideElement(['mobile-header', 'pseudoNav', 'nav'])
+                    }}>
+                    <img src={earth} title="Top Subreddits" alt="Earth icon" />
+                </Link>
             </div>
         </>
     );
