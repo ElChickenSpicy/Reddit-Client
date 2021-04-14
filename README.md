@@ -3,7 +3,8 @@
 
 
 ## Status
-Project is: _In Progress._ Aim to deploy by the end of April 2021.
+Project is: _In Progress._ Resolving a few minor bugs.
+Available to view @ https://retro-reddit.netlify.app/
 
 
 ## Table of contents
