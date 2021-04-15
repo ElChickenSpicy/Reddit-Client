@@ -23,7 +23,8 @@ export class App extends React.Component {
       after: '',
       displayNumber: 10,
       loading: true,
-      hasMore: true
+      hasMore: true,
+      mobileNavigation: 'home'
     };
     this.addSubreddit = this.addSubreddit.bind(this);
     this.checkDataExists = this.checkDataExists.bind(this);
@@ -44,6 +45,7 @@ export class App extends React.Component {
     this.setScrollPosition = this.setScrollPosition.bind(this);
     this.showElement = this.showElement.bind(this);
     this.submit = this.submit.bind(this);
+    this.updateMobileNavigation = this.updateMobileNavigation.bind(this);
     this.updatePost = this.updatePost.bind(this);
   }
 
@@ -299,6 +301,10 @@ export class App extends React.Component {
     window.scrollTo(...this.state.scrollPosition);
   }
 
+  updateMobileNavigation(location) {
+    this.setState({ mobileNavigation: location });
+  }
+
   clearSearch(str) {
     document.getElementById(str).value = "";
   }
@@ -336,9 +342,13 @@ export class App extends React.Component {
           fetchTopSubreddits={this.fetchTopSubreddits}
           hideElement={this.hideElement}
           highlightActive={this.highlightActive()}
+          mobileNavigation={this.state.mobileNavigation}
           navItems={this.state.nav}
+          saveScrollPosition={this.saveScrollPosition}
+          setScrollPosition={this.setScrollPosition}
           showElement={this.showElement}
           subredditsAbout={this.state.subredditsAbout}
+          updateMobileNavigation={this.updateMobileNavigation}
         />
         <Main
           about={this.state.subredditsAbout}
@@ -369,6 +379,7 @@ export class App extends React.Component {
           searchTerm={this.state.searchTerm}
           showElement={this.showElement}
           top={this.state.top}
+          updateMobileNavigation={this.updateMobileNavigation}
         />
       </div>
     )

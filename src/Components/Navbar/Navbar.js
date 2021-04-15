@@ -5,10 +5,10 @@ import burger from '../../Icons/burger.webp';
 import heart from '../../Icons/heart.webp';
 import home from '../../Icons/home.webp';
 import earth from '../../Icons/earth.webp';
-import pacman from '../../Icons/pacman.webp';
+import back from '../../Icons/back.webp';
 import { Searchbar } from "../Searchbar/Searchbar";
 
-export const Navbar = ({ fetchPosts, fetchTopSubreddits, hideElement, highlightActive, navItems, showElement, subredditsAbout }) => {
+export const Navbar = ({ fetchPosts, fetchTopSubreddits, hideElement, highlightActive, mobileNavigation, navItems, saveScrollPosition, setScrollPosition, showElement, subredditsAbout, updateMobileNavigation }) => {
     const name = 'Retro';
     const colors = ['#ff2941', '#fe18d3', '#4206f1', '#74ee15', '#4deeea'];
 
@@ -132,6 +132,7 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, hideElement, highlightA
                                                 });
                                                 if (matchMedia) {
                                                     if (window.matchMedia("(max-width: 800px)").matches) {
+                                                        updateMobileNavigation('home');
                                                         showElement(['mobile-header']);
                                                         document.querySelector('main').style.display = 'flex';
                                                         hideElement(['pseudoNav', 'nav'])
@@ -150,17 +151,21 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, hideElement, highlightA
             </div>
 
             <div id="mobile-navigation">
+                {mobileNavigation === 'home' ? '' : 
                 <Link
                     to="/"
                     className="mobile-nav-item"
                     onClick={() => {
+                        updateMobileNavigation('home');
                         showElement(['mobile-header']);
                         document.querySelector('main').style.display = 'flex';
                         hideElement(['pseudoNav', 'nav', 'pseudoMainHeader', 'main-header']);
+                        setTimeout(() => setScrollPosition(), 0);
                     }}
                 >
-                    <img src={pacman} title="Current" alt="" />
+                    <img src={back} title="Back" alt="" />
                 </Link>
+                }
                 <Link
                     to="/"
                     className="mobile-nav-item"
@@ -169,6 +174,7 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, hideElement, highlightA
                             query: 'r/popular.json',
                             active: 'popular'
                         });
+                        updateMobileNavigation('home');
                         fetchTopSubreddits();
                         showElement(['mobile-header']);
                         document.querySelector('main').style.display = 'flex';
@@ -181,6 +187,8 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, hideElement, highlightA
                     to='/'
                     className="mobile-nav-item"
                     onClick={() => {
+                        saveScrollPosition();
+                        updateMobileNavigation('MySubreddits');
                         document.querySelector('main').style.display = 'none';
                         showElement(['pseudoNav', 'nav']);
                         hideElement(['mobile-header', 'pseudoMainHeader', 'main-header']);
@@ -191,6 +199,8 @@ export const Navbar = ({ fetchPosts, fetchTopSubreddits, hideElement, highlightA
                     to='/'
                     className="mobile-nav-item"
                     onClick={() => {
+                        saveScrollPosition();
+                        updateMobileNavigation('TopSubreddits');
                         document.querySelector('main').style.display = 'none';
                         showElement(['pseudoMainHeader', 'main-header'])
                         hideElement(['mobile-header', 'pseudoNav', 'nav'])

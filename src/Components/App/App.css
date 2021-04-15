@@ -2034,6 +2034,12 @@ main #posts {
     max-height: 550px;
   }
 
+  .text, .long {
+    max-width: 96vw;
+    padding: 20px 10px;
+    font-size: 11px;
+  }
+
 }
 
 @media screen and (max-width: 500px) {
@@ -2170,6 +2176,7 @@ main #posts {
   }
 
   .comments-container {
+    width: 100vw;
     margin-top: 0px;
   }
 
@@ -2182,7 +2189,7 @@ main #posts {
     margin-bottom: 4px;
   }
 
-  .author h2 {
+  .author h2, .username {
     font-size: 10px;
   }
 
@@ -2209,6 +2216,16 @@ main #posts {
 
   .comment-info {
     font-size: 10px;
+  }
+
+  .first-reply-layer {
+    margin-top: 10px;
+    padding-bottom: 12px;
+  }
+  
+  .second-reply-layer {
+    margin-top: 10px;
+    margin-bottom: 6px;
   }
 
 
@@ -2243,6 +2260,10 @@ main #posts {
 
     .subreddit-data h3 {
       font-size: 11px;
+    }
+
+    #label {
+      font-size: 12px;
     }
 }
 

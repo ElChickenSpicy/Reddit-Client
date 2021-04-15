@@ -4,6 +4,7 @@
 
 ## Status
 Project is: _In Progress._ Resolving a few minor bugs.
+<br>
 Available to view @ https://retro-reddit.netlify.app/
 
 

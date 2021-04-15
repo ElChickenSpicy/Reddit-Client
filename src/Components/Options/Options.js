@@ -3,7 +3,7 @@ import defaultImg from '../../Icons/popular.webp';
 import burger from '../../Icons/burger.webp';
 import { Searchbar } from "../Searchbar/Searchbar";
 
-export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPosts, fetchTopSubreddits, hideElement, getCurrentSubreddit, nav, searchSubreddits, searchTerm, showElement, top }) => {
+export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPosts, fetchTopSubreddits, hideElement, getCurrentSubreddit, nav, searchSubreddits, searchTerm, showElement, top, updateMobileNavigation}) => {
 
     if (matchMedia) {
         const mqTablet = window.matchMedia("(min-width: 1150px)");
@@ -84,6 +84,7 @@ export const Options = ({ activeSubreddit, addSubreddit, fetchAboutData, fetchPo
                                                 id="nav-item"
                                                 title={title}
                                                 onClick={() => {
+                                                    updateMobileNavigation('home');
                                                     fetchPosts({
                                                         query: `r/${display_name}.json`,
                                                         active: display_name
