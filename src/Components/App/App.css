@@ -852,7 +852,7 @@ main #posts {
 
 .post-flex-item {
   display: flex;
-  width: 99%;
+  max-width: 99%;
 }
 
 /* Top row of a post container (subreddit & icon) */
