@@ -1389,10 +1389,12 @@ main #posts {
 
 #current-sort:hover > .sort-menu {
   visibility: visible;
-  border-radius: 8px;
+  margin-top: 1px;
   margin-left: 10px;
   padding: 0 10px;
   width: 270px;
+  background-color: white;
+  opacity: 0.6;
 }
 
 .sort-menu {
@@ -2027,6 +2029,17 @@ main #posts {
   .form:hover ~ .mobile-divider .change-view {
     visibility: hidden;
   }
+
+  #current-sort:hover > .sort-menu {
+    margin-left: 6px;
+    padding: 0 8px;
+    width: auto;
+  }
+
+  .comment-item {
+    width: 94%;
+    padding-left: 4%;
+  }
 }
 
 @media screen and (max-width: 700px) {
@@ -2125,7 +2138,13 @@ main #posts {
 
   .active-subreddit h1 {
     padding: 8px 5px 1px 8px;
-    font-size: 12px;
+    font-size: 13px;
+  }
+
+  .change-view {
+    padding-top: 14px;
+    margin-bottom: 14px;
+    justify-content: space-evenly;
   }
 
   i span {
@@ -2172,7 +2191,7 @@ main #posts {
 
   #current-sort {
     width: auto;
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .comments-container {
@@ -2227,9 +2246,6 @@ main #posts {
     margin-top: 10px;
     margin-bottom: 6px;
   }
-
-
-
 }
 
 @media screen and (max-width: 430px) {
@@ -2247,11 +2263,11 @@ main #posts {
     }
 
     #mobile-header {
-      height: 52px;
+      height: 48px;
     }
 
     main {
-      margin-top: 50px;
+      margin-top: 42px;
     }
 
     .fa-fire-alt, .fa-medal, .fa-certificate {
